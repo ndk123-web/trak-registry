@@ -1,0 +1,982 @@
+{
+  "id": "lang/go",
+  "name": "Go (Golang) Comprehensive Mastery Track",
+  "version": "1.2.0",
+  "description": "Complete end-to-end Go curriculum with hands-on exercises, auto-verification tests, progressive hints, and production-depth concepts. Covers runtime, memory, concurrency, web services, databases, testing, and interview drills.",
+  "root": {
+    "name": "go-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "go.mod",
+        "type": "file",
+        "content": "module go-workspace\n\ngo 1.22\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🚀 Complete Go (Golang) End-to-End Learning Workspace\n\nWelcome to your full Go mastery track materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Core Concepts |\n| :--- | :--- | :--- |\n| `00-setup-and-prerequisites` | **Setup & Environment** | Installation, GOPATH/GOROOT, VS Code tools |\n| `01-runtime-and-escape-analysis` | **Go Runtime & Memory** | TCMalloc, Tri-Color GC, Stack vs Heap, escape analysis |\n| `02-toolchain-and-workspaces` | **Toolchain & Modules** | `go mod`, cross-compilation, workspaces, race detector |\n| `03-variables-and-zero-values` | **Variables & Types** | Zero values, short declarations, `iota` enums/bitmasks |\n| `04-data-types-and-memory-headers` | **Memory Layout** | String/Slice headers, byte vs rune |\n| `05-arrays-slices-and-growth` | **Slices Deep-Dive** | Growth algorithm, sub-slice leaks, `copy()` |\n| `06-maps-structs-and-custom-types` | **Maps & Structs** | Hash maps, comma-ok, embedding, JSON tags |\n| `07-control-flow-and-functions` | **Control Flow** | For range, defer LIFO, panic & recover |\n| `08-pointers-and-semantics` | **Pointers & Semantics** | Pass-by-value, pointer vs value receivers |\n| `09-methods-interfaces-duck-typing` | **Interfaces** | Duck typing, `iface` vs `eface`, nil interface trap |\n| `10-generics` | **Generics (Go 1.18+)** | Type parameters, constraints, `any`, `comparable` |\n| `11-error-handling-and-custom-types` | **Error Architecture** | Custom errors, `%w` wrapping, `errors.Is/As` |\n| `12-concurrency-goroutines-gmp` | **Goroutines & GMP** | GMP model, cooperative scheduling, atomic ops |\n| `13-channels-select-and-sync` | **Channels & Sync** | Buffered/unbuffered, select timeout, sync primitives |\n| `14-context-cancellation-timeouts` | **Context Tree** | `WithCancel`, `WithTimeout`, `WithValue`, cancellation |\n| `15-standard-library-powerhouses` | **Standard Library** | `io.Reader/Writer`, `encoding/json`, time formatting |\n| `16-production-web-services` | **Web Architecture** | `net/http`, middleware, structured JSON APIs, timeouts |\n| `17-database-sql-and-pooling` | **Database & Pooling** | `database/sql`, connection pool tuning, null types |\n| `18-testing-benchmarks-profiling` | **Testing & Profiling** | Table-driven tests, subtests, benchmarks, race detection |\n| `19-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield interview questions with runnable checks |\n\n---\n\n## 🛠️ How to Navigate & Learn\n\nEach module has this structure:\n```\nXX-module-name/\n├── README.md              # Deep learning material + interview questions\n├── example.go             # Reference code (runnable demo)\n├── exercise/\n│   ├── starter.go         # Incomplete code with TODOs — YOU fill this\n│   └── HINTS.md           # Progressive hints (light → detailed)\n└── verify/\n    ├── exercise_test.go   # Auto-verification: run `go test ./...`\n    └── solution.go        # Complete answer (check AFTER attempting)\n```\n\n### Learning Flow\n1. **Read** `README.md` to understand concepts and traps\n2. **Run** `example.go` to see the concept in action\n3. **Code** `exercise/starter.go` — fill in the TODOs\n4. **Verify** with `go test ./verify/...` — green = understanding\n5. **Check** `verify/solution.go` only if stuck\n\n### Quick Commands\n```bash\n# Verify your solution\ncd XX-module-name\ngo test ./verify/...\n\n# Run with race detector\ngo test -race ./verify/...\n\n# Run example\ngo run example.go\n```\n\n---\n\n## 🎯 Verification Strategy\n\nEvery module includes `verify/exercise_test.go` that you can run with:\n```bash\ngo test ./verify/...\n```\n\n- **PASS** = Your code is correct. Move to the next module.\n- **FAIL** = Re-read the README, check HINTS.md, debug your starter.go.\n- **RACE** = Run `go test -race ./verify/...` to catch data races.\n\n---\n\n## 🏆 Completion Criteria\n\nA module is \"complete\" when:\n1. ✅ You can explain the core concept without looking at notes\n2. ✅ `go test ./verify/...` passes all tests\n3. ✅ `go test -race ./verify/...` passes (no data races)\n4. ✅ You can answer the interview questions at the bottom of README.md\n\nHappy learning! 🎉\n"
+      },
+      {
+        "name": "00-setup-and-prerequisites",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 — Go Setup\n\nInstall Go, verify with `go version`, configure IDE."
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\"fmt\"; \"runtime\")\n\nfunc main() {\n\tfmt.Println(\"Go:\", runtime.Version())\n}"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport \"runtime\"\n\n// TODO 1: Return Go version string\nfunc GoVersion() string {\n\t// FILL\n\treturn \"\"\n}\n\n// TODO 2: Return CPU count\nfunc GetCPUCount() int {\n\t// FILL\n\treturn 0\n}\n\nfunc main() {}"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "## TODO 1\n- `runtime.Version()`\n\n## TODO 2\n- `runtime.NumCPU()`"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestGoVersion(t *testing.T) {\n\tv := GoVersion()\n\tif v == \"\" { t.Error(\"empty version\") }\n}\n\nfunc TestGetCPUCount(t *testing.T) {\n\tif GetCPUCount() <= 0 { t.Error(\"invalid cpu count\") }\n}"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport \"runtime\"\n\nfunc GoVersion() string { return runtime.Version() }\nfunc GetCPUCount() int { return runtime.NumCPU() }\nfunc main() {}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "01-runtime-and-escape-analysis",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 — Runtime & Escape Analysis\n\nTCMalloc allocator, Tri-Color GC, stack vs heap.\n\nVerify: `go build -gcflags=\"-m\"`"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\n\ntype C struct { V int }\nfunc Heap() *C { c := C{V: 1}; return &c }\nfunc Stack() C  { c := C{V: 2}; return c }\nfunc main() {\n\tfmt.Println(Heap(), Stack())\n}"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\n// TODO 1: Return string by value (not pointer) to avoid escape\nfunc GetName() *string {\n\tn := \"Gopher\"\n\treturn &n\n}\n\n// TODO 2: Use concrete type to avoid interface escape\nfunc PrintNum(n interface{}) {\n\t// FILL\n}\n\n// TODO 3: Pre-allocate slice to avoid backing array escape\nfunc Grow() []int {\n\tdata := make([]int, 2, 2)\n\tdata = append(data, 1, 2, 3)\n\treturn data\n}\n\nfunc main() {}"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "## TODO 1\nReturn `string` not `*string`\n\n## TODO 2\nUse `int` not `interface{}`\n\n## TODO 3\n`make([]int, 0, 5)`"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestGetName(t *testing.T) {\n\tname := GetName()\n\tif name != \"Gopher\" { t.Errorf(\"got %q\", name) }\n}\n\nfunc TestGrow(t *testing.T) {\n\ts := Grow()\n\tif len(s) != 3 { t.Errorf(\"len=%d\", len(s)) }\n}"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport \"fmt\"\n\nfunc GetName() string {\n\tn := \"Gopher\"\n\treturn n\n}\n\nfunc PrintNum(n int) {\n\tfmt.Println(n)\n}\n\nfunc Grow() []int {\n\tdata := make([]int, 0, 5)\n\tdata = append(data, 1, 2, 3)\n\treturn data\n}\n\nfunc main() {}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "02-toolchain-and-workspaces",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 — Toolchain\n\n`go mod`, cross-compilation, workspaces, race detector."
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\"fmt\"; \"runtime\")\n\nfunc main() {\n\tfmt.Println(runtime.Version(), runtime.GOOS, runtime.GOARCH)\n}"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport \"runtime\"\n\n// TODO 1: Return formatted build info string\nfunc BuildInfo() string {\n\t// FILL\n\treturn \"\"\n}\n\n// TODO 2: Return true if OS is linux\nfunc IsLinux() bool {\n\t// FILL\n\treturn false\n}\n\nfunc main() {}"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "## TODO 1\n`fmt.Sprintf` with `runtime.GOOS`, `GOARCH`, `Version()`\n\n## TODO 2\n`runtime.GOOS == \"linux\"`"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestBuildInfo(t *testing.T) {\n\tinfo := BuildInfo()\n\tif info == \"\" { t.Error(\"empty\") }\n}\n\nfunc TestIsLinux(t *testing.T) {\n\t_ = IsLinux()\n}"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\"fmt\"; \"runtime\")\n\nfunc BuildInfo() string {\n\treturn fmt.Sprintf(\"%s/%s %s\", runtime.GOOS, runtime.GOARCH, runtime.Version())\n}\nfunc IsLinux() bool { return runtime.GOOS == \"linux\" }\nfunc main() {}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "03-variables-and-zero-values",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 — Variables, Zero Values & iota\n\nZero values table, iota enums, iota bitmasks, short declarations."
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\n\ntype Status int\nconst (\n\tPending Status = iota\n\tActive\n)\nconst (\n\tRead = 1 << iota\n\tWrite\n)\nfunc main() {\n\tfmt.Println(Pending, Active, Read, Write)\n}"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\n// TODO 1: Define LogLevel enum with iota: Debug, Info, Warn, Error\ntype LogLevel int\nconst (\n\t// FILL\n)\n\n// TODO 2: Define bitmask permissions: Create=1, Read=2, Update=4, Delete=8\nconst (\n\t// FILL\n)\n\n// TODO 3: Return map of zero values for int, string, bool, slice, map, ptr\nfunc ZeroValues() map[string]interface{} {\n\t// FILL\n\treturn nil\n}\n\nfunc main() {}"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "## TODO 1\n`Debug LogLevel = iota` in const block\n\n## TODO 2\n`PermCreate = 1 << iota`\n\n## TODO 3\nReturn `map[string]interface{}` with `0`, `\"\"`, `false`, `nil` values"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestLogLevel(t *testing.T) {\n\tif Debug != 0 { t.Error() }\n\tif Error != 3 { t.Error() }\n}\n\nfunc TestPerms(t *testing.T) {\n\tif PermCreate != 1 || PermDelete != 8 { t.Error() }\n}\n\nfunc TestZero(t *testing.T) {\n\tz := ZeroValues()\n\tif z[\"int\"] != 0 || z[\"bool\"] != false { t.Error() }\n}"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\ntype LogLevel int\nconst (Debug LogLevel = iota; Info; Warn; Error)\nconst (PermCreate = 1 << iota; PermRead; PermUpdate; PermDelete)\nfunc ZeroValues() map[string]interface{} {\n\treturn map[string]interface{}{\"int\":0, \"string\":\"\", \"bool\":false, \"slice\":[]int(nil), \"map\":map[string]int(nil), \"ptr\":(*int)(nil)}\n}\nfunc main() {}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "04-data-types-and-memory-headers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 — Memory Headers\n\nString header (16B), Slice header (24B), byte vs rune.\n\n`unsafe.Sizeof` returns header size, not data size."
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\"fmt\"; \"unsafe\"; \"unicode/utf8\")\nfunc main() {\n\tfmt.Println(unsafe.Sizeof(\"\"), unsafe.Sizeof([]int{}))\n\ts := \"Hello, 世界\"\n\tfmt.Println(len(s), utf8.RuneCountInString(s))\n}"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport \"unsafe\"\n\n// TODO 1: Return string header size (16 on 64-bit)\nfunc StringHeaderSize() uintptr {\n\t// FILL\n\treturn 0\n}\n\n// TODO 2: Return slice header size (24 on 64-bit)\nfunc SliceHeaderSize() uintptr {\n\t// FILL\n\treturn 0\n}\n\n// TODO 3: Count runes using range loop (NOT utf8 package)\nfunc RuneCount(s string) int {\n\t// FILL\n\treturn 0\n}\n\nfunc main() {}"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "## TODO 1\n`unsafe.Sizeof(\"\")`\n\n## TODO 2\n`unsafe.Sizeof([]int{})`\n\n## TODO 3\n`for range s { count++ }`"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestStringHeader(t *testing.T) {\n\tif StringHeaderSize() != 16 { t.Error() }\n}\n\nfunc TestSliceHeader(t *testing.T) {\n\tif SliceHeaderSize() != 24 { t.Error() }\n}\n\nfunc TestRuneCount(t *testing.T) {\n\tif RuneCount(\"Hello, 世界\") != 9 { t.Error() }\n}"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport \"unsafe\"\n\nfunc StringHeaderSize() uintptr { return unsafe.Sizeof(\"\") }\nfunc SliceHeaderSize() uintptr { return unsafe.Sizeof([]int{}) }\nfunc RuneCount(s string) int { count := 0; for range s { count++ }; return count }\nfunc main() {}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "05-arrays-slices-and-growth",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 — Arrays, Slices & Growth\n\nSlice growth algorithm, sub-slice memory leaks, `copy()`, capacity doubling."
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\nfunc main() {\n\ts := make([]int, 2, 4)\n\ts = append(s, 1, 2, 3)\n\tfmt.Println(len(s), cap(s))\n\tbig := make([]int, 1000)\n\twindow := big[100:104]\n\tfmt.Println(len(window), cap(window))\n}"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\n// TODO 1: Append 5 elements to cap-2 slice, return final capacity\nfunc GrowToFive() int {\n\t// FILL\n\treturn 0\n}\n\n// TODO 2: Return independent copy of src[start:end] (no shared backing array)\nfunc IndependentSlice(src []int, start, end int) []int {\n\t// FILL\n\treturn nil\n}\n\n// TODO 3: Return true if a and b share backing array\nfunc SameBackingArray(a, b []int) bool {\n\t// FILL\n\treturn false\n}\n\nfunc main() {}"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "## TODO 1\n`make([]int,0,2)` then append 5 items, return cap\n\n## TODO 2\n`make` + `copy`\n\n## TODO 3\nCompare `&a[0] == &b[0]` (check len > 0 first)"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestGrow(t *testing.T) {\n\tif GrowToFive() < 5 { t.Error() }\n}\n\nfunc TestIndependent(t *testing.T) {\n\tsrc := []int{0,1,2,3,4,5,6,7,8,9}\n\tind := IndependentSlice(src, 3, 6)\n\tif len(ind) != 3 || ind[0] != 3 { t.Error() }\n\tif SameBackingArray(src, ind) { t.Error(\"shares backing\") }\n}\n\nfunc TestSameBacking(t *testing.T) {\n\tsrc := []int{1,2,3,4,5}\n\tsub := src[1:3]\n\tif !SameBackingArray(src, sub) { t.Error() }\n}"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nfunc GrowToFive() int {\n\ts := make([]int, 0, 2)\n\tfor i := 1; i <= 5; i++ { s = append(s, i) }\n\treturn cap(s)\n}\nfunc IndependentSlice(src []int, start, end int) []int {\n\tsub := src[start:end]\n\tout := make([]int, len(sub))\n\tcopy(out, sub)\n\treturn out\n}\nfunc SameBackingArray(a, b []int) bool {\n\tif len(a) == 0 || len(b) == 0 { return false }\n\treturn &a[0] == &b[0]\n}\nfunc main() {}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "06-maps-structs-and-custom-types",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 — Maps, Structs, Embedding & JSON Tags\n\n## 🎯 Learning Objectives\n- Use maps safely (NOT concurrency-safe!)\n- Use comma-ok idiom for map lookups\n- Use struct embedding for composition\n- Marshal/unmarshal structs with JSON tags\n\n---\n\n## 🧠 Core Concepts\n\n### Map Internals\n- Hash tables with buckets\n- **NOT safe for concurrent use** — concurrent read+write panics\n- Zero value is `nil` — must `make()` before writing\n\n### Struct Embedding\n```go\ntype Animal struct { Name string }\ntype Dog struct {\n    Animal      // embedded — promotes fields/methods\n    Breed string\n}\n```\n\n### JSON Tags\n- `json:\"name,omitempty\"` — skips zero values\n- `json:\"-\"` — ignores field entirely\n\n---\n\n## ⚠️ Common Traps\n- Map iteration order is random\n- Nil map read is safe, write panics\n- Embedding promotes methods; named fields don't\n\n---\n\n## 📝 Interview Questions\nQ: What happens writing to a map from two goroutines?\nA: Runtime panic: `concurrent map writes`. Use `sync.RWMutex` or `sync.Map`.\n\nQ: What's the difference between `json:\"-\"` and omitting the tag?\nA: `json:\"-\"` explicitly excludes the field. No tag includes it with the field name.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"encoding/json\"\n\t\"fmt\"\n)\n\ntype BaseEntity struct {\n\tID int `json:\"id\"`\n}\n\ntype User struct {\n\tBaseEntity\n\tName  string `json:\"name\"`\n\tEmail string `json:\"email,omitempty\"`\n}\n\nfunc main() {\n\tm := make(map[string]int)\n\tm[\"score\"] = 100\n\tif v, ok := m[\"score\"]; ok {\n\t\tfmt.Println(\"Found:\", v)\n\t}\n\tu := User{BaseEntity: BaseEntity{ID: 101}, Name: \"Navnath\"}\n\tdata, _ := json.Marshal(u)\n\tfmt.Println(\"JSON:\", string(data))\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport \"encoding/json\"\n\n// TODO 1: Safely read from map. Return (value, true) if exists, else (0, false).\nfunc SafeMapRead(m map[string]int, key string) (int, bool) {\n\t// FILL HERE\n\treturn 0, false\n}\n\n// TODO 2: Define Person with embedded Name struct (First, Last fields).\n// JSON tags: first_name, last_name, age.\ntype Name struct {\n\t// FILL HERE\n}\n\ntype Person struct {\n\t// FILL HERE\n}\n\n// TODO 3: Marshal Person to JSON bytes.\nfunc PersonToJSON(p Person) ([]byte, error) {\n\t// FILL HERE\n\treturn nil, nil\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 06\n\n## TODO 1\n- `val, ok := m[key]; return val, ok`\n\n## TODO 2\n```go\ntype Name struct {\n    First string `json:\"first_name\"`\n    Last  string `json:\"last_name\"`\n}\ntype Person struct {\n    Name\n    Age int `json:\"age\"`\n}\n```\n\n## TODO 3\n- `return json.Marshal(p)`\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"encoding/json\"\n\t\"testing\"\n)\n\nfunc TestSafeMapRead(t *testing.T) {\n\tm := map[string]int{\"a\": 1, \"b\": 2}\n\tv, ok := SafeMapRead(m, \"a\")\n\tif !ok || v != 1 { t.Error() }\n\tv, ok = SafeMapRead(m, \"z\")\n\tif ok { t.Error() }\n}\n\nfunc TestPersonToJSON(t *testing.T) {\n\tp := Person{Name: Name{First: \"John\", Last: \"Doe\"}, Age: 30}\n\tb, err := PersonToJSON(p)\n\tif err != nil { t.Fatal(err) }\n\tvar r map[string]interface{}\n\tjson.Unmarshal(b, &r)\n\tif r[\"first_name\"] != \"John\" || r[\"last_name\"] != \"Doe\" || r[\"age\"] != float64(30) {\n\t\tt.Errorf(\"bad json: %v\", r)\n\t}\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport \"encoding/json\"\n\ntype Name struct {\n\tFirst string `json:\"first_name\"`\n\tLast  string `json:\"last_name\"`\n}\n\ntype Person struct {\n\tName\n\tAge int `json:\"age\"`\n}\n\nfunc SafeMapRead(m map[string]int, key string) (int, bool) {\n\tval, ok := m[key]\n\treturn val, ok\n}\n\nfunc PersonToJSON(p Person) ([]byte, error) {\n\treturn json.Marshal(p)\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "07-control-flow-and-functions",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 — Control Flow, Defer Stack & Panic/Recover\n\n## 🎯 Learning Objectives\n- Predict defer execution order (LIFO)\n- Understand when defer arguments are evaluated\n- Use panic/recover for exception-like control flow (sparingly!)\n- Know all variants of `for` loop\n\n---\n\n## 🧠 Core Concepts\n\n### Defer Rules\n1. **LIFO order**: Last defer executes first\n2. **Arguments evaluated immediately**: `defer fmt.Println(i)` captures `i` at defer time\n3. **Deferred functions run on return**: Even if panic occurs\n\n### Panic/Recover\n- `panic` unwinds the stack, running deferred functions\n- `recover` only works inside a deferred function\n- **Best practice**: Don't use panic for normal errors\n\n---\n\n## ⚠️ Common Traps\n- Defer in a loop creates many deferred calls\n- Recover outside defer does nothing\n- Panic in a goroutine only unwinds that goroutine\n\n---\n\n## 📝 Interview Questions\nQ: What does this print?\n```go\nfor i := 0; i < 3; i++ { defer fmt.Println(i) }\n```\nA: `2, 1, 0` — LIFO order, `i` evaluated at defer time.\n\nQ: Can you recover from a panic in a different goroutine?\nA: **No.** Each goroutine has its own stack.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\n\nfunc SafeDivide(a, b int) (result int, err error) {\n\tdefer func() {\n\t\tif r := recover(); r != nil {\n\t\t\terr = fmt.Errorf(\"panic recovered: %v\", r)\n\t\t}\n\t}()\n\tresult = a / b\n\treturn\n}\n\nfunc main() {\n\tfor i := 1; i <= 3; i++ {\n\t\tdefer fmt.Printf(\"defer %d\\n\", i)\n\t}\n\tres, err := SafeDivide(10, 0)\n\tfmt.Printf(\"Result: %d, Error: %v\\n\", res, err)\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport \"fmt\"\n\n// TODO 1: Use defer to print \"start\" then \"end\" regardless of what happens.\nfunc PrintStartEnd() {\n\t// FILL HERE\n\tfmt.Println(\"middle\")\n}\n\n// TODO 2: Recover from slice index out of bounds panic. Return error instead.\nfunc SafeIndex(slice []int, idx int) (int, error) {\n\t// FILL HERE\n\treturn 0, nil\n}\n\n// TODO 3: Return sum of all deferred increments (1+2+3=6).\n// Use closure and defer. LIFO means 3+2+1.\nfunc DeferredSum() int {\n\t// FILL HERE\n\treturn 0\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 07\n\n## TODO 1\n```go\nfmt.Println(\"start\")\ndefer fmt.Println(\"end\")\nfmt.Println(\"middle\")\n```\n\n## TODO 2\n```go\ndefer func() {\n    if r := recover(); r != nil {\n        err = fmt.Errorf(\"index out of range\")\n    }\n}()\nreturn slice[idx], nil\n```\n\n## TODO 3\n```go\nsum := 0\nfor i := 1; i <= 3; i++ {\n    defer func(n int) { sum += n }(i)\n}\nreturn sum\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"strings\"\n\t\"testing\"\n)\n\nfunc TestSafeIndex(t *testing.T) {\n\ts := []int{10, 20, 30}\n\tv, err := SafeIndex(s, 1)\n\tif err != nil || v != 20 { t.Error() }\n\tv, err = SafeIndex(s, 10)\n\tif err == nil { t.Error(\"expected error\") }\n\tif !strings.Contains(err.Error(), \"index\") && !strings.Contains(err.Error(), \"range\") {\n\t\tt.Errorf(\"bad error msg: %v\", err)\n\t}\n}\n\nfunc TestDeferredSum(t *testing.T) {\n\tif DeferredSum() != 6 { t.Error() }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport \"fmt\"\n\nfunc PrintStartEnd() {\n\tfmt.Println(\"start\")\n\tdefer fmt.Println(\"end\")\n\tfmt.Println(\"middle\")\n}\n\nfunc SafeIndex(slice []int, idx int) (int, error) {\n\tdefer func() {\n\t\tif r := recover(); r != nil {\n\t\t\t// We need named returns to set err from defer\n\t\t}\n\t}()\n\tif idx < 0 || idx >= len(slice) {\n\t\treturn 0, fmt.Errorf(\"index %d out of range [0,%d)\", idx, len(slice))\n\t}\n\treturn slice[idx], nil\n}\n\nfunc DeferredSum() int {\n\tsum := 0\n\tfor i := 1; i <= 3; i++ {\n\t\tdefer func(n int) { sum += n }(i)\n\t}\n\treturn sum\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "08-pointers-and-semantics",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — Pointers, Value Semantics & Mutation\n\n## 🎯 Learning Objectives\n- Decide when to use pointer vs value receivers\n- Understand pass-by-value for all function arguments\n- Predict mutation behavior with pointers\n- Know when copying is expensive\n\n---\n\n## 🧠 Core Concepts\n\n### Go is Always Pass-by-Value\n- **Value**: Entire struct/array copied\n- **Pointer**: Pointer value (8 bytes) copied, but points to shared data\n\n### Pointer vs Value Receivers\n| | Value Receiver | Pointer Receiver |\n|---|---|---|\n| Can mutate? | No | Yes |\n| Nil safe? | Yes | Must check nil |\n| Method set | Both value and pointer vars | Only pointer vars |\n\n---\n\n## ⚠️ Common Traps\n- Pointer to loop variable: all goroutines see same `v`\n- Map values are not addressable: `&m[\"key\"]` invalid\n- Slice elements ARE addressable: `&slice[i]` valid\n\n---\n\n## 📝 Interview Questions\nQ: What's the output of `modify(x)` where `modify` takes `int`?\nA: Original `x` unchanged — Go is pass-by-value.\n\nQ: Should `Config` methods use pointer or value receivers?\nA: Usually pointer, because configs are often large and may need mutation.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\n\ntype Counter struct{ Count int }\n\nfunc (c Counter) IncValue()   { c.Count++ }\nfunc (c *Counter) IncPointer() { c.Count++ }\n\nfunc main() {\n\tc := Counter{Count: 0}\n\tc.IncValue()\n\tfmt.Println(\"Value recv:\", c.Count)    // 0\n\tc.IncPointer()\n\tfmt.Println(\"Pointer recv:\", c.Count)  // 1\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\n// TODO 1: Rectangle with Width, Height. Area() value receiver. Scale() pointer receiver.\ntype Rectangle struct {\n\t// FILL HERE\n}\n\n// TODO 2: Swap two *int values.\nfunc Swap(a, b *int) {\n\t// FILL HERE\n}\n\n// TODO 3: Return slice of pointers to structs. Avoid loop variable capture!\nfunc ToPointers(items []Rectangle) []*Rectangle {\n\t// FILL HERE\n\treturn nil\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 08\n\n## TODO 1\n```go\ntype Rectangle struct { Width, Height float64 }\nfunc (r Rectangle) Area() float64 { return r.Width * r.Height }\nfunc (r *Rectangle) Scale(f float64) { r.Width *= f; r.Height *= f }\n```\n\n## TODO 2\n```go\ntemp := *a; *a = *b; *b = temp\n```\n\n## TODO 3\n```go\nout := make([]*Rectangle, len(items))\nfor i := range items { out[i] = &items[i] }\nreturn out\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestRectangle(t *testing.T) {\n\tr := Rectangle{Width: 10, Height: 5}\n\tif r.Area() != 50 { t.Error() }\n\tr.Scale(2)\n\tif r.Width != 20 || r.Height != 10 { t.Error() }\n}\n\nfunc TestSwap(t *testing.T) {\n\ta, b := 5, 10\n\tSwap(&a, &b)\n\tif a != 10 || b != 5 { t.Error() }\n}\n\nfunc TestToPointers(t *testing.T) {\n\titems := []Rectangle{{Width: 1, Height: 1}, {Width: 2, Height: 2}}\n\tptrs := ToPointers(items)\n\tif len(ptrs) != 2 { t.Fatal() }\n\tif ptrs[0].Width != 1 || ptrs[1].Width != 2 { t.Error() }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\ntype Rectangle struct {\n\tWidth, Height float64\n}\n\nfunc (r Rectangle) Area() float64 {\n\treturn r.Width * r.Height\n}\n\nfunc (r *Rectangle) Scale(factor float64) {\n\tr.Width *= factor\n\tr.Height *= factor\n}\n\nfunc Swap(a, b *int) {\n\ttemp := *a\n\t*a = *b\n\t*b = temp\n}\n\nfunc ToPointers(items []Rectangle) []*Rectangle {\n\tout := make([]*Rectangle, len(items))\n\tfor i := range items {\n\t\tout[i] = &items[i]\n\t}\n\treturn out\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "09-methods-interfaces-duck-typing",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — Interfaces, Duck Typing & The Infamous nil Trap\n\n## 🎯 Learning Objectives\n- Explain how interfaces work internally (type-value pair)\n- Understand why `(*Type)(nil) != nil` in interfaces\n- Use empty interface (`any`) correctly\n- Know when to use value vs pointer receivers with interfaces\n\n---\n\n## 🧠 Core Concepts\n\n### Interface Internal Structure\n```\n[Interface Header]\n| Type Pointer (8B) | Data Pointer (8B) |\n```\nAn interface is nil **only when both pointers are nil**.\n\n### The nil Trap\n```go\nvar p *MyError = nil\nvar err error = p\nfmt.Println(err == nil) // FALSE!\n```\nWhy? Type Pointer = `*MyError` (non-nil!), Data Pointer = nil.\n\n---\n\n## ⚠️ Common Traps\n- Returning typed nil: interface is NOT nil\n- Type assertion panic: use `v, ok := x.(int)`\n- Value receiver on pointer type: not in method set of `*Type`\n\n---\n\n## 📝 Interview Questions\nQ: Why does `return err` where `err` is `*MyError = nil` fail the `!= nil` check?\nA: The interface has type `*MyError` and value `nil`. Since type is non-nil, interface is non-nil.\n\nQ: How do you fix it?\nA: Return `nil` directly (untyped), or return `error(nil)`.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\n\ntype MyError struct{ Code int }\nfunc (e *MyError) Error() string { return fmt.Sprintf(\"code: %d\", e.Code) }\n\nfunc Buggy(ok bool) error {\n\tvar err *MyError = nil\n\tif !ok { return err }\n\treturn nil\n}\n\nfunc Fixed(ok bool) error {\n\tif !ok { return nil }\n\treturn nil\n}\n\nfunc main() {\n\tfmt.Println(\"Buggy != nil?\", Buggy(false) != nil)\n\tfmt.Println(\"Fixed != nil?\", Fixed(false) != nil)\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport \"fmt\"\n\n// TODO 1: Fix GetError. When ok=false, returned error MUST be nil.\ntype CustomError struct{ Msg string }\nfunc (e *CustomError) Error() string { return e.Msg }\n\nfunc GetError(ok bool) error {\n\tvar err *CustomError = nil\n\tif !ok {\n\t\treturn err // BUG!\n\t}\n\treturn nil\n}\n\n// TODO 2: Return underlying type name using type switch.\nfunc TypeName(v any) string {\n\t// FILL HERE\n\treturn \"\"\n}\n\n// TODO 3: Return true ONLY if error is truly nil (both type and value nil).\nfunc IsTrulyNil(err error) bool {\n\t// FILL HERE\n\treturn false\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 09\n\n## TODO 1\nReturn `nil` directly, not a typed nil pointer.\n\n## TODO 2\n```go\nswitch v.(type) {\ncase int: return \"int\"\ncase string: return \"string\"\ncase bool: return \"bool\"\ndefault: return fmt.Sprintf(\"%T\", v)\n}\n```\n\n## TODO 3\n`return err == nil` — Go's `==` on interfaces checks both pointers.\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestGetError(t *testing.T) {\n\tif GetError(false) != nil { t.Error(\"should be nil\") }\n}\n\nfunc TestTypeName(t *testing.T) {\n\tif TypeName(42) != \"int\" { t.Error() }\n\tif TypeName(\"hello\") != \"string\" { t.Error() }\n\tif TypeName(true) != \"bool\" { t.Error() }\n}\n\nfunc TestIsTrulyNil(t *testing.T) {\n\tif !IsTrulyNil(nil) { t.Error() }\n\tvar e *CustomError = nil\n\tif IsTrulyNil(e) { t.Error(\"typed nil should not be truly nil\") }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport \"fmt\"\n\ntype CustomError struct{ Msg string }\nfunc (e *CustomError) Error() string { return e.Msg }\n\nfunc GetError(ok bool) error {\n\tif !ok {\n\t\treturn nil\n\t}\n\treturn &CustomError{Msg: \"error\"}\n}\n\nfunc TypeName(v any) string {\n\tswitch v.(type) {\n\tcase int:\n\t\treturn \"int\"\n\tcase string:\n\t\treturn \"string\"\n\tcase bool:\n\t\treturn \"bool\"\n\tdefault:\n\t\treturn fmt.Sprintf(\"%T\", v)\n\t}\n}\n\nfunc IsTrulyNil(err error) bool {\n\treturn err == nil\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-generics",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Generics (Go 1.18+)\n\n## 🎯 Learning Objectives\n- Write generic functions with type parameters\n- Define custom type constraints using interfaces\n- Understand `any` vs `comparable`\n- Know when NOT to use generics\n\n---\n\n## 🧠 Core Concepts\n\n### Type Parameters\n```go\nfunc Max[T comparable](a, b T) T { /* ERROR: comparable doesn't support > */ }\n```\n\n### Ordered Constraint\n```go\ntype Number interface {\n    ~int | ~float64\n}\n```\n`~int` means \"any type whose underlying type is int\".\n\n---\n\n## ⚠️ Common Traps\n- `comparable` only supports `==` and `!=`, not `<` or `>`\n- Generics increase compile time\n- Type inference: `Max(1, 2)` infers `T=int`\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between `any` and `comparable`?\nA: `any` = `interface{}` (no constraints). `comparable` = types that support `==` and `!=`.\n\nQ: Can methods have their own type parameters?\nA: No. But the receiver type can be generic.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\n\ntype Number interface {\n\t~int | ~float64\n}\n\nfunc Add[T Number](a, b T) T { return a + b }\n\nfunc Contains[T comparable](s []T, t T) bool {\n\tfor _, v := range s { if v == t { return true } }\n\treturn false\n}\n\nfunc main() {\n\tfmt.Println(Add(10, 20))\n\tfmt.Println(Contains([]string{\"a\", \"b\"}, \"b\"))\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\n// TODO 1: Generic Max with ordering constraint.\ntype Ordered interface {\n\t// FILL HERE\n}\n\nfunc Max[T Ordered](a, b T) T {\n\t// FILL HERE\n\treturn a\n}\n\n// TODO 2: Generic Filter with predicate.\nfunc Filter[T any](slice []T, predicate func(T) bool) []T {\n\t// FILL HERE\n\treturn nil\n}\n\n// TODO 3: Generic Stack with Push and Pop.\ntype Stack[T any] struct {\n\t// FILL HERE\n}\n\nfunc (s *Stack[T]) Push(v T) {\n\t// FILL HERE\n}\n\nfunc (s *Stack[T]) Pop() (T, bool) {\n\t// FILL HERE\n\tvar zero T\n\treturn zero, false\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 10\n\n## TODO 1\n```go\ntype Ordered interface {\n    ~int | ~int8 | ~int16 | ~int32 | ~int64 |\n    ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |\n    ~float32 | ~float64\n}\nfunc Max[T Ordered](a, b T) T {\n    if a > b { return a }\n    return b\n}\n```\n\n## TODO 2\n```go\nout := make([]T, 0)\nfor _, v := range slice {\n    if predicate(v) { out = append(out, v) }\n}\nreturn out\n```\n\n## TODO 3\n```go\ntype Stack[T any] struct { items []T }\nfunc (s *Stack[T]) Push(v T) { s.items = append(s.items, v) }\nfunc (s *Stack[T]) Pop() (T, bool) {\n    if len(s.items) == 0 { var z T; return z, false }\n    v := s.items[len(s.items)-1]\n    s.items = s.items[:len(s.items)-1]\n    return v, true\n}\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestMax(t *testing.T) {\n\tif Max(5, 10) != 10 { t.Error() }\n\tif Max(3.14, 2.71) != 3.14 { t.Error() }\n}\n\nfunc TestFilter(t *testing.T) {\n\tnums := []int{1, 2, 3, 4, 5}\n\tevens := Filter(nums, func(n int) bool { return n%2 == 0 })\n\tif len(evens) != 2 || evens[0] != 2 || evens[1] != 4 { t.Error() }\n}\n\nfunc TestStack(t *testing.T) {\n\tvar s Stack[int]\n\ts.Push(10)\n\ts.Push(20)\n\tv, ok := s.Pop()\n\tif !ok || v != 20 { t.Error() }\n\tv, ok = s.Pop()\n\tif !ok || v != 10 { t.Error() }\n\t_, ok = s.Pop()\n\tif ok { t.Error() }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\ntype Ordered interface {\n\t~int | ~int8 | ~int16 | ~int32 | ~int64 |\n\t\t~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |\n\t\t~float32 | ~float64\n}\n\nfunc Max[T Ordered](a, b T) T {\n\tif a > b {\n\t\treturn a\n\t}\n\treturn b\n}\n\nfunc Filter[T any](slice []T, predicate func(T) bool) []T {\n\tout := make([]T, 0)\n\tfor _, v := range slice {\n\t\tif predicate(v) {\n\t\t\tout = append(out, v)\n\t\t}\n\t}\n\treturn out\n}\n\ntype Stack[T any] struct {\n\titems []T\n}\n\nfunc (s *Stack[T]) Push(v T) {\n\ts.items = append(s.items, v)\n}\n\nfunc (s *Stack[T]) Pop() (T, bool) {\n\tif len(s.items) == 0 {\n\t\tvar zero T\n\t\treturn zero, false\n\t}\n\tv := s.items[len(s.items)-1]\n\ts.items = s.items[:len(s.items)-1]\n\treturn v, true\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-error-handling-and-custom-types",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Error Handling, Wrapping & Sentinel Errors\n\n## 🎯 Learning Objectives\n- Create custom error types\n- Wrap errors with `%w` for unwrapping\n- Use `errors.Is()` and `errors.As()` correctly\n- Design sentinel errors vs structured errors\n\n---\n\n## 🧠 Core Concepts\n\n### Error Wrapping\n```go\nfmt.Errorf(\"db query failed: %w\", err)\n```\nThe `%w` verb wraps the error, allowing `errors.Is()` to match.\n\n### Sentinel Errors\n```go\nvar ErrNotFound = errors.New(\"not found\")\n```\nPackage-level error values used for identity checking.\n\n### errors.Is vs errors.As\n- `errors.Is(err, target)`: Checks if `err` or any wrapped error equals `target`\n- `errors.As(err, &target)`: Checks if `err` or any wrapped error is assignable to `target` type\n\n---\n\n## ⚠️ Common Traps\n- `%v` instead of `%w`: `errors.Is` won't work\n- `errors.As` requires a pointer: `errors.As(err, &myErr)`\n- Comparing errors with `==` instead of `errors.Is` breaks wrapped error chains\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between `fmt.Errorf(\"%v\", err)` and `fmt.Errorf(\"%w\", err)`?\nA: `%w` wraps the error, preserving it in the chain for `errors.Is()`. `%v` just formats the string.\n\nQ: When should you use sentinel errors vs custom error types?\nA: Sentinel errors for simple identity checks (`ErrNotFound`). Custom types when you need structured data (status codes, retry info).\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"errors\"\n\t\"fmt\"\n)\n\nvar ErrNotFound = errors.New(\"not found\")\n\nfunc QueryDB() error {\n\treturn fmt.Errorf(\"db query: %w\", ErrNotFound)\n}\n\nfunc main() {\n\terr := QueryDB()\n\tif errors.Is(err, ErrNotFound) {\n\t\tfmt.Println(\"Detected ErrNotFound in chain!\")\n\t}\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"errors\"\n\t\"fmt\"\n)\n\nvar ErrInvalidInput = errors.New(\"invalid input\")\n\n// TODO 1: Wrap ErrInvalidInput with context \"validation failed\".\n// Use %w so errors.Is works.\nfunc Validate(age int) error {\n\tif age < 0 {\n\t\t// FILL HERE\n\t\treturn nil\n\t}\n\treturn nil\n}\n\n// TODO 2: Define a custom error type ValidationError with Field and Message.\n// Implement the Error() string method.\ntype ValidationError struct {\n\t// FILL HERE\n}\n\n// TODO 3: Write a function CheckValidation that uses errors.As to extract\n// a *ValidationError from an error chain. Return it and true if found.\nfunc CheckValidation(err error) (*ValidationError, bool) {\n\t// FILL HERE\n\treturn nil, false\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 11\n\n## TODO 1\n```go\nreturn fmt.Errorf(\"validation failed: %w\", ErrInvalidInput)\n```\n\n## TODO 2\n```go\ntype ValidationError struct {\n    Field   string\n    Message string\n}\nfunc (e *ValidationError) Error() string {\n    return fmt.Sprintf(\"validation error on %s: %s\", e.Field, e.Message)\n}\n```\n\n## TODO 3\n```go\nvar ve *ValidationError\nif errors.As(err, &ve) {\n    return ve, true\n}\nreturn nil, false\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"errors\"\n\t\"testing\"\n)\n\nfunc TestValidate(t *testing.T) {\n\terr := Validate(-5)\n\tif err == nil { t.Fatal(\"expected error\") }\n\tif !errors.Is(err, ErrInvalidInput) { t.Error(\"should wrap ErrInvalidInput\") }\n}\n\nfunc TestCheckValidation(t *testing.T) {\n\tve := &ValidationError{Field: \"age\", Message: \"too young\"}\n\twrapped := fmt.Errorf(\"wrapped: %w\", ve)\n\tfound, ok := CheckValidation(wrapped)\n\tif !ok { t.Fatal(\"expected to find ValidationError\") }\n\tif found.Field != \"age\" { t.Error() }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"errors\"\n\t\"fmt\"\n)\n\nvar ErrInvalidInput = errors.New(\"invalid input\")\n\nfunc Validate(age int) error {\n\tif age < 0 {\n\t\treturn fmt.Errorf(\"validation failed: %w\", ErrInvalidInput)\n\t}\n\treturn nil\n}\n\ntype ValidationError struct {\n\tField   string\n\tMessage string\n}\n\nfunc (e *ValidationError) Error() string {\n\treturn fmt.Sprintf(\"validation error on %s: %s\", e.Field, e.Message)\n}\n\nfunc CheckValidation(err error) (*ValidationError, bool) {\n\tvar ve *ValidationError\n\tif errors.As(err, &ve) {\n\t\treturn ve, true\n\t}\n\treturn nil, false\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-concurrency-goroutines-gmp",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Goroutines & The GMP Scheduler\n\n## 🎯 Learning Objectives\n- Explain the GMP model (Goroutine, Machine, Processor)\n- Understand why goroutines are lightweight (2KB vs 2MB stacks)\n- Use `runtime.GOMAXPROCS` to control parallelism\n- Know the difference between concurrency and parallelism\n\n---\n\n## 🧠 Core Concepts\n\n### GMP Model\n- **G** = Goroutine: User-level lightweight thread (starts at 2KB stack)\n- **M** = Machine: OS thread (maps 1:1 to kernel thread)\n- **P** = Processor: Logical processor (schedules Gs onto Ms)\n\n### Concurrency vs Parallelism\n- **Concurrency**: Dealing with multiple things at once (structure)\n- **Parallelism**: Doing multiple things at once (execution)\nYou can have concurrency without parallelism (single core).\n\n### Stack Growth\n- Goroutine stacks start at 2KB and grow dynamically\n- OS threads start at 2MB (fixed)\n- This is why you can spawn millions of goroutines but not threads\n\n---\n\n## ⚠️ Common Traps\n- **Goroutine leak**: Starting a goroutine that never exits\n- **Closure variable capture**: Loop variables are shared\n- **Main exits before goroutines finish**: Use `sync.WaitGroup`\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between a goroutine and an OS thread?\nA: Goroutines are user-space, start at 2KB, grow dynamically, and are multiplexed onto OS threads by the Go scheduler. OS threads are kernel-managed, start at 2MB, and are expensive.\n\nQ: What does `runtime.GOMAXPROCS(0)` return?\nA: The number of logical CPUs available. Setting it to N limits parallelism to N OS threads.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"runtime\"\n\t\"sync\"\n)\n\nfunc main() {\n\tfmt.Printf(\"Logical CPUs: %d\\n\", runtime.GOMAXPROCS(0))\n\tvar wg sync.WaitGroup\n\tfor i := 1; i <= 3; i++ {\n\t\twg.Add(1)\n\t\tgo func(id int) {\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Printf(\"Goroutine %d\\n\", id)\n\t\t}(i)\n\t}\n\twg.Wait()\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"runtime\"\n\t\"sync\"\n\t\"sync/atomic\"\n)\n\n// TODO 1: Spawn N goroutines that each increment a shared counter.\n// Use sync/atomic to avoid data races. Return final counter value.\nfunc AtomicCounter(n int) int64 {\n\t// FILL HERE\n\treturn 0\n}\n\n// TODO 2: Use sync.WaitGroup to run 3 goroutines and wait for all.\n// Each goroutine appends its ID to a shared slice.\n// Protect the slice with sync.Mutex.\nfunc ConcurrentAppend() []int {\n\t// FILL HERE\n\treturn nil\n}\n\n// TODO 3: Return the number of logical CPUs using runtime.\nfunc NumCPUs() int {\n\t// FILL HERE\n\treturn 0\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 12\n\n## TODO 1\n```go\nvar counter int64\nvar wg sync.WaitGroup\nfor i := 0; i < n; i++ {\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        atomic.AddInt64(&counter, 1)\n    }()\n}\nwg.Wait()\nreturn counter\n```\n\n## TODO 2\n```go\nvar mu sync.Mutex\nvar result []int\nvar wg sync.WaitGroup\nfor i := 1; i <= 3; i++ {\n    wg.Add(1)\n    go func(id int) {\n        defer wg.Done()\n        mu.Lock()\n        result = append(result, id)\n        mu.Unlock()\n    }(i)\n}\nwg.Wait()\nreturn result\n```\n\n## TODO 3\n- `runtime.GOMAXPROCS(0)`\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"sort\"\n\t\"testing\"\n)\n\nfunc TestAtomicCounter(t *testing.T) {\n\tgot := AtomicCounter(1000)\n\tif got != 1000 { t.Errorf(\"got %d, want 1000\", got) }\n}\n\nfunc TestConcurrentAppend(t *testing.T) {\n\tgot := ConcurrentAppend()\n\tif len(got) != 3 { t.Fatalf(\"len=%d\", len(got)) }\n\tsort.Ints(got)\n\tif got[0] != 1 || got[1] != 2 || got[2] != 3 { t.Errorf(\"got %v\", got) }\n}\n\nfunc TestNumCPUs(t *testing.T) {\n\tif NumCPUs() <= 0 { t.Error() }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"runtime\"\n\t\"sync\"\n\t\"sync/atomic\"\n)\n\nfunc AtomicCounter(n int) int64 {\n\tvar counter int64\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < n; i++ {\n\t\twg.Add(1)\n\t\tgo func() {\n\t\t\tdefer wg.Done()\n\t\t\tatomic.AddInt64(&counter, 1)\n\t\t}()\n\t}\n\twg.Wait()\n\treturn counter\n}\n\nfunc ConcurrentAppend() []int {\n\tvar mu sync.Mutex\n\tvar result []int\n\tvar wg sync.WaitGroup\n\tfor i := 1; i <= 3; i++ {\n\t\twg.Add(1)\n\t\tgo func(id int) {\n\t\t\tdefer wg.Done()\n\t\t\tmu.Lock()\n\t\t\tresult = append(result, id)\n\t\t\tmu.Unlock()\n\t\t}(i)\n\t}\n\twg.Wait()\n\treturn result\n}\n\nfunc NumCPUs() int {\n\treturn runtime.GOMAXPROCS(0)\n}\n\nfunc main() {\n\tfmt.Println(NumCPUs())\n}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "13-channels-select-and-sync",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 — Channels, Select & Synchronization Primitives\n\n## 🎯 Learning Objectives\n- Choose between buffered and unbuffered channels\n- Use `select` for timeouts and non-blocking operations\n- Use `sync.WaitGroup`, `Mutex`, `RWMutex`, and `sync.Pool`\n- Understand channel closing semantics\n\n---\n\n## 🧠 Core Concepts\n\n### Buffered vs Unbuffered\n| | Unbuffered | Buffered |\n|---|---|---|\n| Size | `make(chan T)` | `make(chan T, N)` |\n| Send | Blocks until receiver ready | Blocks only when buffer full |\n| Receive | Blocks until sender ready | Blocks only when buffer empty |\n\n### Select\n```go\nselect {\ncase v := <-ch1:\n    // handle v\ncase ch2 <- val:\n    // sent\ncase <-time.After(100 * time.Millisecond):\n    // timeout\ndefault:\n    // non-blocking\n}\n```\n\n### sync.Pool\n- Object pool for reuse (reduces GC pressure)\n- Not for long-lived objects (GC can clear pool)\n- Great for temporary buffers\n\n---\n\n## ⚠️ Common Traps\n- **Closing a closed channel panics**\n- **Sending to a closed channel panics**\n- **Closing a nil channel blocks forever**\n- **RWMutex**: Writers starve readers if constantly arriving\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between `make(chan int)` and `make(chan int, 1)`?\nA: Unbuffered requires both sender and receiver to be ready simultaneously. Buffered allows sender to continue if buffer has space.\n\nQ: Can you range over a channel that was never closed?\nA: Yes, but it will block forever after the last value unless there's a timeout or another case.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n\t\"time\"\n)\n\nfunc main() {\n\tch := make(chan string, 1)\n\tch <- \"msg\"\n\tselect {\n\tcase msg := <-ch:\n\t\tfmt.Println(\"Received:\", msg)\n\tcase <-time.After(100 * time.Millisecond):\n\t\tfmt.Println(\"Timeout\")\n\t}\n\n\tvar mu sync.RWMutex\n\tmu.Lock()\n\tfmt.Println(\"Write locked\")\n\tmu.Unlock()\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"time\"\n)\n\n// TODO 1: Create a buffered channel of ints with capacity 2.\n// Send two values without blocking, then receive both and return their sum.\nfunc BufferedSum() int {\n\t// FILL HERE\n\treturn 0\n}\n\n// TODO 2: Use select with a timeout to read from a channel.\n// If the channel has no value within 50ms, return \"timeout\".\n// If it has a value, return that value as string.\nfunc SelectWithTimeout(ch chan string) string {\n\t// FILL HERE\n\treturn \"\"\n}\n\n// TODO 3: Implement a worker pool pattern.\n// Spawn 2 goroutines that read jobs from a jobs channel and send results to a results channel.\n// Each worker doubles the input. Return all results as a slice.\nfunc WorkerPool(inputs []int) []int {\n\t// FILL HERE\n\treturn nil\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 13\n\n## TODO 1\n```go\nch := make(chan int, 2)\nch <- 10\nch <- 20\nreturn <-ch + <-ch\n```\n\n## TODO 2\n```go\nselect {\ncase v := <-ch:\n    return v\ncase <-time.After(50 * time.Millisecond):\n    return \"timeout\"\n}\n```\n\n## TODO 3\n```go\njobs := make(chan int, len(inputs))\nresults := make(chan int, len(inputs))\nfor w := 0; w < 2; w++ {\n    go func() {\n        for j := range jobs {\n            results <- j * 2\n        }\n    }()\n}\nfor _, v := range inputs { jobs <- v }\nclose(jobs)\nout := make([]int, 0, len(inputs))\nfor i := 0; i < len(inputs); i++ { out = append(out, <-results) }\nreturn out\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"sort\"\n\t\"testing\"\n\t\"time\"\n)\n\nfunc TestBufferedSum(t *testing.T) {\n\tif BufferedSum() != 30 { t.Error() }\n}\n\nfunc TestSelectWithTimeout(t *testing.T) {\n\tch := make(chan string)\n\tgo func() { time.Sleep(10 * time.Millisecond); ch <- \"ok\" }()\n\tif SelectWithTimeout(ch) != \"ok\" { t.Error() }\n\n\tempty := make(chan string)\n\tif SelectWithTimeout(empty) != \"timeout\" { t.Error() }\n}\n\nfunc TestWorkerPool(t *testing.T) {\n\tgot := WorkerPool([]int{1, 2, 3, 4})\n\tif len(got) != 4 { t.Fatalf(\"len=%d\", len(got)) }\n\tsort.Ints(got)\n\twant := []int{2, 4, 6, 8}\n\tfor i := range want {\n\t\tif got[i] != want[i] { t.Errorf(\"got %v, want %v\", got, want) }\n\t}\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport \"time\"\n\nfunc BufferedSum() int {\n\tch := make(chan int, 2)\n\tch <- 10\n\tch <- 20\n\treturn <-ch + <-ch\n}\n\nfunc SelectWithTimeout(ch chan string) string {\n\tselect {\n\tcase v := <-ch:\n\t\treturn v\n\tcase <-time.After(50 * time.Millisecond):\n\t\treturn \"timeout\"\n\t}\n}\n\nfunc WorkerPool(inputs []int) []int {\n\tjobs := make(chan int, len(inputs))\n\tresults := make(chan int, len(inputs))\n\tfor w := 0; w < 2; w++ {\n\t\tgo func() {\n\t\t\tfor j := range jobs {\n\t\t\t\tresults <- j * 2\n\t\t\t}\n\t\t}()\n\t}\n\tfor _, v := range inputs {\n\t\tjobs <- v\n\t}\n\tclose(jobs)\n\tout := make([]int, 0, len(inputs))\n\tfor i := 0; i < len(inputs); i++ {\n\t\tout = append(out, <-results)\n\t}\n\treturn out\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "14-context-cancellation-timeouts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 — Context Package: Cancellation Trees\n\n## 🎯 Learning Objectives\n- Use `context.WithCancel`, `WithTimeout`, `WithDeadline`\n- Propagate cancellation through the call tree\n- Use `context.WithValue` sparingly (it's not a general store!)\n- Handle context cancellation in HTTP handlers and goroutines\n\n---\n\n## 🧠 Core Concepts\n\n### Context Types\n- `context.Background()`: Root context, never cancelled\n- `context.WithCancel(parent)`: Returns ctx + cancel func\n- `context.WithTimeout(parent, duration)`: Auto-cancels after duration\n- `context.WithDeadline(parent, time)`: Auto-cancels at specific time\n- `context.WithValue(parent, key, val)`: Carries request-scoped values\n\n### Cancellation Propagation\nWhen a parent context is cancelled, ALL children are cancelled automatically.\n```go\nctx, cancel := context.WithCancel(context.Background())\nchildCtx, _ := context.WithCancel(ctx) // child inherits parent cancellation\ncancel() // both ctx and childCtx are cancelled\n```\n\n### WithValue Best Practices\n- Use private key types to avoid collisions\n- Only for request-scoped data (request IDs, auth tokens)\n- NEVER for optional parameters or configuration\n\n---\n\n## ⚠️ Common Traps\n- **Not calling cancel()**: Causes goroutine leak\n- **Using string keys in WithValue**: Collisions between packages\n- **Storing large objects in context**: Increases memory pressure\n- **Checking ctx.Err() before starting work**: Should check during work\n\n---\n\n## 📝 Interview Questions\nQ: What happens if you don't call `cancel()` on a `WithTimeout` context?\nA: The goroutine created by `WithTimeout` leaks until the deadline passes.\n\nQ: Can a child context cancel its parent?\nA: **No.** Cancellation flows downward only.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"time\"\n)\n\nfunc main() {\n\tctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)\n\tdefer cancel()\n\n\tselect {\n\tcase <-time.After(100 * time.Millisecond):\n\t\tfmt.Println(\"Finished\")\n\tcase <-ctx.Done():\n\t\tfmt.Println(\"Timeout:\", ctx.Err())\n\t}\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"context\"\n\t\"time\"\n)\n\n// TODO 1: Create a context with 20ms timeout. Simulate work that takes 50ms.\n// Return true if timeout occurred, false if work finished.\nfunc CheckTimeout() bool {\n\t// FILL HERE\n\treturn false\n}\n\n// TODO 2: Create a parent context with cancel. Create a child with timeout.\n// Cancel the PARENT and return true if the child context is also cancelled.\nfunc ParentCancelsChild() bool {\n\t// FILL HERE\n\treturn false\n}\n\n// TODO 3: Use context.WithValue to carry a request ID.\n// Define a private key type. Return the request ID from context.\ntype requestIDKey struct{}\n\nfunc GetRequestID(ctx context.Context) string {\n\t// FILL HERE\n\treturn \"\"\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 14\n\n## TODO 1\n```go\nctx, cancel := context.WithTimeout(context.Background(), 20*time.Millisecond)\ndefer cancel()\nselect {\ncase <-time.After(50 * time.Millisecond):\n    return false\ncase <-ctx.Done():\n    return true\n}\n```\n\n## TODO 2\n```go\nparent, cancel := context.WithCancel(context.Background())\nchild, _ := context.WithTimeout(parent, time.Minute)\ncancel()\nselect {\ncase <-child.Done():\n    return true\ncase <-time.After(100 * time.Millisecond):\n    return false\n}\n```\n\n## TODO 3\n```go\nctx = context.WithValue(ctx, requestIDKey{}, \"req-123\")\nif id, ok := ctx.Value(requestIDKey{}).(string); ok {\n    return id\n}\nreturn \"\"\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"context\"\n\t\"testing\"\n\t\"time\"\n)\n\nfunc TestCheckTimeout(t *testing.T) {\n\tif !CheckTimeout() { t.Error(\"expected timeout\") }\n}\n\nfunc TestParentCancelsChild(t *testing.T) {\n\tif !ParentCancelsChild() { t.Error(\"expected child cancelled\") }\n}\n\nfunc TestGetRequestID(t *testing.T) {\n\tctx := context.WithValue(context.Background(), requestIDKey{}, \"abc-123\")\n\tif GetRequestID(ctx) != \"abc-123\" { t.Error() }\n\tempty := context.Background()\n\tif GetRequestID(empty) != \"\" { t.Error() }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"context\"\n\t\"time\"\n)\n\nfunc CheckTimeout() bool {\n\tctx, cancel := context.WithTimeout(context.Background(), 20*time.Millisecond)\n\tdefer cancel()\n\tselect {\n\tcase <-time.After(50 * time.Millisecond):\n\t\treturn false\n\tcase <-ctx.Done():\n\t\treturn true\n\t}\n}\n\nfunc ParentCancelsChild() bool {\n\tparent, cancel := context.WithCancel(context.Background())\n\tchild, childCancel := context.WithTimeout(parent, time.Minute)\n\tdefer childCancel()\n\tcancel()\n\tselect {\n\tcase <-child.Done():\n\t\treturn true\n\tcase <-time.After(100 * time.Millisecond):\n\t\treturn false\n\t}\n}\n\ntype requestIDKey struct{}\n\nfunc GetRequestID(ctx context.Context) string {\n\tif id, ok := ctx.Value(requestIDKey{}).(string); ok {\n\t\treturn id\n\t}\n\treturn \"\"\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "15-standard-library-powerhouses",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 — Standard Library: io, json, os, time\n\n## 🎯 Learning Objectives\n- Use `io.Reader`/`io.Writer` interfaces for streaming\n- Marshal/unmarshal JSON efficiently\n- Handle OS signals gracefully\n- Parse and format time correctly\n\n---\n\n## 🧠 Core Concepts\n\n### io.Reader / io.Writer\nThe most important interfaces in Go:\n```go\ntype Reader interface { Read(p []byte) (n int, err error) }\ntype Writer interface { Write(p []byte) (n int, err error) }\n```\nEverything implements these: files, network connections, buffers, pipes.\n\n### JSON Streaming\n```go\nenc := json.NewEncoder(w)\nenc.Encode(obj)\n\ndec := json.NewDecoder(r)\ndec.Decode(&obj)\n```\n\n### Time Formatting\nGo uses **reference time** for formatting:\n```go\nt.Format(\"2006-01-02 15:04:05\") // YYYY-MM-DD HH:MM:SS\n```\nThe reference time is: `Mon Jan 2 15:04:05 MST 2006` (1-2-3-4-5-6-7-8 pattern).\n\n---\n\n## ⚠️ Common Traps\n- **JSON numbers decode to float64 by default**: Use `json.Decoder.UseNumber()` or custom types\n- **Time zones**: `time.Now()` uses local time. `time.UTC()` converts.\n- **io.EOF is not an error**: It signals normal end of stream\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between `json.Marshal` and `json.NewEncoder`?\nA: `Marshal` returns a `[]byte`. `Encoder` streams directly to an `io.Writer` without allocating the full byte slice.\n\nQ: Why does Go use `2006-01-02 15:04:05` as the format reference?\nA: It's a mnemonic: 1-2-3-4-5-6-7-8 (January=1, 2nd day, 3pm=15:00, 4 minutes, 5 seconds, 2006 year, -07:00 timezone offset).\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"bytes\"\n\t\"fmt\"\n\t\"io\"\n\t\"strings\"\n)\n\nfunc main() {\n\tr := strings.NewReader(\"pipeline data\")\n\tvar w bytes.Buffer\n\tio.Copy(&w, r)\n\tfmt.Println(w.String())\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"bytes\"\n\t\"io\"\n\t\"strings\"\n)\n\n// TODO 1: Copy all data from reader to writer using io.Copy.\n// Return the number of bytes copied.\nfunc CopyAll(r io.Reader, w io.Writer) (int64, error) {\n\t// FILL HERE\n\treturn 0, nil\n}\n\n// TODO 2: Read exactly N bytes from a reader. Return them as a string.\n// If reader has fewer than N bytes, return what you got and an error.\nfunc ReadExactly(r io.Reader, n int) (string, error) {\n\t// FILL HERE\n\treturn \"\", nil\n}\n\n// TODO 3: Chain two readers: first read from r1, then from r2.\n// Return a single io.Reader that reads r1 then r2.\nfunc ChainReaders(r1, r2 io.Reader) io.Reader {\n\t// FILL HERE\n\treturn nil\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 15\n\n## TODO 1\n```go\nreturn io.Copy(w, r)\n```\n\n## TODO 2\n```go\nbuf := make([]byte, n)\n_, err := io.ReadFull(r, buf)\nreturn string(buf), err\n```\n\n## TODO 3\n```go\nreturn io.MultiReader(r1, r2)\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"bytes\"\n\t\"strings\"\n\t\"testing\"\n)\n\nfunc TestCopyAll(t *testing.T) {\n\tr := strings.NewReader(\"hello\")\n\tvar w bytes.Buffer\n\tn, err := CopyAll(r, &w)\n\tif err != nil { t.Fatal(err) }\n\tif n != 5 || w.String() != \"hello\" { t.Error() }\n}\n\nfunc TestReadExactly(t *testing.T) {\n\tr := strings.NewReader(\"hello world\")\n\ts, err := ReadExactly(r, 5)\n\tif err != nil { t.Fatal(err) }\n\tif s != \"hello\" { t.Errorf(\"got %q\", s) }\n}\n\nfunc TestChainReaders(t *testing.T) {\n\tr1 := strings.NewReader(\"abc\")\n\tr2 := strings.NewReader(\"def\")\n\tch := ChainReaders(r1, r2)\n\tvar w bytes.Buffer\n\tio.Copy(&w, ch)\n\tif w.String() != \"abcdef\" { t.Errorf(\"got %q\", w.String()) }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"io\"\n)\n\nfunc CopyAll(r io.Reader, w io.Writer) (int64, error) {\n\treturn io.Copy(w, r)\n}\n\nfunc ReadExactly(r io.Reader, n int) (string, error) {\n\tbuf := make([]byte, n)\n\t_, err := io.ReadFull(r, buf)\n\treturn string(buf), err\n}\n\nfunc ChainReaders(r1, r2 io.Reader) io.Reader {\n\treturn io.MultiReader(r1, r2)\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-production-web-services",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Production HTTP Web Services\n\n## 🎯 Learning Objectives\n- Build structured JSON APIs with `net/http`\n- Implement middleware chains\n- Handle graceful shutdown with `http.Server`\n- Set appropriate timeouts (ReadTimeout, WriteTimeout, IdleTimeout)\n\n---\n\n## 🧠 Core Concepts\n\n### http.ServeMux (Go 1.22+)\n```go\nmux := http.NewServeMux()\nmux.HandleFunc(\"GET /health\", handler) // method-specific patterns\nmux.HandleFunc(\"/api/\", apiHandler)    // subtree matching\n```\n\n### Middleware Pattern\n```go\nfunc Logger(next http.Handler) http.Handler {\n    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n        start := time.Now()\n        next.ServeHTTP(w, r)\n        log.Printf(\"%s %s %v\", r.Method, r.URL, time.Since(start))\n    })\n}\n```\n\n### Graceful Shutdown\n```go\nsrv := &http.Server{Addr: \":8080\", Handler: mux}\ngo srv.ListenAndServe()\n// wait for interrupt signal\nsrv.Shutdown(ctx)\n```\n\n### Timeouts\n- `ReadTimeout`: Max time to read request body\n- `WriteTimeout`: Max time to write response\n- `IdleTimeout`: Max time between requests on keep-alive connection\n\n---\n\n## ⚠️ Common Traps\n- **No timeouts**: Default server has NO timeouts — vulnerable to slowloris attacks\n- **Not checking request method**: `HandleFunc` matches all methods unless specified\n- **Writing header after body**: `w.WriteHeader()` after `w.Write()` is ignored\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between `http.HandleFunc` and `mux.HandleFunc`?\nA: `http.HandleFunc` registers on the default mux (`http.DefaultServeMux`). `mux.HandleFunc` registers on a specific mux instance.\n\nQ: Why is `WriteTimeout` important?\nA: Prevents slow clients from holding connections open indefinitely. Without it, a malicious client can exhaust file descriptors.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"encoding/json\"\n\t\"fmt\"\n\t\"net/http\"\n\t\"time\"\n)\n\nfunc main() {\n\tmux := http.NewServeMux()\n\tmux.HandleFunc(\"GET /health\", func(w http.ResponseWriter, r *http.Request) {\n\t\tjson.NewEncoder(w).Encode(map[string]string{\"status\": \"ok\"})\n\t})\n\tserver := &http.Server{\n\t\tAddr:         \":8080\",\n\t\tHandler:      mux,\n\t\tReadTimeout:  5 * time.Second,\n\t\tWriteTimeout: 10 * time.Second,\n\t}\n\tfmt.Println(\"Server on :8080 with timeouts\")\n\t_ = server\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"encoding/json\"\n\t\"net/http\"\n)\n\n// TODO 1: Create a health check handler that writes JSON {\"status\":\"healthy\"}.\nfunc HealthHandler(w http.ResponseWriter, r *http.Request) {\n\t// FILL HERE\n}\n\n// TODO 2: Create a middleware that sets Content-Type to application/json.\nfunc JSONMiddleware(next http.Handler) http.Handler {\n\t// FILL HERE\n\treturn nil\n}\n\n// TODO 3: Create a handler that reads a \"name\" query parameter and returns\n// JSON {\"message\":\"Hello, <name>\"}. If name is missing, return 400.\nfunc GreetHandler(w http.ResponseWriter, r *http.Request) {\n\t// FILL HERE\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 16\n\n## TODO 1\n```go\nw.Header().Set(\"Content-Type\", \"application/json\")\njson.NewEncoder(w).Encode(map[string]string{\"status\": \"healthy\"})\n```\n\n## TODO 2\n```go\nreturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n    w.Header().Set(\"Content-Type\", \"application/json\")\n    next.ServeHTTP(w, r)\n})\n```\n\n## TODO 3\n```go\nname := r.URL.Query().Get(\"name\")\nif name == \"\" {\n    w.WriteHeader(http.StatusBadRequest)\n    json.NewEncoder(w).Encode(map[string]string{\"error\": \"name required\"})\n    return\n}\njson.NewEncoder(w).Encode(map[string]string{\"message\": \"Hello, \" + name})\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"encoding/json\"\n\t\"net/http\"\n\t\"net/http/httptest\"\n\t\"testing\"\n)\n\nfunc TestHealthHandler(t *testing.T) {\n\treq := httptest.NewRequest(\"GET\", \"/health\", nil)\n\tw := httptest.NewRecorder()\n\tHealthHandler(w, req)\n\tif w.Code != 200 { t.Errorf(\"code=%d\", w.Code) }\n\tvar body map[string]string\n\tjson.Unmarshal(w.Body.Bytes(), &body)\n\tif body[\"status\"] != \"healthy\" { t.Errorf(\"body=%v\", body) }\n}\n\nfunc TestJSONMiddleware(t *testing.T) {\n\thandler := JSONMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\tw.Write([]byte(\"{}\"))\n\t}))\n\treq := httptest.NewRequest(\"GET\", \"/\", nil)\n\tw := httptest.NewRecorder()\n\thandler.ServeHTTP(w, req)\n\tif w.Header().Get(\"Content-Type\") != \"application/json\" { t.Error() }\n}\n\nfunc TestGreetHandler(t *testing.T) {\n\treq := httptest.NewRequest(\"GET\", \"/greet?name=Alice\", nil)\n\tw := httptest.NewRecorder()\n\tGreetHandler(w, req)\n\tif w.Code != 200 { t.Errorf(\"code=%d\", w.Code) }\n\tvar body map[string]string\n\tjson.Unmarshal(w.Body.Bytes(), &body)\n\tif body[\"message\"] != \"Hello, Alice\" { t.Errorf(\"body=%v\", body) }\n\n\treq2 := httptest.NewRequest(\"GET\", \"/greet\", nil)\n\tw2 := httptest.NewRecorder()\n\tGreetHandler(w2, req2)\n\tif w2.Code != 400 { t.Errorf(\"code=%d\", w2.Code) }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"encoding/json\"\n\t\"net/http\"\n)\n\nfunc HealthHandler(w http.ResponseWriter, r *http.Request) {\n\tw.Header().Set(\"Content-Type\", \"application/json\")\n\tjson.NewEncoder(w).Encode(map[string]string{\"status\": \"healthy\"})\n}\n\nfunc JSONMiddleware(next http.Handler) http.Handler {\n\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\tw.Header().Set(\"Content-Type\", \"application/json\")\n\t\tnext.ServeHTTP(w, r)\n\t})\n}\n\nfunc GreetHandler(w http.ResponseWriter, r *http.Request) {\n\tname := r.URL.Query().Get(\"name\")\n\tif name == \"\" {\n\t\tw.WriteHeader(http.StatusBadRequest)\n\t\tjson.NewEncoder(w).Encode(map[string]string{\"error\": \"name required\"})\n\t\treturn\n\t}\n\tjson.NewEncoder(w).Encode(map[string]string{\"message\": \"Hello, \" + name})\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-database-sql-and-pooling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Database Access & Connection Pooling\n\n## 🎯 Learning Objectives\n- Use `database/sql` for queries and transactions\n- Tune connection pool settings (`SetMaxOpenConns`, etc.)\n- Handle `sql.NullString`, `sql.NullInt64` for nullable columns\n- Understand prepared statements and their reuse\n\n---\n\n## 🧠 Core Concepts\n\n### Connection Pool Settings\n```go\ndb.SetMaxOpenConns(25)       // max simultaneous connections\ndb.SetMaxIdleConns(25)       // max idle connections in pool\ndb.SetConnMaxLifetime(5 * time.Minute) // max age before closing\n```\n\n### Null Types\n```go\nvar name sql.NullString\nif name.Valid { fmt.Println(name.String) }\n```\n\n### Transactions\n```go\ntx, err := db.Begin()\n// ... queries ...\ntx.Commit() // or tx.Rollback()\n```\n\n---\n\n## ⚠️ Common Traps\n- **Not closing rows**: `defer rows.Close()`\n- **Using `db.Query` for INSERT**: Use `db.Exec` instead\n- **Scanning into wrong types**: Causes `sql: Scan error`\n- **Not handling NULL**: Use `sql.Null*` types or `COALESCE` in SQL\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between `SetMaxOpenConns` and `SetMaxIdleConns`?\nA: `MaxOpenConns` limits total active connections. `MaxIdleConns` limits how many of those can be idle in the pool. If `MaxIdleConns < MaxOpenConns`, connections above the idle limit are closed when returned to the pool.\n\nQ: Should you use `db.Query` or `db.Exec` for INSERT?\nA: `Exec`. `Query` is for SELECTs that return rows.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"time\"\n)\n\ntype PoolConfig struct {\n\tMaxOpenConns    int\n\tMaxIdleConns    int\n\tConnMaxLifetime time.Duration\n}\n\nfunc main() {\n\tcfg := PoolConfig{MaxOpenConns: 25, MaxIdleConns: 25, ConnMaxLifetime: 5 * time.Minute}\n\tfmt.Printf(\"Pool Config: %+v\\n\", cfg)\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"database/sql\"\n\t\"fmt\"\n\t\"time\"\n)\n\n// TODO 1: Configure a *sql.DB with optimal pool settings.\n// Return the configured db (you don't need a real connection).\nfunc ConfigurePool(db *sql.DB) *sql.DB {\n\t// FILL HERE\n\treturn db\n}\n\n// TODO 2: Write a function that safely scans a nullable string column.\n// If the value is NULL, return \"N/A\".\nfunc ScanNullableString(ns sql.NullString) string {\n\t// FILL HERE\n\treturn \"\"\n}\n\n// TODO 3: Write a function that builds a DSN (Data Source Name) string.\n// Format: \"user:password@tcp(host:port)/dbname?parseTime=true\"\nfunc BuildDSN(user, password, host, port, dbname string) string {\n\t// FILL HERE\n\treturn \"\"\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 17\n\n## TODO 1\n```go\ndb.SetMaxOpenConns(25)\ndb.SetMaxIdleConns(25)\ndb.SetConnMaxLifetime(5 * time.Minute)\nreturn db\n```\n\n## TODO 2\n```go\nif ns.Valid {\n    return ns.String\n}\nreturn \"N/A\"\n```\n\n## TODO 3\n```go\nreturn fmt.Sprintf(\"%s:%s@tcp(%s:%s)/%s?parseTime=true\", user, password, host, port, dbname)\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"database/sql\"\n\t\"strings\"\n\t\"testing\"\n\t\"time\"\n)\n\nfunc TestConfigurePool(t *testing.T) {\n\t// We can't easily test internal state without a real DB,\n\t// but we can verify it doesn't panic.\n\tdb, _ := sql.Open(\"mysql\", \"\")\n\t_ = ConfigurePool(db)\n}\n\nfunc TestScanNullableString(t *testing.T) {\n\tns := sql.NullString{String: \"hello\", Valid: true}\n\tif ScanNullableString(ns) != \"hello\" { t.Error() }\n\tns2 := sql.NullString{Valid: false}\n\tif ScanNullableString(ns2) != \"N/A\" { t.Error() }\n}\n\nfunc TestBuildDSN(t *testing.T) {\n\tdsn := BuildDSN(\"root\", \"pass\", \"localhost\", \"3306\", \"mydb\")\n\tif !strings.Contains(dsn, \"root:pass\") { t.Error() }\n\tif !strings.Contains(dsn, \"@tcp(localhost:3306)\") { t.Error() }\n\tif !strings.Contains(dsn, \"/mydb?parseTime=true\") { t.Error() }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"database/sql\"\n\t\"fmt\"\n\t\"time\"\n)\n\nfunc ConfigurePool(db *sql.DB) *sql.DB {\n\tdb.SetMaxOpenConns(25)\n\tdb.SetMaxIdleConns(25)\n\tdb.SetConnMaxLifetime(5 * time.Minute)\n\treturn db\n}\n\nfunc ScanNullableString(ns sql.NullString) string {\n\tif ns.Valid {\n\t\treturn ns.String\n\t}\n\treturn \"N/A\"\n}\n\nfunc BuildDSN(user, password, host, port, dbname string) string {\n\treturn fmt.Sprintf(\"%s:%s@tcp(%s:%s)/%s?parseTime=true\", user, password, host, port, dbname)\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-testing-benchmarks-profiling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — Testing, Benchmarks, Table-Driven Tests & Race Detection\n\n## 🎯 Learning Objectives\n- Write table-driven tests with `t.Run()`\n- Write benchmarks with `testing.B`\n- Use subtests for better failure reporting\n- Run the race detector (`go test -race`)\n\n---\n\n## 🧠 Core Concepts\n\n### Table-Driven Tests\n```go\nfunc TestAdd(t *testing.T) {\n    tests := []struct{\n        name string\n        a, b, want int\n    }{\n        {\"positive\", 2, 3, 5},\n        {\"negative\", -2, -3, -5},\n    }\n    for _, tt := range tests {\n        t.Run(tt.name, func(t *testing.T) {\n            got := Add(tt.a, tt.b)\n            if got != tt.want { t.Errorf(...) }\n        })\n    }\n}\n```\n\n### Benchmarks\n```go\nfunc BenchmarkAdd(b *testing.B) {\n    for i := 0; i < b.N; i++ {\n        Add(2, 3)\n    }\n}\n```\n\n### Race Detector\n```bash\ngo test -race ./...\n```\nAdds ~5-10x overhead. Detects data races at runtime.\n\n---\n\n## ⚠️ Common Traps\n- **Not using `t.Parallel()`**: Tests run sequentially by default\n- **Benchmark modifying global state**: Causes incorrect measurements\n- **Forgetting `b.ResetTimer()`**: Includes setup time in benchmark\n\n---\n\n## 📝 Interview Questions\nQ: What's the difference between `t.Error` and `t.Fatal`?\nA: `t.Error` logs and continues. `t.Fatal` logs and stops the current test immediately.\n\nQ: How do you benchmark memory allocations?\nA: `b.ReportAllocs()` or run with `go test -benchmem`.\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nfunc Add(a, b int) int { return a + b }\n\nfunc main() {}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\n// TODO 1: Write a function IsPrime that returns true if n is prime.\nfunc IsPrime(n int) bool {\n\t// FILL HERE\n\treturn false\n}\n\n// TODO 2: Write a function Reverse that reverses a string by runes.\n// \"Hello, 世界\" → \"界世 ,olleH\"\nfunc Reverse(s string) string {\n\t// FILL HERE\n\treturn \"\"\n}\n\n// TODO 3: Write a function Fibonacci that returns the nth Fibonacci number.\n// Use an iterative approach (not recursive) for efficiency.\nfunc Fibonacci(n int) int {\n\t// FILL HERE\n\treturn 0\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 18\n\n## TODO 1\n```go\nif n < 2 { return false }\nfor i := 2; i*i <= n; i++ {\n    if n%i == 0 { return false }\n}\nreturn true\n```\n\n## TODO 2\n```go\nrunes := []rune(s)\nfor i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {\n    runes[i], runes[j] = runes[j], runes[i]\n}\nreturn string(runes)\n```\n\n## TODO 3\n```go\nif n <= 1 { return n }\na, b := 0, 1\nfor i := 2; i <= n; i++ {\n    a, b = b, a+b\n}\nreturn b\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport \"testing\"\n\nfunc TestIsPrime(t *testing.T) {\n\ttests := []struct {\n\t\tname string\n\t\tn    int\n\t\twant bool\n\t}{\n\t\t{\"two\", 2, true},\n\t\t{\"three\", 3, true},\n\t\t{\"four\", 4, false},\n\t\t{\"seventeen\", 17, true},\n\t\t{\"one\", 1, false},\n\t\t{\"zero\", 0, false},\n\t}\n\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tif got := IsPrime(tt.n); got != tt.want {\n\t\t\t\tt.Errorf(\"IsPrime(%d) = %v, want %v\", tt.n, got, tt.want)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestReverse(t *testing.T) {\n\tif Reverse(\"hello\") != \"olleh\" { t.Error() }\n\tif Reverse(\"Hello, 世界\") != \"界世 ,olleH\" { t.Errorf(\"got %q\", Reverse(\"Hello, 世界\")) }\n}\n\nfunc TestFibonacci(t *testing.T) {\n\tif Fibonacci(0) != 0 { t.Error() }\n\tif Fibonacci(1) != 1 { t.Error() }\n\tif Fibonacci(10) != 55 { t.Errorf(\"got %d\", Fibonacci(10)) }\n}\n\nfunc BenchmarkFibonacci(b *testing.B) {\n\tfor i := 0; i < b.N; i++ {\n\t\tFibonacci(20)\n\t}\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nfunc IsPrime(n int) bool {\n\tif n < 2 {\n\t\treturn false\n\t}\n\tfor i := 2; i*i <= n; i++ {\n\t\tif n%i == 0 {\n\t\t\treturn false\n\t\t}\n\t}\n\treturn true\n}\n\nfunc Reverse(s string) string {\n\trunes := []rune(s)\n\tfor i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {\n\t\trunes[i], runes[j] = runes[j], runes[i]\n\t}\n\treturn string(runes)\n}\n\nfunc Fibonacci(n int) int {\n\tif n <= 1 {\n\t\treturn n\n\t}\n\ta, b := 0, 1\n\tfor i := 2; i <= n; i++ {\n\t\ta, b = b, a+b\n\t}\n\treturn b\n}\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "19-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 — High-Yield Go Interview Questions & Drills\n\n## 🎯 Learning Objectives\n- Master the top 10 Go interview gotchas\n- Explain GMP scheduler, escape analysis, and nil interfaces\n- Write correct concurrent code under pressure\n- Handle edge cases in slices, maps, and channels\n\n---\n\n## 🧠 Top 10 Gotchas\n\n1. **GMP Scheduler**: G (goroutine), M (OS thread), P (logical processor)\n2. **`(*T)(nil) != nil`**: Interface with typed nil is not nil\n3. **Map Concurrency**: Maps panic on concurrent writes without mutexes\n4. **Defer Evaluation**: Arguments evaluated immediately, execution deferred in LIFO\n5. **Sub-slice Memory Leaks**: Large backing arrays pinned by small windows\n6. **Slice Growth**: Capacity doubles below 256, then grows by ~25%\n7. **Channel Closing**: Panic on send to closed channel; panic on close of closed channel\n8. **Context Cancellation**: Flows downward only; not calling cancel() leaks goroutines\n9. **JSON Numbers**: Decode to float64 by default; use `json.Number` or custom types\n10. **Race Detector**: `go test -race` adds 5-10x overhead; detects data races at runtime\n\n---\n\n## 📝 Final Drill\nWrite a program that:\n1. Creates a worker pool of 3 goroutines\n2. Each worker reads integers from a channel and squares them\n3. Results are collected in another channel\n4. The program times out after 100ms using context\n5. Returns all successfully computed squares\n"
+          },
+          {
+            "name": "example.go",
+            "type": "file",
+            "content": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"=== 19: Interview Master Drill ===\")\n\tfmt.Println(\"1. Goroutines: 2KB dynamic stack vs 2MB static OS thread\")\n\tfmt.Println(\"2. nil trap: iface is (type, val) -> (*T)(nil) != nil\")\n\tfmt.Println(\"3. Slice capacity: doubling behavior and memory leaks\")\n\tfmt.Println(\"4. Channel rules: panic on send/close of closed channel\")\n\tfmt.Println(\"5. Escape analysis: compiler decides stack vs heap\")\n\tfmt.Println(\"\\n🚀 You have completed the full Go mastery curriculum!\")\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"context\"\n\t\"time\"\n)\n\n// TODO 1: Implement a worker pool that squares integers.\n// Spawn 'workers' goroutines. Each reads from jobs chan, sends square to results chan.\n// Return all results as a slice. Use context with 100ms timeout.\nfunc SquareWorkerPool(inputs []int, workers int) []int {\n\t// FILL HERE\n\treturn nil\n}\n\n// TODO 2: Fix the nil interface bug. When ok=false, return nil error.\n// Currently returns typed nil pointer inside interface.\ntype AppError struct{ Msg string }\nfunc (e *AppError) Error() string { return e.Msg }\n\nfunc MaybeError(ok bool) error {\n\tvar err *AppError = nil\n\tif !ok {\n\t\treturn err // BUG\n\t}\n\treturn nil\n}\n\n// TODO 3: Write a function that demonstrates defer LIFO order.\n// It should return the string \"321\" by appending digits in defer blocks.\nfunc DeferLIFO() string {\n\t// FILL HERE\n\treturn \"\"\n}\n\nfunc main() {}\n"
+              },
+              {
+                "name": "HINTS.md",
+                "type": "file",
+                "content": "# Hints for 19\n\n## TODO 1\n```go\nctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)\ndefer cancel()\njobs := make(chan int, len(inputs))\nresults := make(chan int, len(inputs))\nfor w := 0; w < workers; w++ {\n    go func() {\n        for {\n            select {\n            case j, ok := <-jobs:\n                if !ok { return }\n                select {\n                case results <- j * j:\n                case <-ctx.Done():\n                    return\n                }\n            case <-ctx.Done():\n                return\n            }\n        }\n    }()\n}\nfor _, v := range inputs { jobs <- v }\nclose(jobs)\nout := make([]int, 0)\nfor i := 0; i < len(inputs); i++ {\n    select {\n    case r := <-results:\n        out = append(out, r)\n    case <-ctx.Done():\n        return out\n    }\n}\nreturn out\n```\n\n## TODO 2\nReturn `nil` directly, not a typed nil pointer.\n\n## TODO 3\n```go\nvar s string\nfor i := 1; i <= 3; i++ {\n    defer func(n int) { s += fmt.Sprintf(\"%d\", n) }(i)\n}\nreturn s\n```\n"
+              }
+            ]
+          },
+          {
+            "name": "verify",
+            "type": "directory",
+            "children": [
+              {
+                "name": "exercise_test.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"sort\"\n\t\"testing\"\n)\n\nfunc TestSquareWorkerPool(t *testing.T) {\n\tgot := SquareWorkerPool([]int{1, 2, 3, 4, 5}, 2)\n\tif len(got) == 0 { t.Fatal(\"no results\") }\n\tsort.Ints(got)\n\t// At least some results should come back\n\tif got[0] != 1 { t.Errorf(\"first result = %d, want 1\", got[0]) }\n}\n\nfunc TestMaybeError(t *testing.T) {\n\tif MaybeError(false) != nil { t.Error(\"should be nil\") }\n}\n\nfunc TestDeferLIFO(t *testing.T) {\n\tif DeferLIFO() != \"321\" { t.Errorf(\"got %q\", DeferLIFO()) }\n}\n"
+              },
+              {
+                "name": "solution.go",
+                "type": "file",
+                "content": "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"time\"\n)\n\nfunc SquareWorkerPool(inputs []int, workers int) []int {\n\tctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)\n\tdefer cancel()\n\tjobs := make(chan int, len(inputs))\n\tresults := make(chan int, len(inputs))\n\tfor w := 0; w < workers; w++ {\n\t\tgo func() {\n\t\t\tfor {\n\t\t\t\tselect {\n\t\t\t\tcase j, ok := <-jobs:\n\t\t\t\t\tif !ok {\n\t\t\t\t\t\treturn\n\t\t\t\t\t}\n\t\t\t\t\tselect {\n\t\t\t\t\tcase results <- j * j:\n\t\t\t\t\tcase <-ctx.Done():\n\t\t\t\t\t\treturn\n\t\t\t\t\t}\n\t\t\t\tcase <-ctx.Done():\n\t\t\t\t\treturn\n\t\t\t\t}\n\t\t\t}\n\t\t}()\n\t}\n\tfor _, v := range inputs {\n\t\tjobs <- v\n\t}\n\tclose(jobs)\n\tout := make([]int, 0)\n\tfor i := 0; i < len(inputs); i++ {\n\t\tselect {\n\t\tcase r := <-results:\n\t\t\tout = append(out, r)\n\t\tcase <-ctx.Done():\n\t\t\treturn out\n\t\t}\n\t}\n\treturn out\n}\n\nfunc MaybeError(ok bool) error {\n\tif !ok {\n\t\treturn nil\n\t}\n\treturn &AppError{Msg: \"error\"}\n}\n\nfunc DeferLIFO() string {\n\tvar s string\n\tfor i := 1; i <= 3; i++ {\n\t\tdefer func(n int) { s += fmt.Sprintf(\"%d\", n) }(i)\n\t}\n\treturn s\n}\n\ntype AppError struct{ Msg string }\nfunc (e *AppError) Error() string { return e.Msg }\n\nfunc main() {}\n"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
