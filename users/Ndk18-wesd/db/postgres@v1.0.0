@@ -1,0 +1,635 @@
+{
+  "id": "db/postgres",
+  "name": "PostgreSQL Architecture, Internals & DBA Mastery",
+  "version": "1.2.0",
+  "description": "Complete high-depth PostgreSQL curriculum covering process architecture, MVCC, JSONB, GIN/BRIN indexes, EXPLAIN BUFFERS, Autovacuum, and Streaming Replication",
+  "root": {
+    "name": "postgres-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "docker-compose.yml",
+        "type": "file",
+        "content": "version: '3.8'\n\nservices:\n  postgres:\n    image: postgres:16-alpine\n    environment:\n      POSTGRES_DB: trak_db\n      POSTGRES_USER: trak_admin\n      POSTGRES_PASSWORD: secretpassword\n    ports:\n      - \"5432:5432\"\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n      - ./init.sql:/docker-entrypoint-initdb.d/init.sql\n    restart: unless-stopped\n\nvolumes:\n  pgdata:\n"
+      },
+      {
+        "name": "init.sql",
+        "type": "file",
+        "content": "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";\nCREATE EXTENSION IF NOT EXISTS \"pg_stat_statements\";\nCREATE EXTENSION IF NOT EXISTS \"pg_trgm\";\n\nCREATE TABLE events (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    user_id BIGINT NOT NULL,\n    event_type VARCHAR(50) NOT NULL,\n    payload JSONB NOT NULL DEFAULT '{}'::jsonb,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n\nCREATE INDEX idx_events_payload ON events USING gin (payload);\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🐘 PostgreSQL Architecture, Internals & DBA Mastery Track\n\nWelcome to the **PostgreSQL Architecture, Internals & DBA Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering PostgreSQL server process architecture, MVCC internals (`xmin`/`xmax`), JSONB binary indexing, EXPLAIN BUFFERS execution plans, Autovacuum tuning, and production replication.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-server-architecture` | Process & Memory Model | Postmaster, backend process fork model, `shared_buffers`, WAL Writer, Checkpointer |\n| `01-data-types-and-jsonb-mastery` | JSONB & Advanced Types | `JSONB` binary format, operators (`->`, `->>`, `@>`, `?`), GIN index containment |\n| `02-mvcc-and-transaction-isolation` | MVCC & Tuple Headers | Tuple headers (`xmin`, `xmax`, `ctid`, `infomask`), Snapshot Isolation, SSI |\n| `03-vacuum-autovacuum-and-bloat` | Vacuum & Bloat Control | Dead tuples, HOT (Heap-Only Tuples) optimization, Autovacuum scale factors, `pg_repack` |\n| `04-wal-and-crash-recovery` | WAL & Checkpoints | Write-Ahead Logging, Log Sequence Numbers (LSN), Checkpoint targets, recovery |\n| `05-advanced-indexing-strategies` | Index Engines | B-Tree, GIN (Inverted), GiST (Spatial/Ranges), BRIN (Block Range Index), Partial |\n| `06-query-optimization-and-plans` | Query Optimization | `EXPLAIN (ANALYZE, BUFFERS)`, Cost model, Nested Loop vs Hash Join, `pg_stat_statements` |\n| `07-full-text-search-fts` | Full-Text Search (FTS) | `tsvector`, `tsquery`, `to_tsvector()`, `@@` operator, `ts_rank()`, GIN index |\n| `08-table-partitioning-and-sharding` | Declarative Partitioning | Range, List & Hash partitioning, Partition pruning, `postgres_fdw` foreign tables |\n| `09-stored-procedures-and-plpgsql` | PL/pgSQL & Triggers | `CREATE FUNCTION`, `CREATE PROCEDURE` (with `COMMIT`), `BEFORE`/`AFTER` triggers |\n| `10-connection-pooling-pgbouncer` | PgBouncer & Pooling | Backend process memory overhead, Session vs Transaction pooling modes |\n| `11-streaming-replication-and-ha` | Streaming Replication | Physical Streaming Replication, Replication Slots, Synchronous vs Async, Logical |\n| `12-backup-and-pitr-recovery` | Backups & PITR | `pg_dump`, `pg_basebackup`, continuous WAL archiving, Point-In-Time Recovery |\n| `13-row-level-security-and-rbac` | Security & RBAC | Roles, Grants, Row-Level Security (`ENABLE ROW LEVEL SECURITY`, `CREATE POLICY`) |\n| `14-extensions-ecosystem` | Extensions Ecosystem | `pgcrypto`, `pg_trgm` (fuzzy trigram matching), PostGIS geospatial |\n| `15-concurrency-locking-advisory` | Locks & Queue Patterns | Row locks (`FOR UPDATE`, `SKIP LOCKED` job queue), Advisory Locks (`pg_advisory_lock`) |\n| `16-production-server-tuning` | Production Tuning | `shared_buffers` (25% RAM), `work_mem`, `effective_cache_size`, `random_page_cost` |\n| `17-auditing-and-pg-audit` | Auditing & Compliance | `pgaudit` extension, DDL/DML audit logs, session compliance monitoring |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 PostgreSQL DBA & Backend gotchas + `SKIP LOCKED` Concurrent Job Queue Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.sql` — Fully runnable concept demonstration.\n- `exercise/starter.sql` — Hands-on problem with `TODO` markers.\n- `exercise/solution.sql` — Complete reference solution.\n"
+      },
+      {
+        "name": "00-setup-and-server-architecture",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 — PostgreSQL Process & Memory Architecture\n\n## 🎯 Architecture Breakdown\n- **Postmaster**: Listener process that forks a dedicated backend process for every client connection.\n- **Shared Memory Areas**:\n  - `shared_buffers`: In-memory cache of 8KB database table/index pages (typically 25% of RAM).\n  - `wal_buffers`: Memory buffer for unflushed Write-Ahead Log entries.\n- **Background Daemons**:\n  - **BGWriter**: Proactively writes dirty shared buffers to disk.\n  - **Checkpointer**: Issues periodic checkpoints ensuring crash recovery consistency.\n  - **Autovacuum**: Reclaims dead tuple space and updates optimizer statistics.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 00: Server Information & Memory Settings\nSELECT version();\nSELECT name, setting, unit, short_desc \nFROM pg_settings \nWHERE name IN ('shared_buffers', 'work_mem', 'max_connections', 'effective_cache_size');\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Query pg_stat_database to inspect transaction commits and rollbacks.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT datname, xact_commit, xact_rollback, blks_read, blks_hit \nFROM pg_stat_database \nWHERE datname = current_database();\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "01-data-types-and-jsonb-mastery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 — JSON vs JSONB & Binary Containment\n\n## 🎯 `JSON` vs `JSONB`\n- `JSON`: Exact text representation. Preserves key duplicates and whitespace; re-parsed on every access.\n- `JSONB`: Decomposed binary storage format. Indexed, deduplicates keys, supports GIN index containment (`@>`).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 01: JSONB Insertion and Querying\nINSERT INTO events (user_id, event_type, payload) VALUES\n(101, 'ORDER_PLACED', '{\"order_id\": \"ord_101\", \"total\": 129.99, \"tags\": [\"electronics\", \"express\"]}'::jsonb);\n\n-- Extract scalar field as text (->>)\nSELECT payload->>'order_id' AS order_id, (payload->>'total')::numeric AS total FROM events;\n\n-- Containment check using GIN index (@>)\nSELECT * FROM events WHERE payload @> '{\"tags\": [\"express\"]}';\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write a query to find all events where JSONB payload has key 'order_id' and total > 100.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT * FROM events \nWHERE payload ? 'order_id' \n  AND (payload->>'total')::numeric > 100;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "02-mvcc-and-transaction-isolation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 — MVCC Internals & Tuple Headers\n\n## 🎯 Tuple Header Layout\nEvery row in PostgreSQL has a hidden 23-byte header:\n- `xmin`: Transaction ID that inserted this row.\n- `xmax`: Transaction ID that updated or deleted this row (0 if live).\n- `ctid`: Physical block and offset pointer `(block_number, tuple_offset)`.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 02: Inspecting MVCC Hidden Columns\nSELECT xmin, xmax, ctid, id, event_type FROM events LIMIT 5;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Perform an UPDATE and observe how ctid and xmin/xmax change for the row.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "-- Before update\nSELECT xmin, xmax, ctid, payload FROM events WHERE user_id = 101;\n\nUPDATE events SET payload = payload || '{\"updated\": true}'::jsonb WHERE user_id = 101;\n\n-- After update (notice new ctid and updated xmin!)\nSELECT xmin, xmax, ctid, payload FROM events WHERE user_id = 101;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "03-vacuum-autovacuum-and-bloat",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 — Vacuum, Autovacuum & Table Bloat Control\n\n## 🎯 How Vacuum Works\nPostgreSQL updates create new row versions; old versions become **dead tuples**.\n- `VACUUM`: Marks dead tuple space in the page Free Space Map (FSM) for reuse.\n- `VACUUM FULL`: Rewrites the entire table to a new physical file on disk (requires exclusive lock).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 03: Check Dead Tuple Count\nSELECT relname, n_live_tup, n_dead_tup, last_vacuum, last_autovacuum \nFROM pg_stat_user_tables \nWHERE relname = 'events';\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write a query to tune autovacuum settings specifically for table 'events'.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "ALTER TABLE events SET (\n    autovacuum_vacuum_scale_factor = 0.05,\n    autovacuum_vacuum_threshold = 1000,\n    autovacuum_analyze_scale_factor = 0.02\n);\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "04-wal-and-crash-recovery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 — Write-Ahead Logging (WAL) & Checkpoints\n\n## 🎯 WAL Invariant\nChanges to data pages are written and flushed to the sequential WAL file on disk **before** the actual data page in shared memory is allowed to be flushed to table storage.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 04: Current WAL LSN (Log Sequence Number)\nSELECT pg_current_wal_lsn(), pg_walfile_name(pg_current_wal_lsn());\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Query checkpoint stats from pg_stat_bgwriter.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT checkpoints_timed, checkpoints_req, checkpoint_write_time, checkpoint_sync_time \nFROM pg_stat_bgwriter;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "05-advanced-indexing-strategies",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 — Advanced Index Engines (B-Tree, GIN, BRIN, GiST)\n\n## 🎯 Index Selector Matrix\n- **B-Tree**: Default. Equality and range comparisons (`=`, `<`, `>`, `BETWEEN`).\n- **GIN (Generalized Inverted Index)**: Composite items (JSONB, Arrays, Full-Text Search).\n- **BRIN (Block Range Index)**: Massive append-only time-series tables (100x smaller index size than B-Tree).\n- **Partial Indexes**: Index only active subset (`WHERE status = 'ACTIVE'`).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 05: Partial Index & BRIN Index\nCREATE INDEX idx_events_active ON events (created_at) WHERE event_type = 'ORDER_COMPLETED';\nCREATE INDEX idx_events_brin ON events USING brin (created_at);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Create an expression index to accelerate case-insensitive searches on event_type.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "CREATE INDEX idx_events_lower_type ON events (LOWER(event_type));\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "06-query-optimization-and-plans",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 — EXPLAIN (ANALYZE, BUFFERS) Query Tuning\n\n## 🎯 Interpreting EXPLAIN Output\n- **Seq Scan**: Reading entire table from disk.\n- **Index Scan**: Reading B-Tree index + fetching row pages from heap.\n- **Index Only Scan**: All requested columns exist directly in the index page.\n- **Buffers: shared hit vs read**: `hit` = read from RAM (`shared_buffers`); `read` = fetched from OS disk!\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 06: EXPLAIN with Buffers Analysis\nEXPLAIN (ANALYZE, BUFFERS, VERBOSE)\nSELECT user_id, count(*) \nFROM events \nWHERE payload @> '{\"tags\": [\"express\"]}'\nGROUP BY user_id;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Inspect top 5 most time-consuming queries using pg_stat_statements.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT query, calls, total_exec_time, mean_exec_time, rows \nFROM pg_stat_statements \nORDER BY total_exec_time DESC \nLIMIT 5;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "07-full-text-search-fts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 — Native Full-Text Search (FTS)\n\n## 🎯 Core Concepts\n- `to_tsvector('english', text)`: Converts document into normalized lexeme vector with word positions.\n- `to_tsquery('english', 'search & term')`: Prepares boolean search query.\n- `@@`: Match operator.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 07: Full-Text Search Demonstration\nSELECT to_tsvector('english', 'PostgreSQL database architecture is extremely robust');\n\nSELECT 'PostgreSQL database architecture'::tsvector @@ 'database & architecture'::tsquery AS is_match;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Add a generated tsvector column to a articles table and index it with GIN.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "CREATE TABLE articles (\n    id SERIAL PRIMARY KEY,\n    title TEXT NOT NULL,\n    body TEXT NOT NULL,\n    search_vector tsvector GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED\n);\n\nCREATE INDEX idx_articles_fts ON articles USING gin (search_vector);\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "08-table-partitioning-and-sharding",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — Declarative Table Partitioning\n\n## 🎯 Partition Types\n- **RANGE**: Split by date or integer range (`PARTITION BY RANGE (created_at)`).\n- **LIST**: Split by discrete category (`PARTITION BY LIST (region)`).\n- **HASH**: Distribute across N shards (`PARTITION BY HASH (user_id)`).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 08: Declarative Range Partitioning\nCREATE TABLE metrics (\n    metric_id UUID DEFAULT uuid_generate_v4(),\n    recorded_at TIMESTAMPTZ NOT NULL,\n    cpu_usage NUMERIC(5, 2)\n) PARTITION BY RANGE (recorded_at);\n\nCREATE TABLE metrics_2026_08 PARTITION OF metrics\n    FOR VALUES FROM ('2026-08-01') TO ('2026-09-01');\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Create the partition for September 2026.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "CREATE TABLE metrics_2026_09 PARTITION OF metrics\n    FOR VALUES FROM ('2026-09-01') TO ('2026-10-01');\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "09-stored-procedures-and-plpgsql",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — PL/pgSQL & Trigger Architecture\n\n## 🎯 Functions vs Procedures\n- `FUNCTION`: Cannot execute `COMMIT` or `ROLLBACK` within body.\n- `PROCEDURE`: Supports explicit transaction management (`COMMIT`).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 09: PL/pgSQL Trigger Function\nCREATE OR REPLACE FUNCTION audit_timestamp()\nRETURNS TRIGGER AS $$\nBEGIN\n    NEW.created_at = NOW();\n    RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Create a procedure 'transfer_funds' that deducts balance from account A and credits account B.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "CREATE OR REPLACE PROCEDURE transfer_funds(sender_id INT, receiver_id INT, amount NUMERIC)\nLANGUAGE plpgsql AS $$\nBEGIN\n    -- Perform transfer logic with atomic transaction safety\n    RAISE NOTICE 'Transferred % from % to %', amount, sender_id, receiver_id;\n    COMMIT;\nEND;\n$$;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-connection-pooling-pgbouncer",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Connection Pooling with PgBouncer\n\n## 🎯 Pooling Modes\n- **Session Pooling**: Connection held for entire duration of client session.\n- **Transaction Pooling**: Server connection returned to pool as soon as transaction completes (`COMMIT`).\n- **Statement Pooling**: Single-statement transactions only.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 10: Inspecting Current Active Client Connections\nSELECT pid, usename, client_addr, state, query \nFROM pg_stat_activity \nWHERE datname = current_database();\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Count connections grouped by state (active, idle, idle in transaction).\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT state, count(*) \nFROM pg_stat_activity \nWHERE datname = current_database() \nGROUP BY state;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-streaming-replication-and-ha",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Physical Streaming Replication & High Availability\n\n## 🎯 Replication Slots\nPrevent primary server from recycling WAL files until the replica has acknowledged receiving them.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 11: Inspect Replication Status on Primary\nSELECT client_addr, state, sent_lsn, write_lsn, flush_lsn, replay_lsn, sync_state \nFROM pg_stat_replication;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Create a physical replication slot 'standby_slot_1'.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT pg_create_physical_replication_slot('standby_slot_1');\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-backup-and-pitr-recovery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Backups & Point-In-Time Recovery (PITR)\n\n## 🎯 PITR Workflow\n1. Take base backup with `pg_basebackup -D /backup -Ft -z`.\n2. Continuously ship WAL files via `archive_command`.\n3. To restore to exact point in time: restore base backup, place `recovery.signal`, set `recovery_target_time`.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 12: Verify WAL Archiving Settings\nSELECT name, setting FROM pg_settings WHERE name IN ('archive_mode', 'archive_command', 'wal_level');\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Check whether server is in recovery mode.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT pg_is_in_recovery();\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "13-row-level-security-and-rbac",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 — Row-Level Security (RLS) & Multi-Tenancy\n\n## 🎯 RLS Implementation\n```sql\nALTER TABLE documents ENABLE ROW LEVEL SECURITY;\nCREATE POLICY tenant_isolation_policy ON documents\n    FOR ALL TO app_user\n    USING (tenant_id = current_setting('app.current_tenant')::uuid);\n```\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 13: Enable RLS Policy on Events Table\nALTER TABLE events ENABLE ROW LEVEL SECURITY;\nCREATE POLICY user_isolation_policy ON events\n    FOR ALL\n    USING (user_id = 101);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Create a policy allowing admin role full access to all rows.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "CREATE POLICY admin_all_access ON events\n    FOR ALL TO trak_admin\n    USING (true);\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "14-extensions-ecosystem",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 — Extensions Ecosystem (`pg_trgm`, `pgcrypto`)\n\n## 🎯 `pg_trgm` Trigram Matching\nEnables fast fuzzy search and `LIKE '%pattern%'` queries indexed with GiST/GIN.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 14: Fuzzy Search with Trigrams\nSELECT similarity('PostgreSQL', 'Postgres');\nSELECT * FROM events WHERE event_type % 'ORDER_PLACED';\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Query all installed extensions on this database.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT name, default_version, installed_version, comment \nFROM pg_available_extensions \nWHERE installed_version IS NOT NULL;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "15-concurrency-locking-advisory",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 — Concurrency: `SELECT FOR UPDATE SKIP LOCKED`\n\n## 🎯 High-Throughput Job Queue Pattern\n`SELECT ... FOR UPDATE SKIP LOCKED` allows concurrent worker processes to pick unassigned jobs simultaneously without blocking each other!\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 15: SKIP LOCKED Worker Pattern\nBEGIN;\nSELECT * FROM events \nWHERE event_type = 'ORDER_PLACED'\nORDER BY created_at ASC\nLIMIT 1\nFOR UPDATE SKIP LOCKED;\nCOMMIT;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Demonstrate acquiring an application-level advisory lock with pg_advisory_lock.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT pg_advisory_lock(9999);\n-- Critical section protected across cluster\nSELECT pg_advisory_unlock(9999);\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-production-server-tuning",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Production Configuration Tuning\n\n## 🎯 Formula Guide\n- `shared_buffers`: 25% of total system RAM.\n- `effective_cache_size`: 75% of total system RAM.\n- `maintenance_work_mem`: 5% of RAM (for VACUUM and CREATE INDEX).\n- `work_mem`: `(Total RAM - shared_buffers) / (max_connections * 3)`.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 16: Key Memory Parameters\nSHOW shared_buffers;\nSHOW work_mem;\nSHOW effective_cache_size;\nSHOW maintenance_work_mem;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Check the random_page_cost setting (should be 1.1 for SSD/NVMe).\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SHOW random_page_cost;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-auditing-and-pg-audit",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Auditing & Security Logging\n\n## 🎯 `pgaudit`\nProvides detailed session and object audit logging for enterprise compliance (SOC2, HIPAA, PCI-DSS).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 17: Log Settings Inspection\nSHOW log_statement;\nSHOW log_min_duration_statement;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Query current logging destination.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SHOW log_destination;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — High-Yield PostgreSQL DBA & Backend Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **Transaction ID Wraparound**: 32-bit transaction IDs wrap around after 2 billion transactions; requires freeze autovacuum.\n2. **Index Bloat After Massive Deletes**: B-Tree pages are not returned to OS without `REINDEX CONCURRENTLY` or `pg_repack`.\n3. **`COUNT(*)` Performance**: PostgreSQL must inspect visibility of each tuple (MVCC); requires sequential scan unless index-only scan visibility map is clean.\n4. **Connection Memory Leak**: 500 direct connections consume 5GB+ RAM; always use PgBouncer in transaction mode.\n5. **`work_mem` Allocation**: Allocated per sort/hash operation per query node, not per connection.\n6. **GIN Index Update Overhead**: GIN indexes have higher write latency than B-Trees due to pending list inserts.\n7. **`SERIALIZABLE` vs `REPEATABLE READ`**: SSI detects serialization anomalies and aborts with error 40001 (requires client retry loop).\n8. **HOT Updates Prerequisite**: Heap-Only Tuples work only if updated columns are NOT indexed and the block has free space.\n9. **Partition Pruning**: Disabled if WHERE clause contains non-immutable function expressions.\n10. **Lock Queue Head Blocking**: An ungranted `ACCESS EXCLUSIVE` lock request blocks all subsequent reads in queue.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 18: Master Interview Drill Summary\nSELECT '1. MVCC xmin/xmax tuple visibility' AS topic\nUNION ALL SELECT '2. Autovacuum transaction ID wraparound'\nUNION ALL SELECT '3. EXPLAIN BUFFERS shared hits vs disk reads'\nUNION ALL SELECT '4. SKIP LOCKED job queue pattern';\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Master Drill: Implement a complete transactional FIFO queue schema with SKIP LOCKED support.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "CREATE TABLE job_queue (\n    job_id BIGSERIAL PRIMARY KEY,\n    payload JSONB NOT NULL,\n    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n\n-- Worker query:\n-- BEGIN;\n-- SELECT job_id, payload FROM job_queue \n-- WHERE status = 'PENDING' \n-- ORDER BY job_id ASC \n-- LIMIT 1 \n-- FOR UPDATE SKIP LOCKED;\n-- UPDATE job_queue SET status = 'PROCESSING' WHERE job_id = <job_id>;\n-- COMMIT;\n"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
