@@ -79,16 +79,23 @@ func main() {
 					os.Exit(1)
 				}
 
-				// Rule C: Contributor MUST only modify files under users/<actor>/<category>/<slug>.json
+				// Rule C: Contributor MUST only modify files under users/<actor>/<category>/<slug>[@<version>][.json]
 				if strings.HasPrefix(normalizedFile, "users/") {
 					parts := strings.Split(normalizedFile, "/")
-					if len(parts) != 4 || !strings.HasSuffix(parts[3], ".json") {
+					if len(parts) != 4 {
 						fmt.Printf("❌ Path Error: Community file '%s' must match 'users/%s/<category>/<track>.json'\n", normalizedFile, actor)
 						os.Exit(1)
 					}
 					folderUser := parts[1]
 					category := parts[2]
+					fileName := parts[3]
 
+					// if not json then issue 
+					if !strings.HasSuffix(fileName, ".json") {
+						fmt.Printf("❌ Path Error: Community file '%s' must end in .json or contain @version tag\n", normalizedFile)
+						os.Exit(1)
+					}
+						
 					if !strings.EqualFold(folderUser, actor) {
 						fmt.Printf("❌ Security Violation: PR author '@%s' cannot modify namespace of another user 'users/%s/'\n", actor, folderUser)
 						os.Exit(1)
@@ -123,7 +130,8 @@ func main() {
 		normalizedPath := filepath.ToSlash(path)
 		normalizedPath = strings.TrimPrefix(normalizedPath, "./")
 
-		if !strings.HasSuffix(normalizedPath, ".json") {
+		baseName := filepath.Base(normalizedPath)
+		if !strings.HasSuffix(normalizedPath, ".json") && !strings.Contains(baseName, "@") {
 			return nil
 		}
 		if normalizedPath == "registry.json" || normalizedPath == "package.json" {
