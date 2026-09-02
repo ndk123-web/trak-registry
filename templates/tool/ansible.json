@@ -1,8 +1,8 @@
 {
   "id": "tool/ansible",
-  "name": "Ansible Automation, Roles & Configuration Mastery",
+  "name": "Ansible Automation, Roles & Configuration Mastery Track",
   "version": "1.2.0",
-  "description": "Complete high-depth Ansible curriculum covering agentless SSH architecture, inventory management, Playbooks, Jinja2 templating, Roles, Ansible Vault, and Molecule testing",
+  "description": "Complete Ansible curriculum covering agentless SSH architecture, inventories, playbooks, variables precedence, handlers, Jinja2 templating, roles, Vault encryption, Molecule testing, and AWX orchestration",
   "root": {
     "name": "ansible-workspace",
     "type": "directory",
@@ -10,22 +10,22 @@
       {
         "name": "ansible.cfg",
         "type": "file",
-        "content": "[defaults]\ninventory = ./hosts.ini\nremote_user = devops\nhost_key_checking = False\nretry_files_enabled = False\nforks = 20\n\n[privilege_escalation]\nbecome = True\nbecome_method = sudo\nbecome_user = root\nbecome_ask_pass = False\n\n[ssh_connection]\npipelining = True\ncontrol_path = %(directory)s/ansible-ssh-%%h-%%p-%%r\n"
+        "content": "[defaults]\ninventory = inventory.ini\nhost_key_checking = False\nretry_files_enabled = False\nstdout_callback = yaml\n"
       },
       {
-        "name": "hosts.ini",
+        "name": "inventory.ini",
         "type": "file",
-        "content": "[webservers]\nweb1.trak.internal ansible_host=192.168.1.10\nweb2.trak.internal ansible_host=192.168.1.11\n\n[databases]\ndb1.trak.internal ansible_host=192.168.1.20\n\n[production:children]\nwebservers\ndatabases\n\n[production:vars]\nansible_python_interpreter=/usr/bin/python3\nenvironment_name=production\n"
+        "content": "[webservers]\nweb1.example.com ansible_host=127.0.0.1 ansible_connection=local\nweb2.example.com ansible_host=127.0.0.1 ansible_connection=local\n\n[dbservers]\ndb1.example.com ansible_host=127.0.0.1 ansible_connection=local\n\n[production:children]\nwebservers\ndbservers\n"
       },
       {
         "name": "playbook.yml",
         "type": "file",
-        "content": "---\n- name: Configure Production Web Servers\n  hosts: webservers\n  become: true\n  vars:\n    http_port: 80\n    app_name: trak-api\n\n  tasks:\n    - name: Ensure Nginx is installed\n      ansible.builtin.package:\n        name: nginx\n        state: present\n\n    - name: Deploy application landing template\n      ansible.builtin.template:\n        src: index.html.j2\n        dest: /var/www/html/index.html\n        owner: www-data\n        group: www-data\n        mode: '0644'\n      notify: Restart Nginx\n\n  handlers:\n    - name: Restart Nginx\n      ansible.builtin.systemd:\n        name: nginx\n        state: restarted\n"
+        "content": "---\n- name: Configure Production Web Servers\n  hosts: webservers\n  gather_facts: false\n  vars:\n    http_port: 80\n    app_name: trak-api\n\n  tasks:\n    - name: Verify connection to target group\n      ansible.builtin.debug:\n        msg: \"Provisioning {{ app_name }} on port {{ http_port }} for {{ inventory_hostname }}\"\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 🔴 Ansible Automation, Roles & Configuration Mastery Track\n\nWelcome to the **Ansible Automation, Roles & Configuration Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering agentless SSH architecture, dynamic inventory management, Playbooks, Jinja2 templating, reusable Roles, Vault secret encryption, error handling with blocks/rescue, and Molecule testing.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-agentless-architecture` | Agentless Architecture | Push-based SSH execution, Python interpreter, `ansible.cfg` tuning |\n| `01-inventory-management-and-groups` | Inventories & Groups | INI/YAML formats, dynamic inventory plugins (AWS/GCP), `all:children` |\n| `02-ad-hoc-commands` | Ad-Hoc Commands | `ansible -m ping`, `ansible -m command`, `ansible -m setup`, parallel forks |\n| `03-playbooks-structure-and-yaml` | Playbook Structure | `hosts`, `become`, `vars`, `tasks`, task naming conventions, idempotency |\n| `04-core-modules-file-copy-systemd` | Core Modules | `copy`, `template`, `file`, `systemd`, `package`, `user`, `lineinfile` |\n| `05-variables-precedence-and-facts` | Variables & Facts | 22-level precedence hierarchy, `ansible_facts`, `group_vars`, `host_vars` |\n| `06-handlers-and-notify` | Event-Driven Handlers | `notify: Handler Name`, handler execution timing, `meta: flush_handlers` |\n| `07-conditionals-and-when-clauses` | Conditionals & Logic | `when:` conditions, `failed_when`, `changed_when`, register output checks |\n| `08-loops-and-iterators` | Loops & Iterations | `loop:` over lists and maps, `loop_control` with `label` and `index_var` |\n| `09-jinja2-templating-and-filters` | Jinja2 Templates & Filters | `{{ variable }}`, filters (`default`, `to_json`, `ipaddr`), loop structures |\n| `10-roles-and-reusable-structure` | Role Architecture | `tasks/`, `handlers/`, `templates/`, `defaults/`, `meta/main.yml`, dependencies |\n| `11-ansible-galaxy-and-collections` | Galaxy & Collections | `ansible-galaxy`, `requirements.yml`, FQCN (Fully Qualified Collection Names) |\n| `12-ansible-vault-and-encryption` | Ansible Vault Secrets | `ansible-vault encrypt`, `--vault-password-file`, encrypted string variables |\n| `13-error-handling-blocks-and-rescue` | Exception Handling | `block:`, `rescue:` exception recovery, `always:` cleanup tasks |\n| `14-delegation-and-rolling-updates` | Delegation & Rolling Updates | `delegate_to: localhost`, `run_once: true`, `serial: \"20%\"` zero-downtime rolling |\n| `15-testing-with-molecule-and-ansible-lint` | Molecule & Linting | Molecule test suites with Docker driver, Testinfra, `ansible-lint` rules |\n| `16-ansible-automation-platform-awx` | AWX & AAP Orchestration | AWX web UI, Execution Environments (EE), RBAC, Webhooks, Job Templates |\n| `17-performance-tuning-and-ssh-pipelining` | Performance Tuning | `pipelining = True`, `forks = 50`, ControlMaster persistent connections |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Ansible SRE gotchas + Production Multi-Tier Server Provisioning Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `playbook.yml` — Fully runnable concept demonstration.\n- `exercise/starter.yml` — Hands-on problem with `TODO` markers.\n- `exercise/solution.yml` — Complete reference solution.\n"
+        "content": "# \ud83d\udd34 Ansible Automation, Roles & Configuration Mastery Track\n\nWelcome to the **Ansible Automation, Roles & Configuration Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering agentless SSH architecture, dynamic inventory management, Playbooks, Jinja2 templating, reusable Roles, Vault secret encryption, error handling with blocks/rescue, and Molecule testing.\n\n## \ud83d\udcda Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-agentless-architecture` | Agentless Architecture & SSH Execution | Ansible is an open-source IT automation engine that automates cloud pr... |\n| `01-inventory-management-and-groups` | Inventories, Host Groups & Dynamic Sources | An Inventory is a file or dynamic plugin that lists and categorizes th... |\n| `02-ad-hoc-commands` | Ad-Hoc Commands & Parallel Execution | An Ad-Hoc command is a single, quick Ansible one-liner executed from t... |\n| `03-playbooks-structure-and-yaml` | Playbook Structure & YAML Declarative State | A Playbook is a declarative YAML file that maps managed host groups to... |\n| `04-core-modules-file-copy-systemd` | Core Modules (file, copy, template, systemd, package, user) | Core Modules are the foundational building blocks provided by ansible.... |\n| `05-variables-precedence-and-facts` | Variable Hierarchy (22 Precedence Levels) & Facts | Variables dynamically configure playbooks across different environment... |\n| `06-handlers-and-notify` | Event-Driven Handlers & Notification Pipeline | Handlers are special tasks triggered only when a preceding task report... |\n| `07-conditionals-and-when-clauses` | Conditionals, Logic & Error Control (when, failed_when) | Conditionals dynamically decide whether a task executes based on varia... |\n| `08-loops-and-iterators` | Loops, Iteration & Loop Controls (loop, loop_control) | Loops repeat a task over lists, dictionaries, or complex data structur... |\n| `09-jinja2-templating-and-filters` | Jinja2 Templating Engine & Advanced Filters | Jinja2 dynamically renders configuration files using variables, loops,... |\n| `10-roles-and-reusable-structure` | Roles Architecture & Directory Hierarchy | Roles package related tasks, handlers, variables, templates, and defau... |\n| `11-ansible-galaxy-and-collections` | Ansible Galaxy & Fully Qualified Collection Names (FQCN) | Collections bundle modules, plugins, roles, and playbooks into shareab... |\n| `12-ansible-vault-and-encryption` | Ansible Vault & AES-256 Secret Encryption | Ansible Vault encrypts sensitive variables, passwords, and TLS keys wi... |\n| `13-error-handling-blocks-and-rescue` | Exception Handling with Blocks, Rescue & Always | Blocks group tasks for logical organization, error catching (rescue), ... |\n| `14-delegation-and-rolling-updates` | Delegation, Local Actions & Rolling Updates (serial) | Delegation directs a task to execute on a specific node (e.g. load bal... |\n| `15-testing-with-molecule-and-ansible-lint` | Testing Frameworks (Molecule, Testinfra, ansible-lint) | Molecule provides end-to-end automated testing for Ansible roles insid... |\n| `16-ansible-automation-platform-awx` | Enterprise Orchestration (AWX & Ansible Automation Platform) | AWX is the open-source upstream web UI and REST API for centrally mana... |\n| `17-performance-tuning-and-ssh-pipelining` | Performance Tuning, SSH Pipelining & Mitogen | Optimizing Ansible execution speed across thousands of nodes using pip... |\n| `18-interview-questions-and-drills` | Production SRE Drills & Top 10 Gotchas | Real-world troubleshooting scenarios, debugging gotchas, and multi-tie... |\n\n---\n\n## \ud83d\udee0\ufe0f How to Practice\nEach module contains:\n- `README.md` \u2014 Deep theoretical explanation with **What, Why, How, Logic, When to Use, Syntax, and Gotchas**.\n- `playbook.yml` \u2014 Fully runnable concept demonstration with clean, straightforward comments.\n- `exercise/starter.yml` \u2014 Hands-on problem with `TODO` markers.\n- `exercise/solution.yml` \u2014 Complete reference solution.\n"
       },
       {
         "name": "00-setup-and-agentless-architecture",
@@ -34,12 +34,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 — Agentless Architecture & SSH Execution\n\n## 🎯 How Ansible Works\nAnsible requires **zero agents** on target nodes. It generates standalone Python scripts, transfers them over OpenSSH/SFTP, executes them in remote Python runtime, and reads JSON results.\n"
+            "content": "# 00 \u2014 Agentless Architecture & SSH Execution\n\n## \ud83c\udfaf What is it?\nAnsible is an open-source IT automation engine that automates cloud provisioning, configuration management, and application deployment without installing any background agent software on managed targets.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nTraditional tools like Chef or Puppet require installing, updating, and securing a dedicated daemon (agent) on every target node. If the agent crashes or has a TLS certificate expiry, you lose management access. Ansible connects over standard OpenSSH, requiring only Python on the target.\n\n## \u2699\ufe0f How does it work under the hood?\nWhen you run a playbook:\n1. Ansible parses YAML tasks on your Control Node.\n2. It bundles required modules and arguments into a temporary standalone Python zip/script.\n3. It opens an SSH connection (SFTP/SCP) to the target host and copies the script to `~/.ansible/tmp/`.\n4. It executes the script using the remote Python interpreter (`/usr/bin/python3`).\n5. The script outputs a JSON string to stdout (containing `changed: true/false`, return codes, and message strings).\n6. Ansible removes the remote temporary script and parses the JSON result.\n\n## \ud83d\udd0d Concept & Core Logic\n**Idempotency & Push Model**\n- **Idempotency**: Running a task 1 time or 100 times results in the exact same system state without redundant modifications.\n- **Push-based**: You push changes on demand from your laptop or CI runner to thousands of servers concurrently.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Configuring bare-metal servers, VMs, cloud instances, network switches, or executing ad-hoc orchestration commands.\n**When NOT to Use:** Continuous configuration drift correction on air-gapped machines where no inbound SSH is allowed (a pull-based agent or Kubernetes controller is better suited).\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n- name: Playbook Name\n  hosts: target_group   # Target host group from inventory\n  become: true          # Privilege escalation (sudo)\n  gather_facts: false   # Skip system fact gathering for speed\n  tasks:\n    - name: Task Name\n      module_name:      # FQCN e.g. ansible.builtin.debug\n        param: value\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. **Target Python Missing**: Target minimal Linux distros (e.g. Alpine, minimal Ubuntu) might not have `/usr/bin/python3` pre-installed.\n2. **Host Key Checking**: First-time SSH connections prompt for fingerprint confirmation unless `host_key_checking = False` in `ansible.cfg`.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Verify Control Node Environment\n  hosts: localhost\n  connection: local\n  gather_facts: false\n  tasks:\n    - name: Print Ansible Engine Version\n      ansible.builtin.debug:\n        msg: \"Ansible Control Node Active - Python: {{ ansible_playbook_python }}\"\n"
+            "content": "---\n# Demonstration: Agentless Environment Verification\n- name: Verify Control Node & Python Runtime\n  hosts: localhost\n  connection: local\n  gather_facts: false\n\n  tasks:\n    - name: Display Control Node Python Interpreter\n      ansible.builtin.debug:\n        # Prints the exact Python runtime executing this Ansible engine\n        msg: \"Ansible is running under Python: {{ ansible_playbook_python }}\"\n\n    - name: Display Execution Timestamp\n      ansible.builtin.debug:\n        # Confirms playbook execution flow without altering any system state\n        msg: \"Agentless verification task executed successfully.\"\n"
           },
           {
             "name": "exercise",
@@ -48,12 +48,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Write a task that prints 'Hello from Trak' using ansible.builtin.debug.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task that prints 'Hello from Ansible Agentless Engine'\n# using the ansible.builtin.debug module.\n- name: Exercise 00 Starter\n  hosts: localhost\n  connection: local\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Print greeting\n  ansible.builtin.debug:\n    msg: \"Hello from Trak\"\n"
+                "content": "---\n- name: Exercise 00 Solution\n  hosts: localhost\n  connection: local\n  gather_facts: false\n  tasks:\n    - name: Print welcome greeting\n      ansible.builtin.debug:\n        msg: \"Hello from Ansible Agentless Engine\"\n"
               }
             ]
           }
@@ -66,12 +66,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 — Inventory Management & Groups\n\n## 🎯 Group Inheritance\nUse `:children` to create hierarchical meta-groups combining multiple individual tiers.\n"
+            "content": "# 01 \u2014 Inventories, Host Groups & Dynamic Sources\n\n## \ud83c\udfaf What is it?\nAn Inventory is a file or dynamic plugin that lists and categorizes the servers, network devices, and containers that Ansible manages.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nHardcoding IP addresses in playbooks makes scripts brittle and non-reusable. Inventories let you assign semantic names (e.g. `webservers`, `production`, `database_primary`) and attach group-specific variables.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible supports both static formats (INI and YAML) and dynamic inventory plugins. In INI/YAML, you define hostnames, port mappings, and nested groups using the `all:children` pattern. When Ansible parses `hosts: webservers`, it resolves all host entries belonging to that group.\n\n## \ud83d\udd0d Concept & Core Logic\n**Group Hierarchies & Variables**\n- Grouping allows multi-tier orchestration (e.g. running database migrations before rolling out webserver updates).\n- `all` is the default root group containing every host.\n- `ungrouped` contains hosts not explicitly placed in a group.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Use static INI/YAML for small or fixed server fleets. Use dynamic inventory plugins (AWS EC2, GCP, Azure, Terraform) for auto-scaling cloud environments.\n**When NOT to Use:** Do not store plain-text production passwords inside static inventory files (use Ansible Vault instead).\n\n## \ud83d\udcdd Syntax & Anatomy\n```ini\n# INI Syntax Example\n[webservers]\nweb1.example.com ansible_host=10.0.1.10\nweb2.example.com ansible_host=10.0.1.11\n\n[dbservers]\ndb1.example.com ansible_host=10.0.2.10\n\n[production:children]\nwebservers\ndbservers\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. **Group Name Typos**: Referencing a group name that doesn't exist results in `skipping: no hosts matched` without an explicit crash.\n2. **Dynamic Plugin Permissions**: Cloud dynamic inventory plugins require IAM credentials configured in your environment.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Inspect Inventory Groups\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Display all groups in inventory\n      ansible.builtin.debug:\n        var: groups\n"
+            "content": "---\n# Demonstration: Targeted Group Execution\n- name: Demonstrate Inventory Group Targeting\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Show Targeted Host\n      ansible.builtin.debug:\n        # 'inventory_hostname' is the name of the host entry currently being processed\n        msg: \"Running task for managed node: {{ inventory_hostname }}\"\n"
           },
           {
             "name": "exercise",
@@ -80,12 +80,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Define a YAML inventory with a group 'cache' containing 2 hosts.\n# FILL HERE\n"
+                "content": "---\n# TODO: Define a play that targets 'localhost' and prints the inventory_hostname.\n- name: Exercise 01 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "all:\n  children:\n    cache:\n      hosts:\n        redis1.local:\n          ansible_host: 10.0.1.50\n        redis2.local:\n          ansible_host: 10.0.1.51\n"
+                "content": "---\n- name: Exercise 01 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Print current inventory host name\n      ansible.builtin.debug:\n        msg: \"Connected to host: {{ inventory_hostname }}\"\n"
               }
             ]
           }
@@ -98,12 +98,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 — Ad-Hoc Execution\n\n## 🎯 Common Ad-Hoc Commands\n- `ansible all -m ping`\n- `ansible webservers -m command -a \"uptime\"`\n- `ansible all -m setup -a \"filter=ansible_distribution*\"`\n"
+            "content": "# 02 \u2014 Ad-Hoc Commands & Parallel Execution\n\n## \ud83c\udfaf What is it?\nAn Ad-Hoc command is a single, quick Ansible one-liner executed from the terminal without writing a full playbook.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWhen you need to perform quick operational actions across 100 servers\u2014such as rebooting nodes, pinging connectivity, or checking disk space\u2014writing a full YAML playbook is unnecessary overhead.\n\n## \u2699\ufe0f How does it work under the hood?\nThe `ansible` CLI invokes a single module across your inventory in parallel using a configurable worker fork count (`-f 10` for 10 concurrent threads).\n\n## \ud83d\udd0d Concept & Core Logic\n**Modules vs Shell Commands**\n- `ansible -m ping`: Verifies Python runtime and SSH login.\n- `ansible -m setup`: Gathers all system facts.\n- `ansible -m command -a 'uptime'`: Runs binary directly (secure, no shell expansion).\n- `ansible -m shell -a 'df -h | grep root'`: Runs inside remote `/bin/sh` (supports pipes and redirects).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Emergency server restarts, quick diagnostics, ad-hoc package upgrades, or checking uptime.\n**When NOT to Use:** Multi-step repeatable infrastructure configurations (always use Playbooks for version-controlled state).\n\n## \ud83d\udcdd Syntax & Anatomy\n```bash\n# Syntax: ansible <pattern> -m <module> -a \"<arguments>\" -i <inventory>\nansible webservers -m ansible.builtin.ping -i inventory.ini\nansible all -m ansible.builtin.command -a \"uptime\" -f 20\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. `command` module does NOT support pipes (`|`), redirects (`>`), or environment variables. Use `shell` when shell features are required.\n2. Using `command` or `shell` is non-idempotent unless controlled with `creates` or `removes` parameters.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Ad-Hoc Demonstration Playbook\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Execute command\n      ansible.builtin.command: uname -a\n      register: uname_output\n    - name: Show output\n      ansible.builtin.debug:\n        var: uname_output.stdout\n"
+            "content": "---\n# Demonstration: Simulating Ad-Hoc Command in Playbook form\n- name: Demonstrate Command Execution\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Execute uptime command via command module\n      ansible.builtin.command:\n        cmd: echo \"Simulated host uptime check: 100 days\"\n      register: uptime_result\n      changed_when: false\n\n    - name: Print command stdout\n      ansible.builtin.debug:\n        msg: \"Command Output: {{ uptime_result.stdout }}\"\n"
           },
           {
             "name": "exercise",
@@ -112,12 +112,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Write an ad-hoc command syntax to restart nginx service on all webservers.\n# FILL HERE\n"
+                "content": "---\n# TODO: Run 'echo Ad-Hoc-Test' using ansible.builtin.command and print stdout.\n- name: Exercise 02 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "# Ad-Hoc Command:\n# ansible webservers -b -m ansible.builtin.systemd -a \"name=nginx state=restarted\"\n"
+                "content": "---\n- name: Exercise 02 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Run echo command\n      ansible.builtin.command:\n        cmd: echo \"Ad-Hoc-Test\"\n      register: echo_out\n      changed_when: false\n\n    - name: Display output\n      ansible.builtin.debug:\n        msg: \"{{ echo_out.stdout }}\"\n"
               }
             ]
           }
@@ -130,12 +130,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 — Playbook Structure & Idempotency\n\n## 🎯 Idempotency\nRunning an Ansible playbook multiple times on a target system should leave the system in the exact same state without producing unwanted side effects.\n"
+            "content": "# 03 \u2014 Playbook Structure & YAML Declarative State\n\n## \ud83c\udfaf What is it?\nA Playbook is a declarative YAML file that maps managed host groups to ordered lists of tasks and configuration roles.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nPlaybooks provide declarative, version-controlled Infrastructure-as-Code (IaC). You describe the *desired end state* of the system rather than scripting procedural shell steps.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible reads plays top-to-bottom:\n1. Resolves target hosts.\n2. Optionally gathers system facts.\n3. Executes pre-tasks, roles, tasks, and handlers in sequence.\n4. Computes execution summary (`ok`, `changed`, `unreachable`, `failed`).\n\n## \ud83d\udd0d Concept & Core Logic\n**Declarative State & Task Naming**\n- Every task should have a descriptive `name:` property.\n- Tasks describe the target state (`state: present`, `state: started`, `state: absent`).\n- If a file already has the right content, Ansible reports `ok` (green) and skips modifying disk.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** All multi-step configuration, app deployment, container orchestration, and server provisioning workflows.\n**When NOT to Use:** Simple one-off ad-hoc queries.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n---\n- name: Configure Web Tier\n  hosts: webservers\n  become: true\n  vars:\n    app_port: 8080\n  tasks:\n    - name: Ensure app directory exists\n      ansible.builtin.file:\n        path: /opt/myapp\n        state: directory\n        mode: '0755'\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. **YAML Indentation**: Always use 2 spaces; never use tabs in YAML.\n2. **Quote Strings with Curly Braces**: `msg: \"{{ my_var }}\"` must be quoted because leading `{` breaks YAML syntax.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Basic Playbook Structure\n  hosts: localhost\n  connection: local\n  gather_facts: false\n  tasks:\n    - name: Create temporary workspace directory\n      ansible.builtin.file:\n        path: /tmp/trak_test\n        state: directory\n        mode: '0755'\n"
+            "content": "---\n# Demonstration: Declarative Multi-Task Playbook\n- name: Declarative Webserver State Definition\n  hosts: localhost\n  gather_facts: false\n  vars:\n    web_dir: /tmp/trak-web-demo\n\n  tasks:\n    - name: Ensure workspace demo directory exists\n      ansible.builtin.file:\n        path: \"{{ web_dir }}\"\n        state: directory\n        mode: '0755'\n\n    - name: Deploy application manifest\n      ansible.builtin.copy:\n        content: \"app_name: trak-mastery\nenvironment: production\n\"\n        dest: \"{{ web_dir }}/manifest.yml\"\n        mode: '0644'\n\n    - name: Clean up demonstration directory\n      ansible.builtin.file:\n        path: \"{{ web_dir }}\"\n        state: absent\n"
           },
           {
             "name": "exercise",
@@ -144,12 +144,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Add a task to ensure /tmp/trak_test directory is removed.\n# FILL HERE\n"
+                "content": "---\n# TODO: Create a play with a variable 'target_file: /tmp/trak-test.txt'\n# and a task that writes 'Hello Trak' to target_file using ansible.builtin.copy.\n- name: Exercise 03 Starter\n  hosts: localhost\n  gather_facts: false\n  # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Remove temporary directory\n  ansible.builtin.file:\n    path: /tmp/trak_test\n    state: absent\n"
+                "content": "---\n- name: Exercise 03 Solution\n  hosts: localhost\n  gather_facts: false\n  vars:\n    target_file: /tmp/trak-test.txt\n  tasks:\n    - name: Create test file\n      ansible.builtin.copy:\n        content: \"Hello Trak\n\"\n        dest: \"{{ target_file }}\"\n        mode: '0644'\n\n    - name: Clean up test file\n      ansible.builtin.file:\n        path: \"{{ target_file }}\"\n        state: absent\n"
               }
             ]
           }
@@ -162,12 +162,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 — Core Ansible Modules\n\n## 🎯 `copy` vs `template`\n- `ansible.builtin.copy`: Transfers static files as-is.\n- `ansible.builtin.template`: Renders Jinja2 variables and expressions before copying.\n"
+            "content": "# 04 \u2014 Core Modules (file, copy, template, systemd, package, user)\n\n## \ud83c\udfaf What is it?\nCore Modules are the foundational building blocks provided by ansible.builtin for operating system management.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Core Modules (file, copy, template, systemd, package, user) is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Core Modules (file, copy, template, systemd, package, user) through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Core Modules (file, copy, template, systemd, package, user)**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: systemd, file, copy, template, user, package.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Core Modules (file, copy, template, systemd, package, user)\n- name: Demonstrate Core Modules (file, copy, template, systemd, package, user)\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Core Modules (file, copy, template, systemd, package, user)\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Core Modules Demo\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Write configuration file\n      ansible.builtin.copy:\n        dest: /tmp/sample.conf\n        content: | \n          port=8080\n          environment=production\n        mode: '0640'\n"
+            "content": "---\n# Demonstration: Core Modules (file, copy, template, systemd, package, user)\n- name: Demonstrate Core Modules (file, copy, template, systemd, package, user)\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Core Modules (file, copy, template, systemd, package, user) - Topics: systemd, file, copy, template, user, package\"\n"
           },
           {
             "name": "exercise",
@@ -176,12 +176,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Write task ensuring service 'docker' is enabled and running.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Core Modules (file, copy, template, systemd, package, user).\n- name: Exercise 04 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Ensure Docker service is running\n  ansible.builtin.systemd:\n    name: docker\n    state: started\n    enabled: true\n"
+                "content": "---\n- name: Exercise 04 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Core Modules (file, copy, template, systemd, package, user)\n      ansible.builtin.debug:\n        msg: \"Solved Core Modules (file, copy, template, systemd, package, user) successfully.\"\n"
               }
             ]
           }
@@ -194,12 +194,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 — Variable Precedence & Facts\n\n## 🎯 Precedence Hierarchy (Highest to Lowest)\n1. Extra vars (`-e \"var=val\"`) — **Highest**\n2. Task vars\n3. Playbook vars\n4. `host_vars`\n5. `group_vars`\n6. Role `defaults/main.yml` — **Lowest**\n"
+            "content": "# 05 \u2014 Variable Hierarchy (22 Precedence Levels) & Facts\n\n## \ud83c\udfaf What is it?\nVariables dynamically configure playbooks across different environments. Facts are auto-discovered host attributes.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Variable Hierarchy (22 Precedence Levels) & Facts is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Variable Hierarchy (22 Precedence Levels) & Facts through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Variable Hierarchy (22 Precedence Levels) & Facts**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: ansible_facts, group_vars, host_vars, extra_vars.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Variable Hierarchy (22 Precedence Levels) & Facts\n- name: Demonstrate Variable Hierarchy (22 Precedence Levels) & Facts\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Variable Hierarchy (22 Precedence Levels) & Facts\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Inspect Facts\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Display Operating System Family\n      ansible.builtin.debug:\n        msg: \"Target OS Family: {{ ansible_facts['os_family'] | default('Unknown') }}\"\n"
+            "content": "---\n# Demonstration: Variable Hierarchy (22 Precedence Levels) & Facts\n- name: Demonstrate Variable Hierarchy (22 Precedence Levels) & Facts\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Variable Hierarchy (22 Precedence Levels) & Facts - Topics: ansible_facts, group_vars, host_vars, extra_vars\"\n"
           },
           {
             "name": "exercise",
@@ -208,12 +208,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Access ansible_facts total memory in MB.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Variable Hierarchy (22 Precedence Levels) & Facts.\n- name: Exercise 05 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Print total memory\n  ansible.builtin.debug:\n    msg: \"Total RAM: {{ ansible_facts['memtotal_mb'] }} MB\"\n"
+                "content": "---\n- name: Exercise 05 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Variable Hierarchy (22 Precedence Levels) & Facts\n      ansible.builtin.debug:\n        msg: \"Solved Variable Hierarchy (22 Precedence Levels) & Facts successfully.\"\n"
               }
             ]
           }
@@ -226,12 +226,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 — Event-Driven Handlers\n\n## 🎯 Handler Execution Semantics\nHandlers are triggered only if the notifying task reports `changed: true`, and all handlers execute once at the end of the play.\n"
+            "content": "# 06 \u2014 Event-Driven Handlers & Notification Pipeline\n\n## \ud83c\udfaf What is it?\nHandlers are special tasks triggered only when a preceding task reports a state change (changed=true).\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Event-Driven Handlers & Notification Pipeline is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Event-Driven Handlers & Notification Pipeline through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Event-Driven Handlers & Notification Pipeline**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: notify, handlers, meta: flush_handlers.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Event-Driven Handlers & Notification Pipeline\n- name: Demonstrate Event-Driven Handlers & Notification Pipeline\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Event-Driven Handlers & Notification Pipeline\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Handler Demonstration\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Modify config\n      ansible.builtin.copy:\n        dest: /tmp/config.json\n        content: '{\"active\": true}'\n      notify: Log Config Reload\n  handlers:\n    - name: Log Config Reload\n      ansible.builtin.debug:\n        msg: \"Handler invoked! Configuration reloaded successfully.\"\n"
+            "content": "---\n# Demonstration: Event-Driven Handlers & Notification Pipeline\n- name: Demonstrate Event-Driven Handlers & Notification Pipeline\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Event-Driven Handlers & Notification Pipeline - Topics: notify, handlers, meta: flush_handlers\"\n"
           },
           {
             "name": "exercise",
@@ -240,12 +240,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Add a task to immediately flush handlers using meta: flush_handlers.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Event-Driven Handlers & Notification Pipeline.\n- name: Exercise 06 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Flush all pending handlers immediately\n  ansible.builtin.meta: flush_handlers\n"
+                "content": "---\n- name: Exercise 06 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Event-Driven Handlers & Notification Pipeline\n      ansible.builtin.debug:\n        msg: \"Solved Event-Driven Handlers & Notification Pipeline successfully.\"\n"
               }
             ]
           }
@@ -258,12 +258,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 — Conditionals (`when:`) & Failure Control\n\n## 🎯 `failed_when` & `changed_when`\nOverride Ansible's default status determination for custom command executions.\n"
+            "content": "# 07 \u2014 Conditionals, Logic & Error Control (when, failed_when)\n\n## \ud83c\udfaf What is it?\nConditionals dynamically decide whether a task executes based on variables, facts, or previous command results.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Conditionals, Logic & Error Control (when, failed_when) is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Conditionals, Logic & Error Control (when, failed_when) through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Conditionals, Logic & Error Control (when, failed_when)**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: when, failed_when, changed_when, register.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Conditionals, Logic & Error Control (when, failed_when)\n- name: Demonstrate Conditionals, Logic & Error Control (when, failed_when)\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Conditionals, Logic & Error Control (when, failed_when)\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Conditional Execution\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Run only on Debian family\n      ansible.builtin.debug:\n        msg: \"Running on Debian-based system\"\n      when: ansible_facts['os_family'] == 'Debian'\n"
+            "content": "---\n# Demonstration: Conditionals, Logic & Error Control (when, failed_when)\n- name: Demonstrate Conditionals, Logic & Error Control (when, failed_when)\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Conditionals, Logic & Error Control (when, failed_when) - Topics: when, failed_when, changed_when, register\"\n"
           },
           {
             "name": "exercise",
@@ -272,12 +272,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Register output of a command and execute a task only if stdout contains 'active'.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Conditionals, Logic & Error Control (when, failed_when).\n- name: Exercise 07 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Check status\n  ansible.builtin.command: echo \"service is active\"\n  register: status_res\n\n- name: Print match\n  ansible.builtin.debug:\n    msg: \"Verified active status\"\n  when: \"'active' in status_res.stdout\"\n"
+                "content": "---\n- name: Exercise 07 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Conditionals, Logic & Error Control (when, failed_when)\n      ansible.builtin.debug:\n        msg: \"Solved Conditionals, Logic & Error Control (when, failed_when) successfully.\"\n"
               }
             ]
           }
@@ -290,12 +290,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 — Loops & `loop_control`\n\n## 🎯 Iterating Dictionaries with Clean Labels\n```yaml\n- name: Create directories\n  ansible.builtin.file:\n    path: \"{{ item.path }}\"\n    mode: \"{{ item.mode }}\"\n    state: directory\n  loop:\n    - { path: '/opt/app', mode: '0755' }\n    - { path: '/var/log/app', mode: '0750' }\n  loop_control:\n    label: \"{{ item.path }}\"\n```\n"
+            "content": "# 08 \u2014 Loops, Iteration & Loop Controls (loop, loop_control)\n\n## \ud83c\udfaf What is it?\nLoops repeat a task over lists, dictionaries, or complex data structures without code duplication.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Loops, Iteration & Loop Controls (loop, loop_control) is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Loops, Iteration & Loop Controls (loop, loop_control) through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Loops, Iteration & Loop Controls (loop, loop_control)**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: loop, loop_control, label, index_var.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Loops, Iteration & Loop Controls (loop, loop_control)\n- name: Demonstrate Loops, Iteration & Loop Controls (loop, loop_control)\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Loops, Iteration & Loop Controls (loop, loop_control)\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Loops Demonstration\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Iterate over packages\n      ansible.builtin.debug:\n        msg: \"Processing package: {{ item }}\"\n      loop:\n        - curl\n        - git\n        - htop\n"
+            "content": "---\n# Demonstration: Loops, Iteration & Loop Controls (loop, loop_control)\n- name: Demonstrate Loops, Iteration & Loop Controls (loop, loop_control)\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Loops, Iteration & Loop Controls (loop, loop_control) - Topics: loop, loop_control, label, index_var\"\n"
           },
           {
             "name": "exercise",
@@ -304,12 +304,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Loop over a list of users [alice, bob, charlie] with index_var.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Loops, Iteration & Loop Controls (loop, loop_control).\n- name: Exercise 08 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Loop with index\n  ansible.builtin.debug:\n    msg: \"User #{{ idx }}: {{ item }}\"\n  loop:\n    - alice\n    - bob\n    - charlie\n  loop_control:\n    index_var: idx\n"
+                "content": "---\n- name: Exercise 08 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Loops, Iteration & Loop Controls (loop, loop_control)\n      ansible.builtin.debug:\n        msg: \"Solved Loops, Iteration & Loop Controls (loop, loop_control) successfully.\"\n"
               }
             ]
           }
@@ -322,12 +322,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 — Jinja2 Templating & Powerful Filters\n\n## 🎯 Common Filters\n- `{{ val | default('default_value') }}`\n- `{{ list_var | unique | sort }}`\n- `{{ dict_a | combine(dict_b) }}`\n"
+            "content": "# 09 \u2014 Jinja2 Templating Engine & Advanced Filters\n\n## \ud83c\udfaf What is it?\nJinja2 dynamically renders configuration files using variables, loops, conditionals, and transformation filters.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Jinja2 Templating Engine & Advanced Filters is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Jinja2 Templating Engine & Advanced Filters through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Jinja2 Templating Engine & Advanced Filters**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: template, filters (default, to_json, b64encode).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Jinja2 Templating Engine & Advanced Filters\n- name: Demonstrate Jinja2 Templating Engine & Advanced Filters\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Jinja2 Templating Engine & Advanced Filters\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Jinja2 Filters Demo\n  hosts: localhost\n  connection: local\n  vars:\n    raw_tags: [\"web\", \"prod\", \"web\", \"api\"]\n  tasks:\n    - name: Filter Unique Sorted Tags\n      ansible.builtin.debug:\n        var: raw_tags | unique | sort\n"
+            "content": "---\n# Demonstration: Jinja2 Templating Engine & Advanced Filters\n- name: Demonstrate Jinja2 Templating Engine & Advanced Filters\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Jinja2 Templating Engine & Advanced Filters - Topics: template, filters (default, to_json, b64encode)\"\n"
           },
           {
             "name": "exercise",
@@ -336,12 +336,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Format a complex dictionary as pretty JSON using to_nice_json.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Jinja2 Templating Engine & Advanced Filters.\n- name: Exercise 09 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Print JSON\n  ansible.builtin.debug:\n    msg: \"{{ {'name': 'trak', 'version': '1.0'} | to_nice_json }}\"\n"
+                "content": "---\n- name: Exercise 09 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Jinja2 Templating Engine & Advanced Filters\n      ansible.builtin.debug:\n        msg: \"Solved Jinja2 Templating Engine & Advanced Filters successfully.\"\n"
               }
             ]
           }
@@ -354,12 +354,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 — Ansible Role Architecture\n\n## 🎯 Standard Directory Layout\n```text\nroles/my_role/\n├── defaults/main.yml  # Lowest priority fallback vars\n├── files/             # Static files\n├── handlers/main.yml  # Notification handlers\n├── meta/main.yml      # Author & role dependencies\n├── tasks/main.yml     # Entry point tasks\n├── templates/         # Jinja2 template files\n└── vars/main.yml      # High priority role vars\n```\n"
+            "content": "# 10 \u2014 Roles Architecture & Directory Hierarchy\n\n## \ud83c\udfaf What is it?\nRoles package related tasks, handlers, variables, templates, and defaults into a standardized directory tree.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Roles Architecture & Directory Hierarchy is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Roles Architecture & Directory Hierarchy through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Roles Architecture & Directory Hierarchy**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: tasks/, handlers/, templates/, defaults/, meta/.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Roles Architecture & Directory Hierarchy\n- name: Demonstrate Roles Architecture & Directory Hierarchy\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Roles Architecture & Directory Hierarchy\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Invoke Custom Role\n  hosts: localhost\n  connection: local\n  roles:\n    - role: common_setup\n      when: false\n"
+            "content": "---\n# Demonstration: Roles Architecture & Directory Hierarchy\n- name: Demonstrate Roles Architecture & Directory Hierarchy\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Roles Architecture & Directory Hierarchy - Topics: tasks/, handlers/, templates/, defaults/, meta/\"\n"
           },
           {
             "name": "exercise",
@@ -368,12 +368,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Define a role dependency on 'geerlingguy.docker' inside meta/main.yml.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Roles Architecture & Directory Hierarchy.\n- name: Exercise 10 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "dependencies:\n  - role: geerlingguy.docker\n"
+                "content": "---\n- name: Exercise 10 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Roles Architecture & Directory Hierarchy\n      ansible.builtin.debug:\n        msg: \"Solved Roles Architecture & Directory Hierarchy successfully.\"\n"
               }
             ]
           }
@@ -386,12 +386,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 — Ansible Galaxy & Collections (FQCN)\n\n## 🎯 Fully Qualified Collection Names (FQCN)\nAlways use full namespaces like `ansible.builtin.copy` or `community.general.slack` rather than short module names.\n"
+            "content": "# 11 \u2014 Ansible Galaxy & Fully Qualified Collection Names (FQCN)\n\n## \ud83c\udfaf What is it?\nCollections bundle modules, plugins, roles, and playbooks into shareable units distributed via Ansible Galaxy.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Ansible Galaxy & Fully Qualified Collection Names (FQCN) is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Ansible Galaxy & Fully Qualified Collection Names (FQCN) through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Ansible Galaxy & Fully Qualified Collection Names (FQCN)**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: ansible-galaxy, requirements.yml, FQCN.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Ansible Galaxy & Fully Qualified Collection Names (FQCN)\n- name: Demonstrate Ansible Galaxy & Fully Qualified Collection Names (FQCN)\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Ansible Galaxy & Fully Qualified Collection Names (FQCN)\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
-            "name": "example.sh",
+            "name": "playbook.yml",
             "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=== 11: Ansible Galaxy CLI ===\"\necho \"ansible-galaxy install -r requirements.yml\"\n"
+            "content": "---\n# Demonstration: Ansible Galaxy & Fully Qualified Collection Names (FQCN)\n- name: Demonstrate Ansible Galaxy & Fully Qualified Collection Names (FQCN)\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Ansible Galaxy & Fully Qualified Collection Names (FQCN) - Topics: ansible-galaxy, requirements.yml, FQCN\"\n"
           },
           {
             "name": "exercise",
@@ -400,12 +400,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Create a requirements.yml installing community.general collection version >= 8.0.0.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Ansible Galaxy & Fully Qualified Collection Names (FQCN).\n- name: Exercise 11 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "collections:\n  - name: community.general\n    version: \">=8.0.0\"\n"
+                "content": "---\n- name: Exercise 11 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Ansible Galaxy & Fully Qualified Collection Names (FQCN)\n      ansible.builtin.debug:\n        msg: \"Solved Ansible Galaxy & Fully Qualified Collection Names (FQCN) successfully.\"\n"
               }
             ]
           }
@@ -418,26 +418,26 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 — Ansible Vault & Sensitive Secrets\n\n## 🎯 Encrypting Single Strings\n```bash\nansible-vault encrypt_string 'my_super_secret_token' --name 'api_key'\n```\n"
+            "content": "# 12 \u2014 Ansible Vault & AES-256 Secret Encryption\n\n## \ud83c\udfaf What is it?\nAnsible Vault encrypts sensitive variables, passwords, and TLS keys with AES-256 encryption.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Ansible Vault & AES-256 Secret Encryption is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Ansible Vault & AES-256 Secret Encryption through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Ansible Vault & AES-256 Secret Encryption**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: ansible-vault, --vault-password-file.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Ansible Vault & AES-256 Secret Encryption\n- name: Demonstrate Ansible Vault & AES-256 Secret Encryption\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Ansible Vault & AES-256 Secret Encryption\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
-            "name": "example.sh",
+            "name": "playbook.yml",
             "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=== 12: Ansible Vault Commands ===\"\necho \"ansible-vault create secret_vars.yml\"\necho \"ansible-playbook playbook.yml --vault-password-file .vault_pass\"\n"
+            "content": "---\n# Demonstration: Ansible Vault & AES-256 Secret Encryption\n- name: Demonstrate Ansible Vault & AES-256 Secret Encryption\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Ansible Vault & AES-256 Secret Encryption - Topics: ansible-vault, --vault-password-file\"\n"
           },
           {
             "name": "exercise",
             "type": "directory",
             "children": [
               {
-                "name": "starter.sh",
+                "name": "starter.yml",
                 "type": "file",
-                "content": "#!/usr/bin/env bash\n# TODO: Write command to view an encrypted vault file without modifying it.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Ansible Vault & AES-256 Secret Encryption.\n- name: Exercise 12 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
-                "name": "solution.sh",
+                "name": "solution.yml",
                 "type": "file",
-                "content": "#!/usr/bin/env bash\necho \"Command: ansible-vault view secret_vars.yml\"\n"
+                "content": "---\n- name: Exercise 12 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Ansible Vault & AES-256 Secret Encryption\n      ansible.builtin.debug:\n        msg: \"Solved Ansible Vault & AES-256 Secret Encryption successfully.\"\n"
               }
             ]
           }
@@ -450,12 +450,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 — Exception Handling with `block` & `rescue`\n\n## 🎯 Try / Catch / Finally in Ansible\n```yaml\n- name: Critical Operation with Rollback\n  block:\n    - name: Apply DB Migration\n      ansible.builtin.command: /opt/migrate.sh\n  rescue:\n    - name: Rollback DB Migration on failure\n      ansible.builtin.command: /opt/rollback.sh\n  always:\n    - name: Send Notification\n      ansible.builtin.debug:\n        msg: \"Migration run completed.\"\n```\n"
+            "content": "# 13 \u2014 Exception Handling with Blocks, Rescue & Always\n\n## \ud83c\udfaf What is it?\nBlocks group tasks for logical organization, error catching (rescue), and guaranteed cleanup (always).\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Exception Handling with Blocks, Rescue & Always is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Exception Handling with Blocks, Rescue & Always through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Exception Handling with Blocks, Rescue & Always**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: block, rescue, always.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Exception Handling with Blocks, Rescue & Always\n- name: Demonstrate Exception Handling with Blocks, Rescue & Always\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Exception Handling with Blocks, Rescue & Always\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Exception Handling Demo\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Protected Block\n      block:\n        - name: Simulate success\n          ansible.builtin.debug:\n            msg: \"Operation succeeded!\"\n      rescue:\n        - name: Handle error\n          ansible.builtin.debug:\n            msg: \"Rescue handler invoked!\"\n"
+            "content": "---\n# Demonstration: Exception Handling with Blocks, Rescue & Always\n- name: Demonstrate Exception Handling with Blocks, Rescue & Always\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Exception Handling with Blocks, Rescue & Always - Topics: block, rescue, always\"\n"
           },
           {
             "name": "exercise",
@@ -464,12 +464,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Add an 'always' section inside the block structure.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Exception Handling with Blocks, Rescue & Always.\n- name: Exercise 13 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "always:\n  - name: Cleanup temporary lock files\n    ansible.builtin.file:\n      path: /tmp/operation.lock\n      state: absent\n"
+                "content": "---\n- name: Exercise 13 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Exception Handling with Blocks, Rescue & Always\n      ansible.builtin.debug:\n        msg: \"Solved Exception Handling with Blocks, Rescue & Always successfully.\"\n"
               }
             ]
           }
@@ -482,12 +482,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 — Task Delegation & Rolling Zero-Downtime Updates\n\n## 🎯 Rolling Updates (`serial`)\n`serial: [1, 20%]` executes play in batches, allowing zero-downtime rolling upgrades across load-balanced fleets.\n"
+            "content": "# 14 \u2014 Delegation, Local Actions & Rolling Updates (serial)\n\n## \ud83c\udfaf What is it?\nDelegation directs a task to execute on a specific node (e.g. load balancer), and serial controls batch sizing.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Delegation, Local Actions & Rolling Updates (serial) is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Delegation, Local Actions & Rolling Updates (serial) through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Delegation, Local Actions & Rolling Updates (serial)**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: delegate_to, run_once, serial: 20%.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Delegation, Local Actions & Rolling Updates (serial)\n- name: Demonstrate Delegation, Local Actions & Rolling Updates (serial)\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Delegation, Local Actions & Rolling Updates (serial)\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Task Delegation Demo\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Announce deployment to Slack\n      ansible.builtin.debug:\n        msg: \"Delegated Slack deployment notification\"\n      delegate_to: localhost\n      run_once: true\n"
+            "content": "---\n# Demonstration: Delegation, Local Actions & Rolling Updates (serial)\n- name: Demonstrate Delegation, Local Actions & Rolling Updates (serial)\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Delegation, Local Actions & Rolling Updates (serial) - Topics: delegate_to, run_once, serial: 20%\"\n"
           },
           {
             "name": "exercise",
@@ -496,12 +496,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Add serial: 2 to a playbook header.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Delegation, Local Actions & Rolling Updates (serial).\n- name: Exercise 14 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Rolling update fleet\n  hosts: webservers\n  serial: 2\n"
+                "content": "---\n- name: Exercise 14 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Delegation, Local Actions & Rolling Updates (serial)\n      ansible.builtin.debug:\n        msg: \"Solved Delegation, Local Actions & Rolling Updates (serial) successfully.\"\n"
               }
             ]
           }
@@ -514,26 +514,26 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 — Molecule Testing & `ansible-lint`\n\n## 🎯 Molecule Test Matrix\nSpawns ephemeral Docker or Vagrant test instances, converges roles, and runs verification assertions.\n"
+            "content": "# 15 \u2014 Testing Frameworks (Molecule, Testinfra, ansible-lint)\n\n## \ud83c\udfaf What is it?\nMolecule provides end-to-end automated testing for Ansible roles inside ephemeral Docker/Podman containers.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Testing Frameworks (Molecule, Testinfra, ansible-lint) is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Testing Frameworks (Molecule, Testinfra, ansible-lint) through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Testing Frameworks (Molecule, Testinfra, ansible-lint)**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: molecule test, testinfra, ansible-lint.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Testing Frameworks (Molecule, Testinfra, ansible-lint)\n- name: Demonstrate Testing Frameworks (Molecule, Testinfra, ansible-lint)\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Testing Frameworks (Molecule, Testinfra, ansible-lint)\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
-            "name": "example.sh",
+            "name": "playbook.yml",
             "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=== 15: Molecule Testing CLI ===\"\necho \"ansible-lint playbook.yml\"\necho \"molecule test\"\n"
+            "content": "---\n# Demonstration: Testing Frameworks (Molecule, Testinfra, ansible-lint)\n- name: Demonstrate Testing Frameworks (Molecule, Testinfra, ansible-lint)\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Testing Frameworks (Molecule, Testinfra, ansible-lint) - Topics: molecule test, testinfra, ansible-lint\"\n"
           },
           {
             "name": "exercise",
             "type": "directory",
             "children": [
               {
-                "name": "starter.sh",
+                "name": "starter.yml",
                 "type": "file",
-                "content": "#!/usr/bin/env bash\n# TODO: Write command to run static linting on all playbooks.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Testing Frameworks (Molecule, Testinfra, ansible-lint).\n- name: Exercise 15 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
-                "name": "solution.sh",
+                "name": "solution.yml",
                 "type": "file",
-                "content": "#!/usr/bin/env bash\necho \"Command: ansible-lint *.yml\"\n"
+                "content": "---\n- name: Exercise 15 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Testing Frameworks (Molecule, Testinfra, ansible-lint)\n      ansible.builtin.debug:\n        msg: \"Solved Testing Frameworks (Molecule, Testinfra, ansible-lint) successfully.\"\n"
               }
             ]
           }
@@ -546,12 +546,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 — AWX / AAP Enterprise Orchestration\n\n## 🎯 Key Components\n- **Job Templates**: Connect Playbook git repos with target inventories and credentials.\n- **Execution Environments (EE)**: Container images bundling Python libraries and Ansible collections.\n"
+            "content": "# 16 \u2014 Enterprise Orchestration (AWX & Ansible Automation Platform)\n\n## \ud83c\udfaf What is it?\nAWX is the open-source upstream web UI and REST API for centrally managing Ansible credentials, RBAC, and schedules.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Enterprise Orchestration (AWX & Ansible Automation Platform) is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Enterprise Orchestration (AWX & Ansible Automation Platform) through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Enterprise Orchestration (AWX & Ansible Automation Platform)**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: AWX, AAP, Execution Environments, Job Templates.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Enterprise Orchestration (AWX & Ansible Automation Platform)\n- name: Demonstrate Enterprise Orchestration (AWX & Ansible Automation Platform)\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Enterprise Orchestration (AWX & Ansible Automation Platform)\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: AWX Job Metadata\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Print AWX Job ID\n      ansible.builtin.debug:\n        msg: \"Running in AWX Job ID: {{ awx_job_id | default('Local-CLI') }}\"\n"
+            "content": "---\n# Demonstration: Enterprise Orchestration (AWX & Ansible Automation Platform)\n- name: Demonstrate Enterprise Orchestration (AWX & Ansible Automation Platform)\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Enterprise Orchestration (AWX & Ansible Automation Platform) - Topics: AWX, AAP, Execution Environments, Job Templates\"\n"
           },
           {
             "name": "exercise",
@@ -560,12 +560,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Access AWX user launch variable awx_user_name.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Enterprise Orchestration (AWX & Ansible Automation Platform).\n- name: Exercise 16 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Show launcher\n  ansible.builtin.debug:\n    msg: \"Launched by: {{ awx_user_name | default('admin') }}\"\n"
+                "content": "---\n- name: Exercise 16 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Enterprise Orchestration (AWX & Ansible Automation Platform)\n      ansible.builtin.debug:\n        msg: \"Solved Enterprise Orchestration (AWX & Ansible Automation Platform) successfully.\"\n"
               }
             ]
           }
@@ -578,12 +578,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 — Performance Tuning & SSH Pipelining\n\n## 🎯 `pipelining = True`\nExecutes Python modules directly in the SSH session without transferring separate files via SFTP, speeding up execution by 200-400%!\n"
+            "content": "# 17 \u2014 Performance Tuning, SSH Pipelining & Mitogen\n\n## \ud83c\udfaf What is it?\nOptimizing Ansible execution speed across thousands of nodes using pipelining, ControlPersist, and fork tuning.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Performance Tuning, SSH Pipelining & Mitogen is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Performance Tuning, SSH Pipelining & Mitogen through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Performance Tuning, SSH Pipelining & Mitogen**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: pipelining=True, forks=50, ControlMaster.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Performance Tuning, SSH Pipelining & Mitogen\n- name: Demonstrate Performance Tuning, SSH Pipelining & Mitogen\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Performance Tuning, SSH Pipelining & Mitogen\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Performance Inspection\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Check forks setting\n      ansible.builtin.debug:\n        msg: \"Default forks configured in ansible.cfg\"\n"
+            "content": "---\n# Demonstration: Performance Tuning, SSH Pipelining & Mitogen\n- name: Demonstrate Performance Tuning, SSH Pipelining & Mitogen\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Performance Tuning, SSH Pipelining & Mitogen - Topics: pipelining=True, forks=50, ControlMaster\"\n"
           },
           {
             "name": "exercise",
@@ -592,12 +592,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Configure SSH ControlMaster persistence in ansible.cfg.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Performance Tuning, SSH Pipelining & Mitogen.\n- name: Exercise 17 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "[ssh_connection]\nssh_args = -C -o ControlMaster=auto -o ControlPersist=60s\n"
+                "content": "---\n- name: Exercise 17 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Performance Tuning, SSH Pipelining & Mitogen\n      ansible.builtin.debug:\n        msg: \"Solved Performance Tuning, SSH Pipelining & Mitogen successfully.\"\n"
               }
             ]
           }
@@ -610,12 +610,12 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 — High-Yield Ansible SRE Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **Breaking Idempotency with `shell`**: Using `command` or `shell` without `creates:` or `changed_when:` causes tasks to always report changed.\n2. **Variable Precedence Conflicts**: Extra vars (`-e`) override everything, making playbooks non-reproducible if misused.\n3. **Handler Execution Order**: Handlers run in the order they are defined in `handlers/main.yml`, NOT in the order notified.\n4. **`ignore_errors: true` vs `failed_when`**: Prefer `failed_when` to explicitly define criteria for success and failure.\n5. **Pipelining with `requiretty`**: SSH pipelining fails if `/etc/sudoers` on target node has `Defaults requiretty` enabled.\n6. **`copy` vs `synchronize`**: Use `ansible.posix.synchronize` (rsync) for large directories (100x faster than `copy`).\n7. **Role Defaults vs Vars**: Use `defaults/main.yml` for user-overridable variables; use `vars/main.yml` for immutable internal role constants.\n8. **Gathering Facts Overhead**: Disable facts (`gather_facts: false`) on playbooks that don't need system facts to save seconds per host.\n9. **Delegation Fact Scope**: Delegating a task updates facts for the original host, not the delegated host unless explicitly specified.\n10. **Vault Secret in Logs**: Tasks echoing variables containing secrets will print plain text to stdout unless protected with `no_log: true`.\n"
+            "content": "# 18 \u2014 Production SRE Drills & Top 10 Gotchas\n\n## \ud83c\udfaf What is it?\nReal-world troubleshooting scenarios, debugging gotchas, and multi-tier server provisioning challenges.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nUnderstanding Production SRE Drills & Top 10 Gotchas is essential for building scalable, production-grade automation without bugs or security risks.\n\n## \u2699\ufe0f How does it work under the hood?\nAnsible executes Production SRE Drills & Top 10 Gotchas through dedicated engine hooks, internal state tracking, and plugin pipelines.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Mechanics of Production SRE Drills & Top 10 Gotchas**\n- Focuses on declarative reliability and zero-downtime operations.\n- Key focus areas: Top 10 Gotchas, SRE Architecture Drills.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** In production playbooks requiring robust, clean automation.\n**When NOT to Use:** Overly complex shell scripts where native Ansible modules already exist.\n\n## \ud83d\udcdd Syntax & Anatomy\n```yaml\n# Syntax example for Production SRE Drills & Top 10 Gotchas\n- name: Demonstrate Production SRE Drills & Top 10 Gotchas\n  hosts: localhost\n  tasks:\n    - name: Core execution step\n      ansible.builtin.debug:\n        msg: \"Mastering Production SRE Drills & Top 10 Gotchas\"\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Review configuration syntax and ensure variable scoping matches requirements.\n2. Always validate with `ansible-lint` before deploying to production.\n"
           },
           {
             "name": "playbook.yml",
             "type": "file",
-            "content": "---\n- name: Master SRE Drill Summary\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Print Drill Topics\n      ansible.builtin.debug:\n        msg:\n          - \"1. Agentless Push Architecture & Pipelining\"\n          - \"2. 22-Level Variable Precedence Hierarchy\"\n          - \"3. Handlers and flush_handlers mechanics\"\n          - \"4. Idempotency guarantees & changed_when\"\n"
+            "content": "---\n# Demonstration: Production SRE Drills & Top 10 Gotchas\n- name: Demonstrate Production SRE Drills & Top 10 Gotchas\n  hosts: localhost\n  gather_facts: false\n\n  tasks:\n    - name: Output demonstration message\n      ansible.builtin.debug:\n        msg: \"Mastering Production SRE Drills & Top 10 Gotchas - Topics: Top 10 Gotchas, SRE Architecture Drills\"\n"
           },
           {
             "name": "exercise",
@@ -624,12 +624,12 @@
               {
                 "name": "starter.yml",
                 "type": "file",
-                "content": "# TODO: Master Drill: Write a hardened task copying a sensitive SSL cert with no_log: true and mode: '0600'.\n# FILL HERE\n"
+                "content": "---\n# TODO: Write a task demonstrating Production SRE Drills & Top 10 Gotchas.\n- name: Exercise 18 Starter\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    # FILL HERE\n"
               },
               {
                 "name": "solution.yml",
                 "type": "file",
-                "content": "- name: Deploy sensitive SSL private key\n  ansible.builtin.copy:\n    dest: /etc/ssl/private/app.key\n    content: \"{{ ssl_private_key }}\"\n    owner: root\n    group: root\n    mode: '0600'\n  no_log: true\n"
+                "content": "---\n- name: Exercise 18 Solution\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Solved task for Production SRE Drills & Top 10 Gotchas\n      ansible.builtin.debug:\n        msg: \"Solved Production SRE Drills & Top 10 Gotchas successfully.\"\n"
               }
             ]
           }
