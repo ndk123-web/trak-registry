@@ -25,27 +25,17 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 — Rust Setup & Hello World\n\n## What you will learn\n\nThis module gets you comfortable with the Rust toolchain and the basic lifecycle of a Rust program. You will learn the difference between `rustc` and Cargo, create a project, compile it, run it, and understand where `main.rs` fits.\n\n## Rust Toolchain\n\nRust is normally installed and managed with `rustup`.\n\n```bash\nrustc --version\ncargo --version\nrustup --version\n```\n\n- `rustc` is the Rust compiler.\n- `cargo` is Rust's build system and package manager.\n- `rustup` installs and manages Rust toolchains.\n\nFor normal application development, use Cargo rather than invoking `rustc` manually.\n\n## Creating a Project\n\n```bash\ncargo new hello-rust\ncd hello-rust\n```\n\nCargo creates:\n\n```text\nhello-rust/\n├── Cargo.toml\n└── src/\n    └── main.rs\n```\n\n`Cargo.toml` contains package metadata and dependencies. `src/main.rs` is the entry point for a binary crate.\n\n## Compile, Check, and Run\n\n```bash\ncargo check\ncargo build\ncargo run\ncargo build --release\n```\n\n`cargo check` is useful during development because it checks compilation without producing the final executable.\n\n## First Program\n\n```rust\nfn main() {\n    println!(\"Hello, Rust!\");\n}\n```\n\n`fn` declares a function. `main` is the entry point. `println!` is a macro.\n\n## Practice\n\nImplement `greet` so it returns `Hello, <name>!`, and implement `rust_version_label` using `rustc_version` input passed as a normal string.\n\n## Common Mistakes\n\n- Confusing Cargo with `rustc`.\n- Editing generated files without understanding their role.\n- Forgetting that Rust compiles before executing.\n- Treating compiler diagnostics as something to ignore; Rust's diagnostics are part of the learning process.\n"
-          },
-          {
-            "name": "example.rs",
-            "type": "file",
-            "content": "pub fn greet(name: &str) -> String {\n    format!(\"Hello, {}!\", name)\n}\n\npub fn rust_version_label(version: &str) -> String {\n    format!(\"Rust {}\", version)\n}\n"
-          },
-          {
-            "name": "exercise.rs",
-            "type": "file",
-            "content": "pub fn greet(name: &str) -> String {\n    // TODO: Return exactly: Hello, <name>!\n    String::new()\n}\n\npub fn rust_version_label(version: &str) -> String {\n    // TODO: Return exactly: Rust <version>\n    String::new()\n}\n"
-          },
-          {
-            "name": "exercise_test.rs",
-            "type": "file",
-            "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_greet() {\n    assert_eq!(exercise::greet(\"Ndk\"), \"Hello, Ndk!\");\n    assert_eq!(exercise::greet(\"Rust\"), \"Hello, Rust!\");\n}\n\n#[test]\nfn test_rust_version_label() {\n    assert_eq!(exercise::rust_version_label(\"1.85.0\"), \"Rust 1.85.0\");\n}\n"
+            "content": "# 00 — Rust Setup, Toolchain & Hello World\n\n## What is this?\nWelcome to Rust! This introductory module gets your local development environment verified and walks you through the minimal structure of a Rust program. You do not need to write complex functions or macros here — you will learn what `fn main()`, `println!()`, and Cargo mean and how to run your very first Rust program.\n\n## Why does Rust have it?\n- Every standalone executable Rust application must have an entry point function named `fn main()`.\n- Rust comes with Cargo, the official package manager and build toolchain, which handles compiling, running, dependency management, and testing seamlessly.\n\n## The Minimal Anatomy of a Rust Program\nTake a look at `main.rs` in this directory:\n\n```rust\nfn main() {\n    println!(\"Hello, World!\");\n}\n```\n\nLet us break down each part:\n1. `fn main()`: The entry point of your application. When you launch the program, the Rust runtime executes this function first. It takes no arguments and returns the unit type `()`.\n2. `{ ... }`: Curly braces define the body and scope of the function.\n3. `println!(\"Hello, World!\");`: Outputs text to standard output (`stdout`) followed by a newline.\n4. Why `println!` has an exclamation mark (`!`): In Rust, `println!` is a macro, not a regular function. Macros can accept a variable number of arguments and perform compile-time format string validation.\n5. Semicolon `;`: In Rust, a semicolon turns an expression into a statement, indicating that the operation is completed and returns nothing (`()`).\n\n## How to Run & Build\nOpen your terminal in this directory and execute the following commands:\n\n### 1. Run the code directly with Cargo\n```bash\ncargo run\n```\nCargo compiles your code in memory / target directory and executes it immediately:\n```text\nHello, World!\n```\n\n### 2. Fast syntax checking without building a binary\n```bash\ncargo check\n```\n`cargo check` is much faster than `cargo build` because it only checks for syntax and type errors without generating binary machine code.\n\n### 3. Compile into a standalone binary\n```bash\ncargo build\n```\nThis produces a native executable in `target/debug/hello.exe` (or `hello` on Linux/macOS).\n\n### 4. Build an optimized production binary\n```bash\ncargo build --release\n```\nProduces a heavily optimized binary in `target/release/`.\n\n### 5. Compile directly with rustc (without Cargo)\n```bash\nrustc main.rs\n./main\n```\n\n## Common Mistakes\n1. Forgetting the `!` on `println!`: Writing `println(\"Hello\")` causes an error because `println` is a macro, not a function.\n2. Missing semicolon: Omitting `;` at the end of statements can lead to unexpected syntax or type errors.\n3. Case sensitivity: Writing `fn Main()` or `fn MAIN()` will not be recognized as the program entry point. Rust is strictly case-sensitive.\n\n## What to Practice\n1. Open `main.rs`.\n2. Run `cargo run` in your terminal to see `\"Hello, World!\"`.\n3. Change the message to `\"Hello, Trak!\"` or your name, save, and run `cargo run` again.\n4. Run `trak verify 00` or `trak done 00` to mark this setup complete and proceed to Module 01!\n"
           },
           {
             "name": "Cargo.toml",
             "type": "file",
-            "content": "[package]\nname = \"rust_00_rust_setup_and_first_program\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
+            "content": "[package]\nname = \"rust_00_setup_and_first_program\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[[bin]]\nname = \"hello\"\npath = \"main.rs\"\n"
+          },
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"Hello, World!\");\n}\n"
           }
         ]
       },
