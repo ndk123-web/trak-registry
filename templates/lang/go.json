@@ -65,7 +65,7 @@
           {
             "name": "exercise_test.go",
             "type": "file",
-            "content": "package main\n\nimport \"testing\"\n\nfunc TestEnvironmentIota(t *testing.T) {\n\tif EnvDevelopment != 1 {\n\t\tt.Errorf(\"EnvDevelopment = %d; want 1\", EnvDevelopment)\n\t}\n\tif EnvStaging != 2 {\n\t\tt.Errorf(\"EnvStaging = %d; want 2\", EnvStaging)\n\t}\n\tif EnvProduction != 3 {\n\t\tt.Errorf(\"EnvProduction = %d; want 3\", EnvProduction)\n\t}\n}\n\nfunc TestNewServerConfig(t *testing.T) {\n\tcfg := NewServerConfig()\n\tif cfg.Host != \"0.0.0.0\" {\n\t\tt.Errorf(\"cfg.Host = %q; want \"0.0.0.0\"\", cfg.Host)\n\t}\n\tif cfg.Port != 8080 {\n\t\tt.Errorf(\"cfg.Port = %d; want 8080\", cfg.Port)\n\t}\n\tif cfg.MaxConn != 1000 {\n\t\tt.Errorf(\"cfg.MaxConn = %d; want 1000\", cfg.MaxConn)\n\t}\n\tif cfg.IsProd {\n\t\tt.Errorf(\"cfg.IsProd = true; want false\")\n\t}\n}\n\nfunc TestCalculateQuota(t *testing.T) {\n\tcases := []struct {\n\t\tname string\n\t\tbase int\n\t\tenv  Environment\n\t\twant int\n\t}{\n\t\t{\"Dev\", 50, EnvDevelopment, 50},\n\t\t{\"Staging\", 50, EnvStaging, 100},\n\t\t{\"Prod\", 50, EnvProduction, 150},\n\t\t{\"Invalid Low\", 50, Environment(0), -1},\n\t\t{\"Invalid High\", 50, Environment(4), -1},\n\t}\n\n\tfor _, tc := range cases {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tgot := CalculateQuota(tc.base, tc.env)\n\t\t\tif got != tc.want {\n\t\t\t\tt.Errorf(\"CalculateQuota(%d, %d) = %d; want %d\", tc.base, tc.env, got, tc.want)\n\t\t\t}\n\t\t})\n\t}\n}\n"
+            "content": "package main\n\nimport \"testing\"\n\nfunc TestEnvironmentIota(t *testing.T) {\n\tif EnvDevelopment != 1 {\n\t\tt.Errorf(\"EnvDevelopment = %d; want 1\", EnvDevelopment)\n\t}\n\tif EnvStaging != 2 {\n\t\tt.Errorf(\"EnvStaging = %d; want 2\", EnvStaging)\n\t}\n\tif EnvProduction != 3 {\n\t\tt.Errorf(\"EnvProduction = %d; want 3\", EnvProduction)\n\t}\n}\n\nfunc TestNewServerConfig(t *testing.T) {\n\tcfg := NewServerConfig()\n\twantHost := \"0.0.0.0\"\n\tif cfg.Host != wantHost {\n\t\tt.Errorf(\"cfg.Host = %q; want %q\", cfg.Host, wantHost)\n\t}\n\tif cfg.Port != 8080 {\n\t\tt.Errorf(\"cfg.Port = %d; want 8080\", cfg.Port)\n\t}\n\tif cfg.MaxConn != 1000 {\n\t\tt.Errorf(\"cfg.MaxConn = %d; want 1000\", cfg.MaxConn)\n\t}\n\tif cfg.IsProd {\n\t\tt.Errorf(\"cfg.IsProd = true; want false\")\n\t}\n}\n\nfunc TestCalculateQuota(t *testing.T) {\n\tcases := []struct {\n\t\tname string\n\t\tbase int\n\t\tenv  Environment\n\t\twant int\n\t}{\n\t\t{\"Dev\", 50, EnvDevelopment, 50},\n\t\t{\"Staging\", 50, EnvStaging, 100},\n\t\t{\"Prod\", 50, EnvProduction, 150},\n\t\t{\"Invalid Low\", 50, Environment(0), -1},\n\t\t{\"Invalid High\", 50, Environment(4), -1},\n\t}\n\n\tfor _, tc := range cases {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tgot := CalculateQuota(tc.base, tc.env)\n\t\t\tif got != tc.want {\n\t\t\t\tt.Errorf(\"CalculateQuota(%d, %d) = %d; want %d\", tc.base, tc.env, got, tc.want)\n\t\t\t}\n\t\t})\n\t}\n}\n"
           }
         ]
       },
@@ -523,7 +523,7 @@
           {
             "name": "example.go",
             "type": "file",
-            "content": "package main\n\nimport (\n\t\"fmt\"\n\t\"time\"\n)\n\nfunc main() {\n\tfmt.Println(\"Database connection pool initialized with 15m lifetime.\")\n}\n"
+            "content": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Database connection pool initialized with 15m lifetime.\")\n}\n"
           },
           {
             "name": "exercise.go",
