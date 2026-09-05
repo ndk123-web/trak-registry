@@ -1,8 +1,8 @@
 {
   "id": "lang/typescript",
   "name": "TypeScript Architecture & Type Systems Mastery Track",
-  "version": "1.2.0",
-  "description": "Complete high-depth TypeScript curriculum covering type-level programming, conditional types, infer, template literals, Zod schema validation, and runtime mechanics",
+  "version": "1.3.0",
+  "description": "Complete, structured 20-module TypeScript curriculum from fundamentals and discriminated unions to advanced generics, conditional types, and production error architectures.",
   "root": {
     "name": "typescript-workspace",
     "type": "directory",
@@ -10,623 +10,525 @@
       {
         "name": "package.json",
         "type": "file",
-        "content": "{\n  \"name\": \"typescript-workspace\",\n  \"version\": \"0.1.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"build\": \"tsc\"\n  },\n  \"devDependencies\": {\n    \"typescript\": \"^5.4.0\"\n  }\n}\n"
+        "content": "{\n  \"name\": \"typescript-workspace\",\n  \"version\": \"0.1.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test\"\n  }\n}\n"
       },
       {
         "name": "tsconfig.json",
         "type": "file",
-        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"moduleResolution\": \"NodeNext\",\n    \"strict\": true,\n    \"exactOptionalPropertyTypes\": true,\n    \"noImplicitReturns\": true,\n    \"noFallthroughCasesInSwitch\": true,\n    \"skipLibCheck\": true\n  }\n}\n"
+        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"moduleResolution\": \"NodeNext\",\n    \"strict\": true,\n    \"skipLibCheck\": true\n  }\n}\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# \ud83d\udd37 TypeScript Architecture & Type Systems Mastery Track\n\nWelcome to the **TypeScript Architecture & Type Systems Mastery Track** materialized by **Trak**.\n\nThis workspace covers TypeScript from fundamentals and discriminated unions to advanced type-level metaprogramming (`infer`, mapped types, conditional types, template literal types) and runtime validation.\n\n## \ud83d\udcda Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-tsc-compiler` | Compiler & Config | `tsconfig.json`, `tsc`, `ES2022`, strict flags, AST checking |\n| `01-basics-primitive-types` | Type Primitives & Bottom Types | `string`, `number`, `boolean`, `any` vs `unknown` vs `never` |\n| `02-literal-types-and-unions` | Discriminated Unions | Type narrowing (`typeof`, `instanceof`, `in`), exhaustiveness checking |\n| `03-objects-interfaces-type-aliases` | Object Models | `interface` vs `type`, declaration merging, index signatures, `readonly` |\n| `04-tuples-and-enums` | Tuples & Const Assertions | `as const`, labeled tuples, string enums vs union objects |\n| `05-functions-and-signatures` | Functions & Overloads | Function overloads, `this` parameter typing, generic call signatures |\n| `06-generics-and-constraints` | Generics & Bounds | Generic constraints (`T extends Record<string, unknown>`), generic defaults |\n| `07-conditional-types-and-infer` | Conditional Types & `infer` | `T extends U ? X : Y`, unpacking Promises, extracting tuple types with `infer` |\n| `08-mapped-types-and-keyof` | Mapped Types & Metaprogramming | `keyof`, `in keyof`, template literal types, modifier removal (`-readonly`, `?`) |\n| `09-utility-types-deep-dive` | Standard Utility Types | `Partial`, `Required`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited` |\n| `10-classes-and-inheritance` | OOP & Access Modifiers | `private` vs `#private` (hard private), abstract classes, parameter properties |\n| `11-decorators-and-metadata` | TC39 Decorators | Class decorators, method decorators, accessor decorators, metadata reflection |\n| `12-modules-namespaces-and-paths` | ESM & Type Imports | `import type`, re-exports, path mapping (`baseUrl`, `paths`) |\n| `13-error-handling-and-custom-errors` | Error Architecture | Discriminated `Result<T, E>` types, safe narrowing of `catch (err: unknown)` |\n| `14-async-promises-and-event-loop` | Async & Event Loop | `Promise<T>`, microtask vs macrotask queue, `Promise.allSettled` |\n| `15-schema-validation-with-zod` | Runtime Schema Validation | Zod schema parsing, `z.infer<typeof schema>`, transforms, custom refinements |\n| `16-testing-with-vitest` | Testing & Type Assertions | Unit testing, type-level assertions (`expectTypeOf`), test runners |\n| `17-monorepos-and-project-references` | Project References | Composite projects, `tsBuildInfo`, workspace resolution |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 TypeScript gotchas (bivariance, structural typing, `never` checks) |\n\n---\n\n## \ud83d\udee0\ufe0f How to Practice\nEach module contains:\n- `README.md` \u2014 Deep theoretical explanation and architecture notes.\n- `example.ts` \u2014 Fully runnable concept demonstration.\n- `exercise/starter.ts` \u2014 Hands-on problem with `TODO` markers.\n- `exercise/solution.ts` \u2014 Complete reference solution.\n"
+        "content": "# TypeScript Architecture & Type Systems Mastery Track\n\nWelcome to the TypeScript Architecture & Type Systems Mastery Track materialized with Trak.\n\n## Curriculum Structure\n\n00 — Setup, Toolchain & First Program\n01 — Primitive Types & Type Annotations\n02 — Literal Types & Union Types\n03 — Objects, Type Aliases & Interfaces\n04 — Arrays, Tuples & Readonly\n05 — Generics & Type Parameters\n06 — Generic Constraints & Keyof\n07 — Type Narrowing & Discriminated Unions\n08 — Utility Types: Partial, Pick, Omit, Record\n09 — Conditional Types & Infer\n10 — Asynchronous TypeScript & Result Pattern\n11 — Mapped Types & Key Remapping\n12 — Template Literal Types\n13 — Classes & Access Modifiers\n14 — Abstract Classes & Polymorphism\n15 — Function Overloads & Signatures\n16 — Advanced Type Guards & Predicates\n17 — Branded & Nominal Types\n18 — Utility Types: Exclude, Extract, ReturnType\n19 — Modules & Type-Only Imports\n\n## Verification Commands\n\n```bash\n# Verify current pending exercise:\ntrak verify\n\n# Verify specific module:\ntrak verify 01\n\n# Verify all modules:\ntrak verify --all\n```\n"
       },
       {
-        "name": "00-setup-and-tsc-compiler",
+        "name": "00-setup-toolchain-and-first-program",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 \u2014 Setup And Tsc Compiler\n\n## \ud83c\udfaf What is it?\nSetup And Tsc Compiler is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Setup And Tsc Compiler, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Setup And Tsc Compiler executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 TypeScript Compiler (`tsc`) & `tsconfig.json`\n\n## \ud83c\udfaf Learning Objectives\n- Understand TypeScript's two jobs: **Type Checking (Static Analysis)** and **Transpilation (Strip Types to JS)**\n- Configure essential strict compiler flags (`strict`, `noImplicitAny`, `strictNullChecks`)\n- Understand `moduleResolution: \"NodeNext\"` for modern Node.js ESM\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Setup And Tsc Compiler\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 00 — Setup, Toolchain & First Program\n\n## What is this?\nWelcome to TypeScript! TypeScript is a strongly typed programming language that builds on JavaScript by adding static type definitions. You do not need to solve complex type puzzles or pass automated tests in this introductory module. You will learn how TypeScript code runs, how types work at compile time, and how to execute your first TypeScript file.\n\n## Why does TypeScript have it?\n- JavaScript is dynamically typed, meaning type errors (such as calling a method that does not exist or passing `undefined` to a function) are only discovered when users trigger them in production.\n- TypeScript introduces a compile-time static type checker that catches bugs while you write code in your editor.\n- At runtime, TypeScript types are completely erased (stripped away). The JavaScript engine (V8 / Node.js) executes the clean underlying JavaScript with zero runtime performance overhead.\n\n## The Minimal Anatomy of a TypeScript Program\nTake a look at `index.ts` in this directory:\n\n```typescript\nconst greeting: string = \"Hello, TypeScript!\";\nconsole.log(greeting);\n```\n\nLet us break down each part:\n1. `const greeting`: Declares an immutable variable identifier.\n2. `: string`: A static type annotation. Informs the TypeScript compiler that `greeting` must always be a string. If you attempt to assign a number to it, the compiler will refuse to build.\n3. `\"Hello, TypeScript!\"`: The string value.\n4. `console.log(...)`: Standard output printing to terminal.\n\n## How to Run Your First Program\nOpen your terminal in this directory and execute:\n\n### 1. Run the script directly with Node\nModern Node.js executes TypeScript natively by stripping type annotations:\n```bash\nnode index.ts\n```\nYou will see:\n```text\nHello, TypeScript!\n```\n\n### 2. Type-check your project with the TypeScript compiler\nIf you have `tsc` installed globally or via npm:\n```bash\nnpx tsc --noEmit\n```\nThis runs the full TypeScript type checker across your workspace without generating output files, confirming that your types are 100% valid.\n\n## Common Mistakes\n1. Expecting types to exist at runtime: Writing `if (typeof x === \"MyInterface\")` will fail because TypeScript interfaces and type aliases do not exist in the compiled JavaScript runtime.\n2. Confusing TypeScript with a separate runtime: Node.js or the browser executes JavaScript; TypeScript is the author-time type system that ensures safety before runtime.\n\n## What to Practice\n1. Open `index.ts`.\n2. Run `node index.ts` in your terminal to verify output.\n3. Change the message to `\"Hello, Trak!\"` or your name, save, and run `node index.ts` again.\n4. Run `trak verify 00` or `trak done 00` to mark this setup complete and proceed to Module 01!\n"
           },
           {
-            "name": "example.ts",
+            "name": "index.ts",
             "type": "file",
-            "content": "function verifyToolchain(): string {\n  const version: string = \"5.4.0\";\n  const engine: string = \"TypeScript Static Type Engine\";\n  return `[\u2714] ${engine} (v${version}) ready!`;\n}\n\nconsole.log(\"=== 00: TypeScript Toolchain Verification ===\");\nconsole.log(verifyToolchain());\n"
-          },
-          {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Write a typed function 'getSystemInfo' that returns an object with:\n// os: string, cores: number, is64Bit: boolean.\n\nfunction getSystemInfo() {\n  // FILL HERE\n}\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "interface SystemInfo {\n  os: string;\n  cores: number;\n  is64Bit: boolean;\n}\n\nfunction getSystemInfo(): SystemInfo {\n  return {\n    os: \"linux\",\n    cores: 8,\n    is64Bit: true,\n  };\n}\n\nconst info = getSystemInfo();\nconsole.log(\"System Info:\", info);\n"
-              }
-            ]
+            "content": "const greeting: string = \"Hello, TypeScript!\";\nconsole.log(greeting);\n"
           }
         ]
       },
       {
-        "name": "01-basics-primitive-types",
+        "name": "01-primitive-types-and-type-annotations",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 \u2014 Basics Primitive Types\n\n## \ud83c\udfaf What is it?\nBasics Primitive Types is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Basics Primitive Types, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Basics Primitive Types executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Primitive Types, Top & Bottom Types\n\n## \ud83c\udfaf Type Hierarchy\n- **Top Types**: `unknown` (safe, requires narrowing before use) vs `any` (unsafe, disables type checker).\n- **Bottom Type**: `never` (represents impossible values / unreachable code).\n- **Primitives**: `string`, `number`, `boolean`, `symbol`, `bigint`, `null`, `undefined`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Basics Primitive Types\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 01 — Primitive Types & Type Annotations\n\n## What is this?\nTypeScript mirrors JavaScript's primitive types (`string`, `number`, `boolean`, `null`, `undefined`, `symbol`, `bigint`) and allows explicit type annotations. TypeScript also provides special top/bottom types: `any`, `unknown`, and `never`.\n\n## Why does TypeScript have it?\n- Explicit annotations ensure functions accept and return the exact shapes intended.\n- `unknown` is a type-safe counterpart to `any`. Anything is assignable to `unknown`, but nothing can be performed on an `unknown` value without first narrowing its type.\n\n## Basic Syntax\n```typescript\nlet username: string = \"Elena\";\nlet age: number = 28;\nlet isActive: boolean = true;\n\n// Type Inference (TypeScript automatically infers 'number')\nlet score = 100;\n\n// Type-safe unknown\nlet data: unknown = \"raw input\";\nif (typeof data === \"string\") {\n    console.log(data.toUpperCase()); // Safe because narrowed to string\n}\n```\n\n## How it Behaves\n1. Type Inference: You do not need to annotate every variable. If an initial value is provided, TypeScript infers the type automatically.\n2. `any` vs `unknown`:\n   - `any`: Disables type checking completely. Avoid using `any` in production.\n   - `unknown`: Requires type checking (narrowing) before any properties or methods can be accessed.\n3. `null` and `undefined`: Under `strictNullChecks: true`, `null` and `undefined` cannot be assigned to `string` or `number` unless explicitly typed as a union (`string | null`).\n\n## Common Mistakes\n1. Annotating obvious types unnecessarily: Writing `const x: number = 5;` is redundant because TypeScript already infers `5` as number.\n2. Using `any` as an escape hatch instead of `unknown` with narrowing.\n3. Capitalizing primitive type names: Using `String` or `Number` refers to JavaScript's wrapper objects, not the primitive types. Always use lowercase `string`, `number`, `boolean`.\n\n## Small Practical Example\n```typescript\nfunction formatPrice(amount: number, currency: string = \"USD\"): string {\n    return `${currency} ${amount.toFixed(2)}`;\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. `formatGreeting(name: string, isFormal?: boolean): string`:\n   - If `isFormal` is `true`, return `\"Greetings, <name>.\"`\n   - Otherwise, return `\"Hello, <name>!\"`\n2. `calculateTotal(price: number, quantity: number, taxRate: number = 0.05): number`:\n   - Returns `(price * quantity) * (1 + taxRate)`. Round to 2 decimal places using `Number(val.toFixed(2))`.\n   - If `price < 0` or `quantity < 0`, return `0`.\n3. `parseLength(value: unknown): number`:\n   - If `typeof value === \"string\"`: return `value.length`.\n   - If `Array.isArray(value)`: return `value.length`.\n   - Otherwise return `-1`.\n\n## Progressive Hints\n- Hint 1: In `formatGreeting`, mark `isFormal?: boolean` as optional.\n- Hint 2: In `parseLength`, check `typeof value === \"string\"` and `Array.isArray(value)`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport function formatGreeting(name: string, isFormal?: boolean): string {\n    if (isFormal) {\n        return `Greetings, ${name}.`;\n    }\n    return `Hello, ${name}!`;\n}\n\nexport function calculateTotal(price: number, quantity: number, taxRate: number = 0.05): number {\n    if (price < 0 || quantity < 0) {\n        return 0;\n    }\n    const total = (price * quantity) * (1 + taxRate);\n    return Number(total.toFixed(2));\n}\n\nexport function parseLength(value: unknown): number {\n    if (typeof value === \"string\") {\n        return value.length;\n    }\n    if (Array.isArray(value)) {\n        return value.length;\n    }\n    return -1;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "function processData(input: unknown): string {\n  // Type narrowing required for 'unknown'\n  if (typeof input === \"string\") {\n    return input.toUpperCase();\n  }\n  if (typeof input === \"number\") {\n    return input.toFixed(2);\n  }\n  throw new Error(\"Unsupported input type\");\n}\n\nconsole.log(\"=== 01: unknown vs any ===\");\nconsole.log(\"String:\", processData(\"trak\"));\nconsole.log(\"Number:\", processData(42.5678));\n"
+            "content": "// Module 01: Primitive Types Example\n\nfunction printUserDetails(name: string, age: number, isVerified: boolean): string {\n    return `User: ${name}, Age: ${age}, Verified: ${isVerified}`;\n}\n\nconsole.log(printUserDetails(\"Maya\", 25, true));\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement a safe JSON parser function 'safeJsonParse(raw: string): unknown'\n// that returns the parsed object or null on error without using 'any'.\n\nfunction safeJsonParse(raw: string): unknown {\n  // FILL HERE\n  return null;\n}\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "function safeJsonParse(raw: string): unknown {\n  try {\n    return JSON.parse(raw);\n  } catch {\n    return null;\n  }\n}\n\nconst valid = safeJsonParse('{\"version\": \"1.2.0\"}');\nconst invalid = safeJsonParse('invalid-json');\nconsole.log(\"Valid parse:\", valid);\nconsole.log(\"Invalid parse:\", invalid);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 01: Primitive Types & Type Annotations\n\nexport function formatGreeting(name: string, isFormal?: boolean): string {\n    // TODO: Return \"Greetings, <name>.\" if isFormal, else \"Hello, <name>!\"\n    return \"\";\n}\n\nexport function calculateTotal(price: number, quantity: number, taxRate: number = 0.05): number {\n    // TODO: Return (price * quantity) * (1 + taxRate) rounded to 2 decimals.\n    // Return 0 if price < 0 or quantity < 0\n    return 0;\n}\n\nexport function parseLength(value: unknown): number {\n    // TODO: Return string.length or array.length, otherwise -1\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { formatGreeting, calculateTotal, parseLength } from './exercise.ts';\n\ntest('formatGreeting formats correctly based on formality', () => {\n    assert.equal(formatGreeting('Alice', true), 'Greetings, Alice.');\n    assert.equal(formatGreeting('Bob', false), 'Hello, Bob!');\n    assert.equal(formatGreeting('Charlie'), 'Hello, Charlie!');\n});\n\ntest('calculateTotal computes total with tax and guard checks', () => {\n    assert.equal(calculateTotal(10, 2, 0.1), 22);\n    assert.equal(calculateTotal(100, 1), 105);\n    assert.equal(calculateTotal(-10, 5), 0);\n    assert.equal(calculateTotal(10, -5), 0);\n});\n\ntest('parseLength safely inspects unknown input types', () => {\n    assert.equal(parseLength('hello'), 5);\n    assert.equal(parseLength([1, 2, 3, 4]), 4);\n    assert.equal(parseLength(42), -1);\n    assert.equal(parseLength(null), -1);\n    assert.equal(parseLength({ length: 10 }), -1);\n});\n"
           }
         ]
       },
       {
-        "name": "02-literal-types-and-unions",
+        "name": "02-literal-types-and-union-types",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 \u2014 Literal Types And Unions\n\n## \ud83c\udfaf What is it?\nLiteral Types And Unions is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Literal Types And Unions, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Literal Types And Unions executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Discriminated Unions & Exhaustiveness Checking\n\n## \ud83c\udfaf Discriminated Unions\nA pattern where every variant in a union shares a common literal discriminator property (e.g. `type: \"success\" | \"error\"`).\n\n## \ud83e\udde0 Exhaustive Checking with `never`\nUsing `assertNever(val: never)` in the `default` branch of a switch statement forces compile-time errors if a new union variant is added without being handled!\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Literal Types And Unions\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 02 — Literal Types & Union Types\n\n## What is this?\nA literal type represents an exact specific value (e.g. `\"admin\"`, `200`, `true`). A union type (`|`) represents a value that can be one of several types. Combining literal types with union types allows you to model finite sets of acceptable values with compile-time verification.\n\n## Why does TypeScript have it?\n- Replaces magic strings and arbitrary numbers with strict, compiler-enforced enums and state representations.\n\n## Basic Syntax\n```typescript\n// String literal union\ntype Status = \"pending\" | \"active\" | \"archived\";\n\n// Number literal union\ntype HttpSuccessCode = 200 | 201 | 204;\n\n// Type narrowing\nfunction handleStatus(status: Status) {\n    if (status === \"active\") {\n        // TypeScript knows status is strictly \"active\" here\n    }\n}\n```\n\n## How it Behaves\n1. Exact Value Matching: A variable typed as `\"asc\" | \"desc\"` will reject `\"ascending\"` at compile time.\n2. Union Narrowing: Inside conditional blocks (`if`, `switch`), TypeScript narrows the broad union down to the specific branch value.\n\n## Common Mistakes\n1. Forgetting to export the type alias: When using types across multiple files, remember `export type ...`.\n2. Assuming literal types are preserved in mutable objects without `as const`:\n   ```typescript\n   const req = { method: \"GET\" }; // inferred as { method: string }\n   // Fix: const req = { method: \"GET\" as const };\n   ```\n\n## Small Practical Example\n```typescript\ntype Direction = \"north\" | \"south\" | \"east\" | \"west\";\n\nfunction move(dir: Direction, steps: number): string {\n    return `Moving ${steps} steps towards ${dir}`;\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define type alias `LogLevel = \"debug\" | \"info\" | \"warn\" | \"error\"`.\n2. Define type alias `HttpStatus = 200 | 400 | 401 | 404 | 500`.\n3. `isClientError(status: HttpStatus): boolean`: Returns `true` if `status` is `400`, `401`, or `404`, otherwise `false`.\n4. `formatLog(level: LogLevel, message: string): string`: Returns `\"[<LEVEL>]: <message>\"`, where `<LEVEL>` is uppercase (e.g. `\"[INFO]: Server started\"`).\n\n## Progressive Hints\n- Hint 1: Export type `LogLevel` and `HttpStatus`.\n- Hint 2: In `isClientError`, check `status >= 400 && status < 500`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type LogLevel = \"debug\" | \"info\" | \"warn\" | \"error\";\nexport type HttpStatus = 200 | 400 | 401 | 404 | 500;\n\nexport function isClientError(status: HttpStatus): boolean {\n    return status === 400 || status === 401 || status === 404;\n}\n\nexport function formatLog(level: LogLevel, message: string): string {\n    return `[${level.toUpperCase()}]: ${message}`;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "type NetworkState =\n  | { status: \"loading\" }\n  | { status: \"success\"; data: string[] }\n  | { status: \"error\"; message: string };\n\nfunction assertNever(x: never): never {\n  throw new Error(`Unhandled union variant: ${JSON.stringify(x)}`);\n}\n\nfunction renderUI(state: NetworkState): string {\n  switch (state.status) {\n    case \"loading\":\n      return \"Spinner active...\";\n    case \"success\":\n      return `Items: ${state.data.join(\", \")}`;\n    case \"error\":\n      return `Error: ${state.message}`;\n    default:\n      return assertNever(state);\n  }\n}\n\nconsole.log(\"=== 02: Discriminated Unions ===\");\nconsole.log(renderUI({ status: \"success\", data: [\"Go\", \"Rust\", \"TS\"] }));\n"
+            "content": "// Module 02: Literal & Union Types Example\n\ntype ThemeMode = \"light\" | \"dark\" | \"system\";\n\nfunction applyTheme(theme: ThemeMode): string {\n    return `Applied ${theme} theme to UI`;\n}\n\nconsole.log(applyTheme(\"dark\"));\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Define a discriminated union 'PaymentMethod':\n// - { kind: 'card', cardNumber: string, cvv: string }\n// - { kind: 'paypal', email: string }\n// - { kind: 'crypto', walletAddress: string }\n// Implement 'processPayment(method: PaymentMethod): string' with exhaustiveness checking.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "type PaymentMethod =\n  | { kind: \"card\"; cardNumber: string; cvv: string }\n  | { kind: \"paypal\"; email: string }\n  | { kind: \"crypto\"; walletAddress: string };\n\nfunction processPayment(method: PaymentMethod): string {\n  switch (method.kind) {\n    case \"card\":\n      return `Charged card ending in ${method.cardNumber.slice(-4)}`;\n    case \"paypal\":\n      return `Paid via PayPal account ${method.email}`;\n    case \"crypto\":\n      return `Transferred to wallet ${method.walletAddress}`;\n  }\n}\n\nconsole.log(processPayment({ kind: \"card\", cardNumber: \"1234567812345678\", cvv: \"123\" }));\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 02: Literal Types & Union Types\n\nexport type LogLevel = \"debug\" | \"info\" | \"warn\" | \"error\";\nexport type HttpStatus = 200 | 400 | 401 | 404 | 500;\n\nexport function isClientError(status: HttpStatus): boolean {\n    // TODO: Return true if status is 400, 401, or 404, else false\n    return false;\n}\n\nexport function formatLog(level: LogLevel, message: string): string {\n    // TODO: Return \"[<LEVEL>]: <message>\" with level in uppercase\n    return \"\";\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { isClientError, formatLog } from './exercise.ts';\n\ntest('isClientError accurately identifies 4xx status codes', () => {\n    assert.equal(isClientError(400), true);\n    assert.equal(isClientError(401), true);\n    assert.equal(isClientError(404), true);\n    assert.equal(isClientError(200), false);\n    assert.equal(isClientError(500), false);\n});\n\ntest('formatLog prints uppercase level prefix', () => {\n    assert.equal(formatLog('info', 'Worker ready'), '[INFO]: Worker ready');\n    assert.equal(formatLog('error', 'Disk full'), '[ERROR]: Disk full');\n    assert.equal(formatLog('debug', 'Tracing id 123'), '[DEBUG]: Tracing id 123');\n});\n"
           }
         ]
       },
       {
-        "name": "03-objects-interfaces-type-aliases",
+        "name": "03-objects-type-aliases-and-interfaces",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 \u2014 Objects Interfaces Type Aliases\n\n## \ud83c\udfaf What is it?\nObjects Interfaces Type Aliases is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Objects Interfaces Type Aliases, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Objects Interfaces Type Aliases executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 `interface` vs `type` Aliases & Declaration Merging\n\n## \ud83c\udfaf Comparison\n- **`interface`**: Can be reopened (Declaration Merging). Best for public API models and OOP.\n- **`type`**: Supports unions, primitives, tuples, and mapped types. Cannot be reopened.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Objects Interfaces Type Aliases\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 03 — Objects, Type Aliases & Interfaces\n\n## What is this?\nTypeScript offers two primary ways to describe object structures: `interface` and `type` alias. Both allow defining required properties, optional properties (`?`), and immutable properties (`readonly`).\n\n## Why does TypeScript have it?\n- Large systems rely on shared contracts for data structures passed between components, services, and APIs.\n- TypeScript uses structural typing (duck typing): if two objects have the same properties with compatible types, they are considered the same type regardless of declaration name.\n\n## Basic Syntax\n```typescript\ninterface UserProfile {\n    readonly id: number;\n    username: string;\n    email?: string; // Optional property\n}\n\ntype ServiceConfig = {\n    host: string;\n    port: number;\n};\n```\n\n## How it Behaves\n1. `readonly`: Prevents reassignment of the property after initialization.\n2. Optional Properties (`?`): Automatically typed as `Type | undefined`.\n3. Interface Extension: `interface Admin extends UserProfile { role: string; }`\n4. Type Intersections: `type Admin = UserProfile & { role: string; }`\n\n## Common Mistakes\n1. Assuming `readonly` freezes nested properties: `readonly` is shallow.\n2. Attempting to assign an object with missing required properties.\n3. Excess Property Checks: When passing an object literal directly to a function, TypeScript disallows extra properties not listed in the interface.\n\n## Small Practical Example\n```typescript\ninterface Product {\n    id: string;\n    name: string;\n    price: number;\n    discount?: number;\n}\n\nfunction getFinalPrice(product: Product): number {\n    return product.price - (product.discount ?? 0);\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define interface `UserProfile`:\n   - `readonly id: string`\n   - `username: string`\n   - `email: string`\n   - `bio?: string`\n2. Define interface `AdminUser extends UserProfile`:\n   - `permissions: string[]`\n3. `createAdminUser(id: string, username: string, email: string, permissions?: string[]): AdminUser`:\n   - Returns an `AdminUser` object. If `permissions` is omitted, defaults to `[\"read\", \"write\"]`.\n4. `updateEmail(user: UserProfile, newEmail: string): UserProfile`:\n   - Returns a new copy of `user` with `email` set to `newEmail`.\n\n## Progressive Hints\n- Hint 1: In `createAdminUser`, write `permissions = [\"read\", \"write\"]`.\n- Hint 2: In `updateEmail`, return `{ ...user, email: newEmail }`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport interface UserProfile {\n    readonly id: string;\n    username: string;\n    email: string;\n    bio?: string;\n}\n\nexport interface AdminUser extends UserProfile {\n    permissions: string[];\n}\n\nexport function createAdminUser(\n    id: string,\n    username: string,\n    email: string,\n    permissions: string[] = [\"read\", \"write\"]\n): AdminUser {\n    return {\n        id,\n        username,\n        email,\n        permissions\n    };\n}\n\nexport function updateEmail(user: UserProfile, newEmail: string): UserProfile {\n    return {\n        ...user,\n        email: newEmail\n    };\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "interface User {\n  id: number;\n  name: string;\n}\n\n// Declaration merging: adds 'email' to User interface\ninterface User {\n  email: string;\n}\n\nconst user: User = {\n  id: 101,\n  name: \"Navnath\",\n  email: \"admin@trak.dev\",\n};\n\nconsole.log(\"=== 03: Interfaces & Declaration Merging ===\");\nconsole.log(\"Merged User:\", user);\n"
+            "content": "// Module 03: Objects & Interfaces Example\n\ninterface ServerConfig {\n    readonly port: number;\n    host: string;\n    ssl?: boolean;\n}\n\nconst config: ServerConfig = {\n    port: 8080,\n    host: \"0.0.0.0\",\n    ssl: true\n};\n\nconsole.log(\"Host:\", config.host);\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Create an immutable Record interface with 'readonly' properties\n// and an index signature for dynamic string metadata.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "interface ImmutableDoc {\n  readonly id: string;\n  readonly createdAt: Date;\n  readonly [metaKey: string]: unknown;\n}\n\nconst doc: ImmutableDoc = {\n  id: \"doc_100\",\n  createdAt: new Date(),\n  author: \"ndk123-web\",\n  tags: [\"typescript\", \"guide\"],\n};\n\nconsole.log(\"Immutable Document:\", doc);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 03: Objects, Type Aliases & Interfaces\n\nexport interface UserProfile {\n    readonly id: string;\n    username: string;\n    email: string;\n    bio?: string;\n}\n\nexport interface AdminUser extends UserProfile {\n    permissions: string[];\n}\n\nexport function createAdminUser(\n    id: string,\n    username: string,\n    email: string,\n    permissions?: string[]\n): AdminUser {\n    // TODO: Return AdminUser, default permissions to [\"read\", \"write\"]\n    return {} as AdminUser;\n}\n\nexport function updateEmail(user: UserProfile, newEmail: string): UserProfile {\n    // TODO: Return new copy with updated email\n    return user;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createAdminUser, updateEmail } from './exercise.ts';\n\ntest('createAdminUser creates admin with default or custom permissions', () => {\n    const admin1 = createAdminUser('u-1', 'alex', 'alex@example.com');\n    assert.deepEqual(admin1, {\n        id: 'u-1',\n        username: 'alex',\n        email: 'alex@example.com',\n        permissions: ['read', 'write']\n    });\n\n    const admin2 = createAdminUser('u-2', 'sam', 'sam@example.com', ['superadmin']);\n    assert.deepEqual(admin2.permissions, ['superadmin']);\n});\n\ntest('updateEmail returns new object without mutating original', () => {\n    const original = { id: 'u-1', username: 'alex', email: 'old@example.com' };\n    const updated = updateEmail(original, 'new@example.com');\n\n    assert.equal(updated.email, 'new@example.com');\n    assert.equal(original.email, 'old@example.com'); // original intact\n    assert.equal(updated.id, original.id);\n});\n"
           }
         ]
       },
       {
-        "name": "04-tuples-and-enums",
+        "name": "04-arrays-tuples-and-readonly",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 \u2014 Tuples And Enums\n\n## \ud83c\udfaf What is it?\nTuples And Enums is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Tuples And Enums, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Tuples And Enums executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Labeled Tuples & `as const` Objects vs Enums\n\n## \ud83c\udfaf Modern Best Practice: `as const` Objects\nTypeScript `enum` generates JavaScript runtime objects. Using `as const` objects is zero-overhead and tree-shakeable:\n```ts\nexport const LogLevel = {\n  Info: \"INFO\",\n  Warn: \"WARN\",\n  Error: \"ERROR\",\n} as const;\n\nexport type LogLevel = (typeof LogLevel)[keyof typeof LogLevel];\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Tuples And Enums\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 04 — Arrays, Tuples & Readonly\n\n## What is this?\nTypeScript supports typed arrays (`T[]` or `Array<T>`), fixed-length ordered heterogeneous arrays known as **tuples** (`[string, number]`), and immutable arrays (`readonly T[]`).\n\n## Why does TypeScript have it?\n- Standard arrays have arbitrary length and uniform elements. Tuples allow modeling records with strict positional semantics (e.g. coordinates `[x, y]`, key-value pairs `[key, val]`, or function return states like React's `[state, setState]`).\n\n## Basic Syntax\n```typescript\n// Typed Array\nconst scores: number[] = [90, 85, 95];\n\n// Tuple (fixed length 2, specific types per position)\ntype Coordinate = [number, number];\nconst point: Coordinate = [10, 20];\n\n// Labeled Tuple\ntype HttpResponse = [statusCode: number, message: string];\n\n// Readonly Array\nconst immutableList: readonly string[] = [\"a\", \"b\", \"c\"];\n// immutableList.push(\"d\"); // Error: push does not exist on readonly array!\n```\n\n## How it Behaves\n1. Tuples enforce length and position: Assigning `[10]` or `[10, \"text\"]` to `[number, number]` will cause a compiler error.\n2. `as const`: When applied to an array literal, locks the array into a `readonly` tuple where elements become literal types:\n   ```typescript\n   const HTTP_METHODS = [\"GET\", \"POST\", \"PUT\"] as const;\n   // Inferred as readonly [\"GET\", \"POST\", \"PUT\"]\n   ```\n\n## Common Mistakes\n1. Mutating tuples via `push()`: Prior to recent TypeScript versions, calling `.push()` on mutable tuples was allowed. To ensure true immutability, type them as `readonly [T1, T2]`.\n2. Confusing arrays with tuples: `let x = [\"a\", 1]` is inferred as `(string | number)[]` (arbitrary length), not a tuple. To get a tuple, provide an explicit annotation `[string, number]` or use `as const`.\n\n## Small Practical Example\n```typescript\ntype Entry = [key: string, value: number];\n\nfunction parseEntry(raw: string): Entry {\n    const [k, v] = raw.split(\"=\");\n    return [k, Number(v)];\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define tuple type `GeoPoint = [latitude: number, longitude: number]`.\n2. `calculateDistance(p1: GeoPoint, p2: GeoPoint): number`:\n   - Calculates the Euclidean distance: `Math.sqrt((x2 - x1)**2 + (y2 - y1)**2)`. Round to 2 decimal places using `Number(res.toFixed(2))`.\n3. `splitAt<T>(arr: readonly T[], index: number): [T[], T[]]`:\n   - Returns a tuple of two arrays: `[arr.slice(0, index), arr.slice(index)]`.\n\n## Progressive Hints\n- Hint 1: In `calculateDistance`, destructure coordinates: `const [x1, y1] = p1; const [x2, y2] = p2;`.\n- Hint 2: In `splitAt`, return `[arr.slice(0, index), arr.slice(index)]`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type GeoPoint = [latitude: number, longitude: number];\n\nexport function calculateDistance(p1: GeoPoint, p2: GeoPoint): number {\n    const [x1, y1] = p1;\n    const [x2, y2] = p2;\n    const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);\n    return Number(dist.toFixed(2));\n}\n\nexport function splitAt<T>(arr: readonly T[], index: number): [T[], T[]] {\n    return [\n        arr.slice(0, index),\n        arr.slice(index)\n    ];\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "const HTTP_METHODS = {\n  GET: \"GET\",\n  POST: \"POST\",\n  PUT: \"PUT\",\n  DELETE: \"DELETE\",\n} as const;\n\ntype HttpMethod = (typeof HTTP_METHODS)[keyof typeof HTTP_METHODS];\n\n// Labeled Tuple\ntype LatLng = [latitude: number, longitude: number];\n\nfunction sendRequest(method: HttpMethod, coords: LatLng) {\n  console.log(`Sending ${method} request to coordinates [${coords[0]}, ${coords[1]}]`);\n}\n\nconsole.log(\"=== 04: as const & Labeled Tuples ===\");\nsendRequest(HTTP_METHODS.POST, [18.5204, 73.8567]);\n"
+            "content": "// Module 04: Tuples Example\n\ntype KeyValue = [key: string, value: number];\n\nconst entry: KeyValue = [\"port\", 8080];\nconsole.log(`Key: ${entry[0]}, Value: ${entry[1]}`);\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Define a const object 'StatusCodes' with OK (200), NotFound (404), and ServerError (500).\n// Extract its type 'StatusCode'.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "const StatusCodes = {\n  OK: 200,\n  NotFound: 404,\n  ServerError: 500,\n} as const;\n\ntype StatusCode = (typeof StatusCodes)[keyof typeof StatusCodes];\n\nfunction handleResponse(code: StatusCode) {\n  return code === StatusCodes.OK ? \"Success\" : \"Failure\";\n}\n\nconsole.log(\"200:\", handleResponse(StatusCodes.OK));\nconsole.log(\"404:\", handleResponse(StatusCodes.NotFound));\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 04: Arrays, Tuples & Readonly\n\nexport type GeoPoint = [latitude: number, longitude: number];\n\nexport function calculateDistance(p1: GeoPoint, p2: GeoPoint): number {\n    // TODO: Calculate Euclidean distance rounded to 2 decimals\n    return 0;\n}\n\nexport function splitAt<T>(arr: readonly T[], index: number): [T[], T[]] {\n    // TODO: Return tuple with [firstPart, secondPart]\n    return [[], []];\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { calculateDistance, splitAt, type GeoPoint } from './exercise.ts';\n\ntest('calculateDistance calculates Euclidean distance accurately', () => {\n    const p1: GeoPoint = [0, 0];\n    const p2: GeoPoint = [3, 4];\n    assert.equal(calculateDistance(p1, p2), 5);\n\n    const p3: GeoPoint = [1, 2];\n    const p4: GeoPoint = [4, 6];\n    assert.equal(calculateDistance(p3, p4), 5);\n});\n\ntest('splitAt divides array into two tuple components', () => {\n    const items = [10, 20, 30, 40, 50];\n    const [left, right] = splitAt(items, 2);\n    assert.deepEqual(left, [10, 20]);\n    assert.deepEqual(right, [30, 40, 50]);\n});\n"
           }
         ]
       },
       {
-        "name": "05-functions-and-signatures",
+        "name": "05-generics-and-type-parameters",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 \u2014 Functions And Signatures\n\n## \ud83c\udfaf What is it?\nFunctions And Signatures is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Functions And Signatures, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Functions And Signatures executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Function Overloading & Generic Call Signatures\n\n## \ud83c\udfaf Function Overloads\nProvide multiple function type signatures followed by a single general implementation signature:\n```ts\nfunction format(val: string): string;\nfunction format(val: number): string;\nfunction format(val: string | number): string { ... }\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Functions And Signatures\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 05 — Generics & Type Parameters\n\n## What is this?\nGenerics allow you to write reusable, type-safe functions, classes, and interfaces that work with a variety of types rather than a single fixed type, while preserving full type information across arguments and return values.\n\n## Why does TypeScript have it?\n- Without generics, you would either have to duplicate functions for every type (`identityNumber`, `identityString`) or use `any`, which completely loses compile-time type safety.\n\n## Basic Syntax\n```typescript\n// Generic identity function\nfunction identity<T>(arg: T): T {\n    return arg;\n}\n\n// Generic Interface\ninterface ApiResponse<TData> {\n    status: number;\n    data: TData;\n    timestamp: number;\n}\n```\n\n## How it Behaves\n1. Type Parameter `<T>`: Acts as a type variable that captures the type supplied at the call site (or inferred by the compiler).\n2. Type Inference: You rarely need to write `identity<string>(\"hello\")`; TypeScript infers `T` as `string` automatically from the passed argument.\n3. Multiple Type Parameters: `<T, U>` allows distinct types for different parameters.\n\n## Common Mistakes\n1. Overusing generics when simple types suffice: Writing `function print<T extends string>(s: T): void` when `function print(s: string): void` is much simpler.\n2. Assuming properties exist on unrestricted `T`: Accessing `arg.length` inside `function log<T>(arg: T)` fails because `T` could be `number` which has no `.length`.\n\n## Small Practical Example\n```typescript\nfunction wrapInBox<T>(item: T): { value: T; createdAt: number } {\n    return {\n        value: item,\n        createdAt: Date.now()\n    };\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. `firstElement<T>(arr: T[]): T | null`: Returns the first element of `arr`, or `null` if empty.\n2. `makePair<A, B>(first: A, second: B): [A, B]`: Returns a tuple containing `first` and `second`.\n3. `createStore<T>(initialState: T)`: Returns an object with:\n   - `get(): T`\n   - `set(newState: T): void`\n   - `update(updater: (current: T) => T): T`\n\n## Progressive Hints\n- Hint 1: In `firstElement`, check `if (arr.length === 0) return null; return arr[0];`.\n- Hint 2: In `createStore`, store `let state = initialState;`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport function firstElement<T>(arr: T[]): T | null {\n    if (arr.length === 0) return null;\n    return arr[0];\n}\n\nexport function makePair<A, B>(first: A, second: B): [A, B] {\n    return [first, second];\n}\n\nexport function createStore<T>(initialState: T) {\n    let state = initialState;\n    return {\n        get(): T {\n            return state;\n        },\n        set(newState: T): void {\n            state = newState;\n        },\n        update(updater: (current: T) => T): T {\n            state = updater(state);\n            return state;\n        }\n    };\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "function double(x: number): number;\nfunction double(x: string): string;\nfunction double(x: number | string): number | string {\n  if (typeof x === \"number\") return x * 2;\n  return x + x;\n}\n\nconsole.log(\"=== 05: Function Overloads ===\");\nconsole.log(\"Number:\", double(5));\nconsole.log(\"String:\", double(\"trak\"));\n"
+            "content": "// Module 05: Generics Example\n\ninterface CacheContainer<T> {\n    key: string;\n    value: T;\n}\n\nfunction createCache<T>(key: string, value: T): CacheContainer<T> {\n    return { key, value };\n}\n\nconst numCache = createCache(\"counter\", 42);\nconsole.log(numCache.value + 10); // Fully type-checked number\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement an overloaded function 'getItem':\n// getItem(id: number): Promise<string>\n// getItem(slug: string): Promise<string>\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "async function getItem(key: number | string): Promise<string> {\n  return `Item for key: ${key}`;\n}\n\ngetItem(101).then(console.log);\ngetItem(\"golang\").then(console.log);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 05: Generics & Type Parameters\n\nexport function firstElement<T>(arr: T[]): T | null {\n    // TODO: Return first element or null if empty\n    return null;\n}\n\nexport function makePair<A, B>(first: A, second: B): [A, B] {\n    // TODO: Return tuple [first, second]\n    return [first, second];\n}\n\nexport function createStore<T>(initialState: T) {\n    // TODO: Return store with get(), set(val), update(fn)\n    return null;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { firstElement, makePair, createStore } from './exercise.ts';\n\ntest('firstElement preserves element type and handles empty arrays', () => {\n    assert.equal(firstElement([10, 20, 30]), 10);\n    assert.equal(firstElement(['a', 'b']), 'a');\n    assert.equal(firstElement([]), null);\n});\n\ntest('makePair constructs typed tuple', () => {\n    assert.deepEqual(makePair('id', 101), ['id', 101]);\n    assert.deepEqual(makePair(true, 'ready'), [true, 'ready']);\n});\n\ntest('createStore encapsulates and mutates generic state', () => {\n    const store = createStore<number>(10);\n    assert.equal(store.get(), 10);\n    store.set(25);\n    assert.equal(store.get(), 25);\n    const updated = store.update(val => val * 2);\n    assert.equal(updated, 50);\n    assert.equal(store.get(), 50);\n});\n"
           }
         ]
       },
       {
-        "name": "06-generics-and-constraints",
+        "name": "06-generic-constraints-and-keyof",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 \u2014 Generics And Constraints\n\n## \ud83c\udfaf What is it?\nGenerics And Constraints is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Generics And Constraints, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Generics And Constraints executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Generics & Type Constraints\n\n## \ud83c\udfaf Generic Constraints (`extends`)\nConstrain generic type parameters to guarantee properties exist at compile-time:\n```ts\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Generics And Constraints\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 06 — Generic Constraints & Keyof\n\n## What is this?\nGeneric constraints use the `extends` keyword to restrict what types can be passed as a generic parameter (e.g. `<T extends { id: string }>`). The `keyof` operator extracts a union of property names from an object type. Combining them (`<K extends keyof T>`) enables type-safe property access and manipulation.\n\n## Why does TypeScript have it?\n- Allows writing flexible generic algorithms that can safely read specific properties or methods without falling back to `any`.\n\n## Basic Syntax\n```typescript\n// Constraining T to objects with a length property\nfunction logLength<T extends { length: number }>(item: T): number {\n    return item.length;\n}\n\n// Constraining K to valid keys of T\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n    return obj[key];\n}\n```\n\n## How it Behaves\n1. `keyof T`: Returns a union of the keys: if `T = { name: string; age: number }`, then `keyof T` is `\"name\" | \"age\"`.\n2. Indexed Access `T[K]`: Returns the exact type of property `K` on object `T`.\n3. Strict Safety: If you try to pass a key that does not exist on `obj`, the compiler rejects it immediately.\n\n## Common Mistakes\n1. Writing `<K extends keyof any>`: While valid, it does not link `K` to the target object's specific keys.\n2. Missing constraints when accessing object properties: `function get(obj: T, k: string)` cannot guarantee `k` exists on `T`.\n\n## Small Practical Example\n```typescript\nfunction pluck<T, K extends keyof T>(items: T[], key: K): T[K][] {\n    return items.map(item => item[key]);\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. `hasMinLength<T extends { length: number }>(item: T, min: number): boolean`: Returns `true` if `item.length >= min`, else `false`.\n2. `getProp<T, K extends keyof T>(obj: T, key: K): T[K]`: Safely accesses and returns `obj[key]`.\n3. `pluckField<T, K extends keyof T>(list: T[], key: K): T[K][]`: Extracts an array containing the property `key` from each object in `list`.\n\n## Progressive Hints\n- Hint 1: In `hasMinLength`, use `item.length >= min`.\n- Hint 2: In `pluckField`, use `list.map(item => item[key])`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport function hasMinLength<T extends { length: number }>(item: T, min: number): boolean {\n    return item.length >= min;\n}\n\nexport function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {\n    return obj[key];\n}\n\nexport function pluckField<T, K extends keyof T>(list: T[], key: K): T[K][] {\n    return list.map(item => item[key]);\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "interface HasId {\n  id: number | string;\n}\n\nfunction findById<T extends HasId>(items: T[], targetId: number | string): T | undefined {\n  return items.find((item) => item.id === targetId);\n}\n\nconst tracks = [\n  { id: \"go\", name: \"Golang Mastery\" },\n  { id: \"rust\", name: \"Rust Systems\" },\n];\n\nconsole.log(\"=== 06: Generic Constraints ===\");\nconsole.log(\"Found:\", findById(tracks, \"rust\"));\n"
+            "content": "// Module 06: Constraints & Keyof Example\n\ninterface User {\n    id: number;\n    name: string;\n}\n\nfunction printProp<T, K extends keyof T>(obj: T, key: K) {\n    console.log(`${String(key)}: ${obj[key]}`);\n}\n\nprintProp({ id: 1, name: \"Alice\" }, \"name\");\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement a generic dictionary cache class 'Cache<K, V>' with methods\n// set(key: K, value: V): void and get(key: K): V | undefined.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "class Cache<K extends string | number, V> {\n  private store = new Map<K, V>();\n\n  set(key: K, value: V): void {\n    self: this.store.set(key, value);\n  }\n\n  get(key: K): V | undefined {\n    return this.store.get(key);\n  }\n}\n\nconst cache = new Cache<string, number>();\ncache.set(\"go-version\", 122);\nconsole.log(\"Cache get:\", cache.get(\"go-version\"));\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 06: Generic Constraints & Keyof\n\nexport function hasMinLength<T extends { length: number }>(item: T, min: number): boolean {\n    // TODO: Return true if item.length >= min\n    return false;\n}\n\nexport function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {\n    // TODO: Return obj[key]\n    return obj[key];\n}\n\nexport function pluckField<T, K extends keyof T>(list: T[], key: K): T[K][] {\n    // TODO: Return array of values for key from each item\n    return [];\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { hasMinLength, getProp, pluckField } from './exercise.ts';\n\ntest('hasMinLength inspects length on strings and arrays', () => {\n    assert.equal(hasMinLength('hello', 3), true);\n    assert.equal(hasMinLength('hi', 3), false);\n    assert.equal(hasMinLength([1, 2, 3], 2), true);\n    assert.equal(hasMinLength([], 1), false);\n});\n\ntest('getProp retrieves property safely with correct type', () => {\n    const user = { id: 10, username: 'charlie' };\n    assert.equal(getProp(user, 'username'), 'charlie');\n    assert.equal(getProp(user, 'id'), 10);\n});\n\ntest('pluckField extracts matching keys across collection', () => {\n    const users = [\n        { id: 1, name: 'Alice' },\n        { id: 2, name: 'Bob' },\n        { id: 3, name: 'Charlie' }\n    ];\n    assert.deepEqual(pluckField(users, 'name'), ['Alice', 'Bob', 'Charlie']);\n    assert.deepEqual(pluckField(users, 'id'), [1, 2, 3]);\n});\n"
           }
         ]
       },
       {
-        "name": "07-conditional-types-and-infer",
+        "name": "07-type-narrowing-and-discriminated-unions",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 \u2014 Conditional Types And Infer\n\n## \ud83c\udfaf What is it?\nConditional Types And Infer is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Conditional Types And Infer, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Conditional Types And Infer executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Conditional Types & Type Inference with `infer`\n\n## \ud83c\udfaf Conditional Type Syntax\n`T extends U ? X : Y` evaluates type branches dynamically at compile time.\n\n## \ud83e\udde0 `infer` Keyword\nAllows capturing and extracting types from within complex structures (Promises, Functions, Arrays):\n```ts\ntype UnpackPromise<T> = T extends Promise<infer U> ? U : T;\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Conditional Types And Infer\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 07 — Type Narrowing & Discriminated Unions\n\n## What is this?\nType narrowing is the process by which TypeScript refines a broad type into a more specific type based on control flow checks (`typeof`, `instanceof`, `in`, and custom type guards). A **Discriminated Union** (or Tagged Union) is a pattern where every object in a union has a shared literal property (the \"discriminant\"), enabling clear, compiler-verified branching.\n\n## Why does TypeScript have it?\n- Eliminates runtime type errors in complex state machines, API result models, and event systems.\n- Enables exhaustive type checking using the `never` type.\n\n## Basic Syntax\n```typescript\ninterface SuccessResponse {\n    status: \"success\";\n    data: string;\n}\n\ninterface ErrorResponse {\n    status: \"error\";\n    error: string;\n}\n\ntype ApiResponse = SuccessResponse | ErrorResponse;\n\nfunction handleResponse(res: ApiResponse) {\n    if (res.status === \"success\") {\n        console.log(res.data); // TypeScript knows it's SuccessResponse\n    } else {\n        console.error(res.error); // TypeScript knows it's ErrorResponse\n    }\n}\n```\n\n## How it Behaves\n1. Discriminated Property: The shared field (e.g. `type`, `status`, `kind`) must be a literal type.\n2. Exhaustiveness Checking: In a `switch` statement, assigning unhandled cases to a variable of type `never` guarantees at compile time that all branches were covered:\n   ```typescript\n   function assertNever(x: never): never {\n       throw new Error(\"Unexpected object: \" + x);\n   }\n   ```\n3. User-defined Type Guard: A function returning `x is Type`:\n   ```typescript\n   function isString(val: unknown): val is string {\n       return typeof val === \"string\";\n   }\n   ```\n\n## Common Mistakes\n1. Not providing a common literal discriminant across all union members.\n2. Checking properties before narrowing when the property only exists on some union members.\n\n## Small Practical Example\n```typescript\ntype Shape =\n    | { kind: \"circle\"; radius: number }\n    | { kind: \"square\"; size: number };\n\nfunction getArea(shape: Shape): number {\n    switch (shape.kind) {\n        case \"circle\": return Math.PI * shape.radius ** 2;\n        case \"square\": return shape.size ** 2;\n    }\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define discriminated union `PaymentResult`:\n   - `{ status: \"success\"; transactionId: string; amount: number }`\n   - `{ status: \"failed\"; reason: string }`\n   - `{ status: \"pending\"; estimatedSeconds: number }`\n2. `describePayment(result: PaymentResult): string`:\n   - If `\"success\"`: returns `\"Paid $<amount> (ID: <transactionId>)\"`\n   - If `\"failed\"`: returns `\"Payment failed: <reason>\"`\n   - If `\"pending\"`: returns `\"Processing in <estimatedSeconds>s\"`\n3. `isSuccess(result: PaymentResult): boolean`: Type guard returning `true` if `result.status === \"success\"`.\n\n## Progressive Hints\n- Hint 1: In `describePayment`, use a `switch(result.status)`.\n- Hint 2: In `isSuccess`, write `result.status === \"success\"`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type PaymentResult =\n    | { status: \"success\"; transactionId: string; amount: number }\n    | { status: \"failed\"; reason: string }\n    | { status: \"pending\"; estimatedSeconds: number };\n\nexport function describePayment(result: PaymentResult): string {\n    switch (result.status) {\n        case \"success\":\n            return `Paid $${result.amount} (ID: ${result.transactionId})`;\n        case \"failed\":\n            return `Payment failed: ${result.reason}`;\n        case \"pending\":\n            return `Processing in ${result.estimatedSeconds}s`;\n    }\n}\n\nexport function isSuccess(result: PaymentResult): boolean {\n    return result.status === \"success\";\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "type UnpackPromise<T> = T extends Promise<infer U> ? U : T;\ntype ElementType<T> = T extends (infer E)[] ? E : T;\n\ntype NumPromise = Promise<number>;\ntype ResolvedNum = UnpackPromise<NumPromise>; // number\n\ntype StringArray = string[];\ntype Item = ElementType<StringArray>; // string\n\nconsole.log(\"=== 07: Conditional Types & infer ===\");\nconsole.log(\"Conditional Types compiled successfully.\");\n"
+            "content": "// Module 07: Discriminated Unions Example\n\ntype Action =\n    | { type: \"LOGIN\"; username: string }\n    | { type: \"LOGOUT\" };\n\nfunction handleAction(action: Action) {\n    if (action.type === \"LOGIN\") {\n        console.log(`Welcome, ${action.username}`);\n    } else {\n        console.log(\"Logged out\");\n    }\n}\n\nhandleAction({ type: \"LOGIN\", username: \"Maya\" });\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement a utility type 'MyReturnType<T>' using conditional types and 'infer'\n// that extracts the return type of any function.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never;\n\nfunction calculateScore(): number {\n  return 99.5;\n}\n\ntype ScoreType = MyReturnType<typeof calculateScore>; // number\nconsole.log(\"ScoreType verified at compile time.\");\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 07: Type Narrowing & Discriminated Unions\n\nexport type PaymentResult =\n    | { status: \"success\"; transactionId: string; amount: number }\n    | { status: \"failed\"; reason: string }\n    | { status: \"pending\"; estimatedSeconds: number };\n\nexport function describePayment(result: PaymentResult): string {\n    // TODO: Return descriptive string per status\n    return \"\";\n}\n\nexport function isSuccess(result: PaymentResult): boolean {\n    // TODO: Return true if status is \"success\"\n    return false;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describePayment, isSuccess, type PaymentResult } from './exercise.ts';\n\ntest('describePayment handles all union variants', () => {\n    const s: PaymentResult = { status: 'success', transactionId: 'tx-100', amount: 49.99 };\n    assert.equal(describePayment(s), 'Paid $49.99 (ID: tx-100)');\n\n    const f: PaymentResult = { status: 'failed', reason: 'Insufficient funds' };\n    assert.equal(describePayment(f), 'Payment failed: Insufficient funds');\n\n    const p: PaymentResult = { status: 'pending', estimatedSeconds: 30 };\n    assert.equal(describePayment(p), 'Processing in 30s');\n});\n\ntest('isSuccess returns true only on successful result', () => {\n    assert.equal(isSuccess({ status: 'success', transactionId: 'tx-1', amount: 10 }), true);\n    assert.equal(isSuccess({ status: 'failed', reason: 'timeout' }), false);\n    assert.equal(isSuccess({ status: 'pending', estimatedSeconds: 5 }), false);\n});\n"
           }
         ]
       },
       {
-        "name": "08-mapped-types-and-keyof",
+        "name": "08-utility-types-partial-pick-omit-record",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 \u2014 Mapped Types And Keyof\n\n## \ud83c\udfaf What is it?\nMapped Types And Keyof is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Mapped Types And Keyof, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Mapped Types And Keyof executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Mapped Types & Template Literal Metaprogramming\n\n## \ud83c\udfaf Mapped Types Syntax\nTransform every property of an existing type:\n```ts\ntype Optional<T> = { [K in keyof T]?: T[K] };\ntype Getters<T> = { [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K] };\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Mapped Types And Keyof\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 08 — Utility Types: Partial, Required, Pick, Omit, Record\n\n## What is this?\nTypeScript includes built-in global utility types to facilitate common type transformations: `Partial<T>`, `Required<T>`, `Readonly<T>`, `Pick<T, K>`, `Omit<T, K>`, and `Record<K, T>`.\n\n## Why does TypeScript have it?\n- Avoids having to manually rewrite duplicate interfaces for update patches (`Partial`), subsets of data (`Pick`/`Omit`), or dictionary lookups (`Record`).\n\n## Basic Syntax\n```typescript\ninterface User {\n    id: string;\n    name: string;\n    email: string;\n    age?: number;\n}\n\n// Makes all properties optional (ideal for PATCH requests)\ntype UserUpdate = Partial<User>;\n\n// Picks only specified keys\ntype UserCredentials = Pick<User, \"email\">;\n\n// Omits specified keys\ntype UserWithoutId = Omit<User, \"id\">;\n\n// Constructs an object map with specified keys and value types\ntype UserDirectory = Record<string, User>;\n```\n\n## How it Behaves\n1. `Partial<T>`: Iterates over all properties of `T` and adds `?` to each.\n2. `Required<T>`: Removes `?` from all properties, making them strictly required.\n3. `Pick<T, K>`: Extracts only keys `K` from `T`.\n4. `Omit<T, K>`: Removes keys `K` from `T`.\n5. `Record<K, V>`: Creates an object type where keys are of type `K` and values are of type `V`.\n\n## Common Mistakes\n1. Using `Omit` with keys that don't exist: TypeScript allows it, but it might indicate a typo.\n2. Forgetting that `Partial<T>` is shallow: Nested object properties are not converted to `Partial`.\n\n## Small Practical Example\n```typescript\nfunction patchUser(current: User, patch: Partial<User>): User {\n    return { ...current, ...patch };\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define interface `Account`:\n   - `id: string`\n   - `name: string`\n   - `email: string`\n   - `tier: \"free\" | \"pro\" | \"enterprise\"`\n2. `updateAccount(account: Account, updates: Partial<Omit<Account, \"id\">>): Account`:\n   - Applies `updates` to `account`. `id` cannot be modified.\n3. `createLookup<T extends { id: string }>(items: T[]): Record<string, T>`:\n   - Returns a dictionary object where each key is `item.id` and value is the `item`.\n\n## Progressive Hints\n- Hint 1: In `updateAccount`, return `{ ...account, ...updates, id: account.id }`.\n- Hint 2: In `createLookup`, use `items.reduce((acc, item) => { acc[item.id] = item; return acc; }, {} as Record<string, T>)`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport interface Account {\n    id: string;\n    name: string;\n    email: string;\n    tier: \"free\" | \"pro\" | \"enterprise\";\n}\n\nexport function updateAccount(\n    account: Account,\n    updates: Partial<Omit<Account, \"id\">>\n): Account {\n    return {\n        ...account,\n        ...updates,\n        id: account.id\n    };\n}\n\nexport function createLookup<T extends { id: string }>(items: T[]): Record<string, T> {\n    const lookup: Record<string, T> = {};\n    for (const item of items) {\n        lookup[item.id] = item;\n    }\n    return lookup;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "interface Person {\n  name: string;\n  age: number;\n}\n\ntype Getters<T> = {\n  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n\ntype PersonGetters = Getters<Person>;\n// {\n//   getName: () => string;\n//   getAge: () => number;\n// }\n\nconsole.log(\"=== 08: Mapped & Template Literal Types ===\");\nconsole.log(\"PersonGetters type synthesized.\");\n"
+            "content": "// Module 08: Utility Types Example\n\ninterface Product {\n    sku: string;\n    title: string;\n    price: number;\n}\n\ntype ProductPreview = Pick<Product, \"sku\" | \"title\">;\nconst preview: ProductPreview = { sku: \"A1\", title: \"Keyboard\" };\nconsole.log(\"Preview:\", preview);\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement a mapped type 'Nullable<T>' that makes every property in T\n// nullable (T[K] | null).\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "type Nullable<T> = {\n  [K in keyof T]: T[K] | null;\n};\n\ninterface Config {\n  host: string;\n  port: number;\n}\n\ntype NullableConfig = Nullable<Config>;\nconst cfg: NullableConfig = { host: null, port: 8080 };\nconsole.log(\"Nullable config:\", cfg);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 08: Utility Types: Partial, Pick, Omit, Record\n\nexport interface Account {\n    id: string;\n    name: string;\n    email: string;\n    tier: \"free\" | \"pro\" | \"enterprise\";\n}\n\nexport function updateAccount(\n    account: Account,\n    updates: Partial<Omit<Account, \"id\">>\n): Account {\n    // TODO: Return updated account preserving original id\n    return account;\n}\n\nexport function createLookup<T extends { id: string }>(items: T[]): Record<string, T> {\n    // TODO: Return map of id -> item\n    return {};\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { updateAccount, createLookup, type Account } from './exercise.ts';\n\ntest('updateAccount updates fields without altering id', () => {\n    const acc: Account = { id: 'acc-1', name: 'Alice', email: 'alice@example.com', tier: 'free' };\n    const updated = updateAccount(acc, { name: 'Alice Smith', tier: 'pro' });\n\n    assert.equal(updated.name, 'Alice Smith');\n    assert.equal(updated.tier, 'pro');\n    assert.equal(updated.id, 'acc-1');\n    assert.equal(acc.name, 'Alice'); // original unchanged\n});\n\ntest('createLookup builds id indexed record', () => {\n    const list = [\n        { id: '101', label: 'First' },\n        { id: '102', label: 'Second' }\n    ];\n    const dict = createLookup(list);\n    assert.deepEqual(dict['101'], { id: '101', label: 'First' });\n    assert.deepEqual(dict['102'], { id: '102', label: 'Second' });\n});\n"
           }
         ]
       },
       {
-        "name": "09-utility-types-deep-dive",
+        "name": "09-conditional-types-and-infer",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 \u2014 Utility Types Deep Dive\n\n## \ud83c\udfaf What is it?\nUtility Types Deep Dive is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Utility Types Deep Dive, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Utility Types Deep Dive executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Standard Utility Types Deep Dive\n\n## \ud83c\udfaf Common Utilities\n- `Partial<T>` / `Required<T>`\n- `Readonly<T>`\n- `Record<K, T>`\n- `Pick<T, K>` / `Omit<T, K>`\n- `Exclude<T, U>` / `Extract<T, U>`\n- `NonNullable<T>`\n- `Awaited<T>`\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Utility Types Deep Dive\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 09 — Conditional Types & Infer\n\n## What is this?\nConditional types select one of two possible types based on a condition expressed as a type relationship test: `T extends U ? X : Y`. The `infer` keyword allows you to declare a type variable within the condition to extract (unpack) inner types dynamically.\n\n## Why does TypeScript have it?\n- Powers advanced type transformations like unpacking Promise results (`Awaited<T>`), extracting array item types, or reading function return types (`ReturnType<T>`).\n\n## Basic Syntax\n```typescript\n// If T is an array, extract item type, else return T\ntype Flatten<T> = T extends (infer Item)[] ? Item : T;\n\ntype StringItem = Flatten<string[]>; // string\ntype SingleNumber = Flatten<number>; // number\n\n// Unpack Promise\ntype UnwrapPromise<T> = T extends Promise<infer R> ? R : T;\n```\n\n## How it Behaves\n1. Distributive Conditional Types: When the checked type is a bare type parameter and a union is passed, the condition distributes across the union:\n   ```typescript\n   type ToArray<T> = T extends any ? T[] : never;\n   type Res = ToArray<string | number>; // string[] | number[]\n   ```\n2. `infer`: Introduces a new generic type variable that is deduced by pattern matching against the structure of `T`.\n\n## Common Mistakes\n1. Trying to use `infer` outside of an `extends` conditional clause: `infer` can only be placed inside the `extends` clause of a conditional type.\n2. Forgetting that unions distribute: If distribution is undesired, wrap both sides in square brackets: `[T] extends [any] ? ...`.\n\n## Small Practical Example\n```typescript\ntype ElementType<T> = T extends readonly (infer E)[] ? E : never;\n\nconst colors = [\"red\", \"green\", \"blue\"] as const;\ntype Color = ElementType<typeof colors>; // \"red\" | \"green\" | \"blue\"\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define type `UnpackPromise<T>`: If `T extends Promise<infer U>`, returns `U`, otherwise returns `T`.\n2. Define type `FirstArgument<T>`: If `T extends (first: infer A, ...rest: any[]) => any`, returns `A`, otherwise returns `never`.\n3. `unwrapValue<T>(val: T): T extends Promise<infer R> ? Promise<R> : T`:\n   - If `val` is a Promise, returns the promise. Otherwise returns `val`.\n\n## Progressive Hints\n- Hint 1: `type UnpackPromise<T> = T extends Promise<infer U> ? U : T;`\n- Hint 2: `type FirstArgument<T> = T extends (first: infer A, ...args: any[]) => any ? A : never;`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type UnpackPromise<T> = T extends Promise<infer U> ? U : T;\n\nexport type FirstArgument<T> = T extends (first: infer A, ...args: any[]) => any ? A : never;\n\nexport function unwrapValue<T>(val: T): T extends Promise<infer R> ? Promise<R> : T {\n    return val as any;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "interface Course {\n  id: string;\n  title: string;\n  description: string;\n  isPublished: boolean;\n}\n\n// Create a Course Preview by Picking specific fields\ntype CoursePreview = Pick<Course, \"id\" | \"title\">;\n\n// Course update payload with optional fields\ntype UpdateCourseInput = Partial<Omit<Course, \"id\">>;\n\nconst update: UpdateCourseInput = {\n  title: \"Updated TypeScript Mastery\",\n};\n\nconsole.log(\"=== 09: Utility Types ===\");\nconsole.log(\"Update payload:\", update);\n"
+            "content": "// Module 09: Conditional Types & Infer Example\n\ntype ReturnOf<T> = T extends (...args: any[]) => infer R ? R : never;\n\nfunction getTimestamp(): number {\n    return Date.now();\n}\n\ntype TimeType = ReturnOf<typeof getTimestamp>; // number\nconsole.log(\"TimeType is verified at compile-time as number\");\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Use utility types to define a 'UserRolesMap' type that maps\n// 'admin' | 'editor' | 'viewer' to a list of permission strings.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "type Role = \"admin\" | \"editor\" | \"viewer\";\ntype UserRolesMap = Record<Role, string[]>;\n\nconst permissions: UserRolesMap = {\n  admin: [\"create\", \"read\", \"update\", \"delete\"],\n  editor: [\"create\", \"read\", \"update\"],\n  viewer: [\"read\"],\n};\n\nconsole.log(\"Role Permissions Map:\", permissions);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 09: Conditional Types & Infer\n\nexport type UnpackPromise<T> = T extends Promise<infer U> ? U : T;\n\nexport type FirstArgument<T> = T extends (first: infer A, ...args: any[]) => any ? A : never;\n\nexport function unwrapValue<T>(val: T): T extends Promise<infer R> ? Promise<R> : T {\n    // TODO: Return val\n    return null as any;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { unwrapValue, type UnpackPromise, type FirstArgument } from './exercise.ts';\n\ntest('unwrapValue returns synchronous and asynchronous values correctly', async () => {\n    const syncVal = unwrapValue(42);\n    assert.equal(syncVal, 42);\n\n    const asyncVal = unwrapValue(Promise.resolve('loaded'));\n    assert.equal(await asyncVal, 'loaded');\n});\n\ntest('type-level assertions for UnpackPromise and FirstArgument', () => {\n    type TestA = UnpackPromise<Promise<string>>; // string\n    type TestB = UnpackPromise<number>;          // number\n\n    type TargetFn = (id: string, count: number) => void;\n    type Arg1 = FirstArgument<TargetFn>;         // string\n\n    const dummyString: Arg1 = 'valid-id';\n    assert.equal(dummyString, 'valid-id');\n});\n"
           }
         ]
       },
       {
-        "name": "10-classes-and-inheritance",
+        "name": "10-async-typescript-and-result-pattern",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 \u2014 Classes And Inheritance\n\n## \ud83c\udfaf What is it?\nClasses And Inheritance is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Classes And Inheritance, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Classes And Inheritance executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Classes, Parameter Properties & Hard Private `#`\n\n## \ud83c\udfaf Access Modifiers\n- `private`: Compile-time check only (transpiled to standard properties in JS).\n- `#private`: Hard ECMAScript runtime private field (cannot be accessed outside class).\n- Parameter properties (`constructor(public name: string)`): Shorthand declaration and assignment.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Classes And Inheritance\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 10 — Asynchronous TypeScript & Result Pattern\n\n## What is this?\nHandling errors in asynchronous TypeScript can be done either with traditional `try...catch` blocks or with the functional **Result Pattern** (also known as `Result<T, E>`), where operations return a discriminated union `{ ok: true; data: T } | { ok: false; error: E }` instead of throwing unchecked exceptions.\n\n## Why does TypeScript have it?\n- In TypeScript, thrown exceptions have type `unknown` inside `catch(err: unknown)`. The compiler cannot force you to handle specific thrown errors.\n- The Result pattern turns errors into explicit return types, forcing callers to check `if (res.ok)` before accessing `res.data`.\n\n## Basic Syntax\n```typescript\ntype Result<T, E = Error> =\n    | { ok: true; data: T }\n    | { ok: false; error: E };\n\nasync function fetchUserSafe(id: string): Promise<Result<{ id: string; name: string }>> {\n    try {\n        const user = await api.getUser(id);\n        return { ok: true, data: user };\n    } catch (err) {\n        return { ok: false, error: err instanceof Error ? err : new Error(String(err)) };\n    }\n}\n```\n\n## How it Behaves\n1. Explicit Success/Failure: If `res.ok === true`, TypeScript narrows the type so `res.data` is accessible. If `false`, only `res.error` is accessible.\n2. Compile-Time Safety: You cannot accidentally read `res.data` without checking `res.ok`, eliminating runtime `undefined` reads.\n\n## Common Mistakes\n1. Forgetting to check `err instanceof Error` when re-throwing or wrapping errors in catch blocks.\n2. Mixing throwing exceptions with returning `Result` inconsistently within the same module.\n\n## Small Practical Example\n```typescript\nfunction parseSafeInt(str: string): Result<number, string> {\n    const num = Number(str);\n    if (Number.isNaN(num)) {\n        return { ok: false, error: `Invalid number: ${str}` };\n    }\n    return { ok: true, data: num };\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define type `Result<T, E = string> = { ok: true; data: T } | { ok: false; error: E }`.\n2. `ok<T>(data: T): Result<T, never>`: Constructs a successful Result.\n3. `err<E>(error: E): Result<never, E>`: Constructs an error Result.\n4. `safeAsync<T>(promise: Promise<T>): Promise<Result<T, string>>`:\n   - Awaits `promise`. If fulfilled with `val`, returns `ok(val)`.\n   - If rejected with `error`, returns `err(error.message || String(error))`.\n\n## Progressive Hints\n- Hint 1: `export function ok<T>(data: T): Result<T, never> { return { ok: true, data }; }`\n- Hint 2: In `safeAsync`, wrap `await promise` in a `try/catch`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type Result<T, E = string> =\n    | { ok: true; data: T }\n    | { ok: false; error: E };\n\nexport function ok<T>(data: T): Result<T, never> {\n    return { ok: true, data };\n}\n\nexport function err<E>(error: E): Result<never, E> {\n    return { ok: false, error };\n}\n\nexport async function safeAsync<T>(promise: Promise<T>): Promise<Result<T, string>> {\n    try {\n        const data = await promise;\n        return ok(data);\n    } catch (e: any) {\n        return err(e?.message ?? String(e));\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "class BankAccount {\n  #balance: number = 0; // Hard private field\n\n  constructor(public readonly accountNumber: string, initialBalance: number) {\n    this.#balance = initialBalance;\n  }\n\n  deposit(amount: number): void {\n    if (amount > 0) this.#balance += amount;\n  }\n\n  getBalance(): number {\n    return this.#balance;\n  }\n}\n\nconsole.log(\"=== 10: Classes & Hard Private Fields ===\");\nconst acc = new BankAccount(\"ACC_12345\", 500);\nacc.deposit(250);\nconsole.log(\"Balance:\", acc.getBalance());\n"
+            "content": "// Module 10: Result Pattern Example\n\ntype Result<T> = { ok: true; data: T } | { ok: false; error: string };\n\nfunction divide(a: number, b: number): Result<number> {\n    if (b === 0) return { ok: false, error: \"Division by zero\" };\n    return { ok: true, data: a / b };\n}\n\nconst res = divide(10, 2);\nif (res.ok) {\n    console.log(\"Result:\", res.data); // 5\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement an abstract class 'DatabaseConnector' with abstract method 'connect(): Promise<boolean>'\n// and concrete class 'PostgresConnector' extending it.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "abstract class DatabaseConnector {\n  abstract connect(): Promise<boolean>;\n}\n\nclass PostgresConnector extends DatabaseConnector {\n  constructor(public connectionUri: string) {\n    super();\n  }\n\n  async connect(): Promise<boolean> {\n    console.log(`Connected to Postgres at ${this.connectionUri}`);\n    return true;\n  }\n}\n\nconst pg = new PostgresConnector(\"postgres://localhost:5432/trak\");\npg.connect();\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 10: Asynchronous TypeScript & Result Pattern\n\nexport type Result<T, E = string> =\n    | { ok: true; data: T }\n    | { ok: false; error: E };\n\nexport function ok<T>(data: T): Result<T, never> {\n    // TODO: Return { ok: true, data }\n    return { ok: true, data };\n}\n\nexport function err<E>(error: E): Result<never, E> {\n    // TODO: Return { ok: false, error }\n    return { ok: false, error };\n}\n\nexport async function safeAsync<T>(promise: Promise<T>): Promise<Result<T, string>> {\n    // TODO: Await promise, return ok(data) or err(message)\n    return err(\"not implemented\");\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { ok, err, safeAsync } from './exercise.ts';\n\ntest('ok and err construct valid Results', () => {\n    const success = ok(100);\n    assert.equal(success.ok, true);\n    if (success.ok) assert.equal(success.data, 100);\n\n    const failure = err('Disk full');\n    assert.equal(failure.ok, false);\n    if (!failure.ok) assert.equal(failure.error, 'Disk full');\n});\n\ntest('safeAsync wraps resolved and rejected promises', async () => {\n    const goodPromise = Promise.resolve('data payload');\n    const resGood = await safeAsync(goodPromise);\n    assert.equal(resGood.ok, true);\n    if (resGood.ok) assert.equal(resGood.data, 'data payload');\n\n    const badPromise = Promise.reject(new Error('Network offline'));\n    const resBad = await safeAsync(badPromise);\n    assert.equal(resBad.ok, false);\n    if (!resBad.ok) assert.equal(resBad.error, 'Network offline');\n});\n"
           }
         ]
       },
       {
-        "name": "11-decorators-and-metadata",
+        "name": "11-mapped-types-and-key-remapping",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 \u2014 Decorators And Metadata\n\n## \ud83c\udfaf What is it?\nDecorators And Metadata is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Decorators And Metadata, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Decorators And Metadata executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Modern TC39 Decorators\n\n## \ud83c\udfaf Decorator Architecture\nModern TypeScript 5.0+ supports standard TC39 Stage 3 decorators without requiring `experimentalDecorators`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Decorators And Metadata\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 11 — Mapped Types & Key Remapping\n\n## What is this?\nMapped types build on the syntax for index signatures to declare properties that iterate over a union of keys: `[K in keyof T]`. TypeScript also supports **Key Remapping** using the `as` clause, allowing property keys to be filtered or transformed into new string names.\n\n## Why does TypeScript have it?\n- Allows transforming entire object schemas (e.g. making all properties getters `getPropName()`, prefixing keys, or stripping nullability) without manual duplication.\n\n## Basic Syntax\n```typescript\n// Mapped type making all properties boolean flags\ntype Flags<T> = {\n    [K in keyof T]: boolean;\n};\n\n// Key remapping with template literals\ntype Getters<T> = {\n    [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n```\n\n## How it Behaves\n1. Modifiers: You can add or remove `readonly` or `?` modifiers using `+` or `-` prefixes:\n   - `-readonly`: Removes immutability.\n   - `-?`: Removes optionality (makes required).\n2. Filtering Keys with `never`: If key remapping evaluates to `never`, that property is omitted from the resulting type:\n   ```typescript\n   type OnlyStrings<T> = {\n       [K in keyof T as T[K] extends string ? K : never]: T[K];\n   };\n   ```\n\n## Common Mistakes\n1. Forgetting `string & K`: `keyof T` can include `symbol` or `number`. When applying template literal transformations like `Capitalize`, intersect with `string`.\n\n## Small Practical Example\n```typescript\ntype Mutable<T> = {\n    -readonly [K in keyof T]: T[K];\n};\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define mapped type `NullableProps<T> = { [K in keyof T]: T[K] | null }`.\n2. Define mapped type `StringifyProps<T> = { [K in keyof T]: string }`.\n3. `nullifyProperties<T extends object>(obj: T): NullableProps<T>`: Returns a shallow clone of `obj` where every property value is set to `null`.\n\n## Progressive Hints\n- Hint 1: `type NullableProps<T> = { [K in keyof T]: T[K] | null };`\n- Hint 2: In `nullifyProperties`, loop over `Object.keys(obj)` and assign `null`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type NullableProps<T> = {\n    [K in keyof T]: T[K] | null;\n};\n\nexport type StringifyProps<T> = {\n    [K in keyof T]: string;\n};\n\nexport function nullifyProperties<T extends object>(obj: T): NullableProps<T> {\n    const result: any = {};\n    for (const key of Object.keys(obj)) {\n        result[key] = null;\n    }\n    return result;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "function LogMethod(target: any, context: ClassMethodDecoratorContext) {\n  return function (this: any, ...args: any[]) {\n    console.log(`[LOG] Calling method: ${String(context.name)} with args:`, args);\n    return target.apply(this, args);\n  };\n}\n\nclass Calculator {\n  @LogMethod\n  add(a: number, b: number): number {\n    return a + b;\n  }\n}\n\nconsole.log(\"=== 11: TC39 Decorators ===\");\nconst calc = new Calculator();\nconsole.log(\"Result:\", calc.add(10, 25));\n"
+            "content": "// Module 11: Mapped Types Example\n\ninterface Point {\n    x: number;\n    y: number;\n}\n\ntype StringPoint = { [K in keyof Point]: string };\nconst p: StringPoint = { x: \"10\", y: \"20\" };\nconsole.log(\"Point:\", p);\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement a method decorator 'ExecutionTimer' that measures runtime in milliseconds.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "function ExecutionTimer(target: any, context: ClassMethodDecoratorContext) {\n  return function (this: any, ...args: any[]) {\n    const start = performance.now();\n    const result = target.apply(this, args);\n    const elapsed = performance.now() - start;\n    console.log(`Method ${String(context.name)} took ${elapsed.toFixed(3)}ms`);\n    return result;\n  };\n}\n\nclass DataProcessor {\n  @ExecutionTimer\n  process(): void {\n    for (let i = 0; i < 1_000_000; i++) {}\n  }\n}\n\nnew DataProcessor().process();\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 11: Mapped Types & Key Remapping\n\nexport type NullableProps<T> = {\n    // TODO: Map every key to T[K] | null\n    [K in keyof T]: T[K] | null;\n};\n\nexport type StringifyProps<T> = {\n    // TODO: Map every key to string\n    [K in keyof T]: string;\n};\n\nexport function nullifyProperties<T extends object>(obj: T): NullableProps<T> {\n    // TODO: Return object with all keys set to null\n    return {} as any;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { nullifyProperties, type NullableProps } from './exercise.ts';\n\ntest('nullifyProperties sets all own keys to null', () => {\n    const initial = { id: 1, title: 'Sample', active: true };\n    const nullified = nullifyProperties(initial);\n\n    assert.deepEqual(nullified, { id: null, title: null, active: null });\n    assert.equal(initial.id, 1); // original intact\n});\n"
           }
         ]
       },
       {
-        "name": "12-modules-namespaces-and-paths",
+        "name": "12-template-literal-types",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 \u2014 Modules Namespaces And Paths\n\n## \ud83c\udfaf What is it?\nModules Namespaces And Paths is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Modules Namespaces And Paths, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Modules Namespaces And Paths executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Modern ESM & Type-Only Imports\n\n## \ud83c\udfaf `import type`\n`import type` guarantees that imports are fully erased during transpilation, avoiding circular dependencies and runtime side-effects.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Modules Namespaces And Paths\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 12 — Template Literal Types\n\n## What is this?\nTemplate literal types build on string literal types and have the ability to expand into many strings via unions: `` `${Prefix}_${Suffix}` ``. TypeScript provides built-in string manipulation utility types: `Uppercase<S>`, `Lowercase<S>`, `Capitalize<S>`, and `Uncapitalize<S>`.\n\n## Why does TypeScript have it?\n- Allows defining strictly typed event names (e.g. `\"onUserCreated\"`, `\"onUserDeleted\"`), CSS class mappings, and type-safe routing patterns.\n\n## Basic Syntax\n```typescript\ntype Protocol = \"http\" | \"https\";\ntype Domain = \"example.com\" | \"internal.dev\";\n\n// Cross-product expansion: \"http://example.com\" | \"http://internal.dev\" | ...\ntype WebUrl = `${Protocol}://${Domain}`;\n\ntype EventType = \"click\" | \"hover\";\ntype EventHandlerName = `on${Capitalize<EventType>}`; // \"onClick\" | \"onHover\"\n```\n\n## How it Behaves\n1. Cross-Product Combinations: If multiple unions are interpolated in a single template literal, TypeScript generates all permutations automatically.\n2. Pattern Matching with `infer`: You can parse strings at compile time using template literals and `infer` (e.g. extracting path parameters from `\"/users/:id\"`).\n\n## Common Mistakes\n1. Generating massive unions: Combining 4 large unions can create millions of combinations, causing compiler slow-downs.\n\n## Small Practical Example\n```typescript\ntype HttpMethod = \"get\" | \"post\";\ntype ApiRoute = `/${string}`;\ntype Endpoint = `${Uppercase<HttpMethod>} ${ApiRoute}`;\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define type `ActionPrefix = \"CREATE\" | \"UPDATE\" | \"DELETE\"`.\n2. Define type `Resource = \"USER\" | \"ORDER\"`.\n3. Define type `PermissionString = `${ActionPrefix}_${Resource}``.\n4. `formatPermission(prefix: ActionPrefix, resource: Resource): PermissionString`: Returns `\"${prefix}_${resource}\"`.\n\n## Progressive Hints\n- Hint 1: `type PermissionString = `${ActionPrefix}_${Resource}`;`\n- Hint 2: In `formatPermission`, write `return `${prefix}_${resource}` as PermissionString;`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type ActionPrefix = \"CREATE\" | \"UPDATE\" | \"DELETE\";\nexport type Resource = \"USER\" | \"ORDER\";\nexport type PermissionString = `${ActionPrefix}_${Resource}`;\n\nexport function formatPermission(prefix: ActionPrefix, resource: Resource): PermissionString {\n    return `${prefix}_${resource}` as PermissionString;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "export interface ApiResponse<T> {\n  status: number;\n  payload: T;\n}\n\nexport function createResponse<T>(data: T): ApiResponse<T> {\n  return {\n    status: 200,\n    payload: data,\n  };\n}\n\nconsole.log(\"=== 12: ESM Modules ===\");\nconsole.log(createResponse({ user: \"ndk123-web\" }));\n"
+            "content": "// Module 12: Template Literal Types Example\n\ntype Status = \"ready\" | \"busy\";\ntype EventName = `server_${Status}`;\n\nconst ev: EventName = \"server_ready\";\nconsole.log(\"Event:\", ev);\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Create a namespace 'MathUtils' with exported functions 'square' and 'cube'.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "namespace MathUtils {\n  export function square(n: number): number { return n * n; }\n  export function cube(n: number): number { return n * n * n; }\n}\n\nconsole.log(\"Square:\", MathUtils.square(4));\nconsole.log(\"Cube:\", MathUtils.cube(3));\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 12: Template Literal Types\n\nexport type ActionPrefix = \"CREATE\" | \"UPDATE\" | \"DELETE\";\nexport type Resource = \"USER\" | \"ORDER\";\nexport type PermissionString = `${ActionPrefix}_${Resource}`;\n\nexport function formatPermission(prefix: ActionPrefix, resource: Resource): PermissionString {\n    // TODO: Return \"${prefix}_${resource}\" as PermissionString\n    return \"\" as any;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { formatPermission, type PermissionString } from './exercise.ts';\n\ntest('formatPermission produces valid permission strings', () => {\n    assert.equal(formatPermission('CREATE', 'USER'), 'CREATE_USER');\n    assert.equal(formatPermission('DELETE', 'ORDER'), 'DELETE_ORDER');\n    assert.equal(formatPermission('UPDATE', 'USER'), 'UPDATE_USER');\n});\n"
           }
         ]
       },
       {
-        "name": "13-error-handling-and-custom-errors",
+        "name": "13-classes-and-access-modifiers",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 \u2014 Error Handling And Custom Errors\n\n## \ud83c\udfaf What is it?\nError Handling And Custom Errors is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Error Handling And Custom Errors, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Error Handling And Custom Errors executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Functional Error Handling with `Result<T, E>`\n\n## \ud83c\udfaf Type-Safe Result Pattern\nInstead of unwrapped `throw`, return typed `Result` objects:\n```ts\ntype Result<T, E = Error> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Error Handling And Custom Errors\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 13 — Classes & Access Modifiers\n\n## What is this?\nTypeScript enhances ES6 classes with compile-time access modifiers (`public`, `private`, `protected`, and `readonly`), constructor parameter properties, and interface conformance checking via `implements`.\n\n## Why does TypeScript have it?\n- Enforces encapsulation boundaries between internal implementation details and public APIs.\n- Parameter properties (`constructor(public name: string)`) reduce tedious boilerplate assignments.\n\n## Basic Syntax\n```typescript\ninterface Disposable {\n    dispose(): void;\n}\n\nclass DatabaseConnection implements Disposable {\n    // Parameter property: automatically declares and assigns this.host\n    constructor(\n        public readonly host: string,\n        private timeoutMs: number = 5000,\n        protected isConnected: boolean = false\n    ) {}\n\n    public connect(): void {\n        this.isConnected = true;\n    }\n\n    public dispose(): void {\n        this.isConnected = false;\n    }\n}\n```\n\n## How it Behaves\n1. `public`: Accessible anywhere (default).\n2. `protected`: Accessible only within the declaring class and its subclasses.\n3. `private`: Accessible only within the declaring class at compile time (erased at runtime). For hard runtime privacy, use `#privateField`.\n4. `implements`: Guarantees that a class adheres to the contract declared by an interface.\n\n## Common Mistakes\n1. Confusing TypeScript `private` with ES private `#field`: TypeScript's `private` is a compile-time check only; `#field` enforces runtime encapsulation.\n\n## Small Practical Example\n```typescript\nclass BankVault {\n    constructor(private pin: string) {}\n    verify(entered: string): boolean {\n        return this.pin === entered;\n    }\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define interface `Identifiable`: `{ readonly id: string; }`.\n2. Define class `BaseEntity implements Identifiable`:\n   - `constructor(public readonly id: string, protected createdAt: number = Date.now())`\n   - `public getAgeInSeconds(): number`: returns `Math.floor((Date.now() - this.createdAt) / 1000)`.\n3. Define class `UserAccount extends BaseEntity`:\n   - `constructor(id: string, public username: string, private role: string = \"member\")`\n   - `public getRole(): string`: returns `this.role`.\n\n## Progressive Hints\n- Hint 1: In `BaseEntity`, use parameter properties in constructor.\n- Hint 2: In `UserAccount`, call `super(id)`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport interface Identifiable {\n    readonly id: string;\n}\n\nexport class BaseEntity implements Identifiable {\n    public readonly id: string;\n    protected createdAt: number;\n\n    constructor(id: string, createdAt: number = Date.now()) {\n        this.id = id;\n        this.createdAt = createdAt;\n    }\n\n    public getAgeInSeconds(): number {\n        return Math.floor((Date.now() - this.createdAt) / 1000);\n    }\n}\n\nexport class UserAccount extends BaseEntity {\n    public username: string;\n    private role: string;\n\n    constructor(id: string, username: string, role: string = \"member\") {\n        super(id);\n        this.username = username;\n        this.role = role;\n    }\n\n    public getRole(): string {\n        return this.role;\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "type Result<T, E = Error> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\n\nfunction divide(a: number, b: number): Result<number, string> {\n  if (b === 0) return { ok: false, error: \"Division by zero\" };\n  return { ok: true, value: a / b };\n}\n\nconsole.log(\"=== 13: Type-Safe Result Pattern ===\");\nconst res = divide(10, 2);\nif (res.ok) {\n  console.log(\"Result:\", res.value);\n} else {\n  console.error(\"Error:\", res.error);\n}\n"
+            "content": "// Module 13: Classes Example\n\nclass Logger {\n    constructor(private prefix: string) {}\n    log(msg: string): string {\n        return `${this.prefix} ${msg}`;\n    }\n}\n\nconst appLog = new Logger(\"[APP]\");\nconsole.log(appLog.log(\"Ready\"));\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Write a safe integer parse function 'parseInteger(s: string): Result<number, string>'\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "function parseInteger(s: string): Result<number, string> {\n  const parsed = parseInt(s, 10);\n  if (Number.isNaN(parsed)) {\n    return { ok: false, error: `Cannot parse '${s}' as integer` };\n  }\n  return { ok: true, value: parsed };\n}\n\nconsole.log(parseInteger(\"42\"));\nconsole.log(parseInteger(\"abc\"));\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 13: Classes & Access Modifiers\n\nexport interface Identifiable {\n    readonly id: string;\n}\n\nexport class BaseEntity implements Identifiable {\n    public readonly id: string;\n    protected createdAt: number;\n    constructor(id: string, createdAt: number = Date.now()) {\n        this.id = id;\n        this.createdAt = createdAt;\n    }\n    public getAgeInSeconds(): number {\n        return 0;\n    }\n}\n\nexport class UserAccount extends BaseEntity {\n    // TODO: constructor(id, username, role), getRole()\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BaseEntity, UserAccount } from './exercise.ts';\n\ntest('UserAccount inherits BaseEntity and encapsulates role', () => {\n    const user = new UserAccount('u-101', 'elena', 'admin');\n    assert.equal(user.id, 'u-101');\n    assert.equal(user.username, 'elena');\n    assert.equal(user.getRole(), 'admin');\n\n    const defaultUser = new UserAccount('u-102', 'mark');\n    assert.equal(defaultUser.getRole(), 'member');\n});\n"
           }
         ]
       },
       {
-        "name": "14-async-promises-and-event-loop",
+        "name": "14-abstract-classes-and-polymorphism",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 \u2014 Async Promises And Event Loop\n\n## \ud83c\udfaf What is it?\nAsync Promises And Event Loop is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Async Promises And Event Loop, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Async Promises And Event Loop executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Async, Promises & Concurrency Handling\n\n## \ud83c\udfaf `Promise.allSettled` vs `Promise.all`\n- `Promise.all`: Short-circuits immediately if any promise rejects.\n- `Promise.allSettled`: Waits for all promises to resolve or reject, returning `{ status: 'fulfilled' | 'rejected' }`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Async Promises And Event Loop\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 14 — Abstract Classes & Polymorphism\n\n## What is this?\nAn `abstract class` is a base class that cannot be instantiated directly with `new`. It serves as a blueprint that can contain both implemented methods (with shared logic) and `abstract` method signatures that concrete derived classes must implement.\n\n## Why does TypeScript have it?\n- Implements the Template Method pattern: common lifecycle logic is defined in the abstract base class, while specific steps are delegated to subclasses.\n\n## Basic Syntax\n```typescript\nabstract class NotificationService {\n    abstract send(recipient: string, message: string): boolean;\n\n    // Shared template method\n    public notifyWithTimestamp(recipient: string, message: string): boolean {\n        const stamped = `[${new Date().toISOString()}] ${message}`;\n        return this.send(recipient, stamped);\n    }\n}\n\nclass EmailService extends NotificationService {\n    send(recipient: string, message: string): boolean {\n        console.log(`Email to ${recipient}: ${message}`);\n        return true;\n    }\n}\n```\n\n## How it Behaves\n1. Instantiation Block: Calling `new AbstractClass()` causes a compile-time error.\n2. Polymorphism: Functions can accept the abstract base class type, allowing any derived subclass to be passed interchangeably.\n\n## Common Mistakes\n1. Forgetting to implement an abstract method in a derived class: Triggers compile error `Non-abstract class 'X' does not implement inherited abstract member 'Y'`.\n\n## Small Practical Example\n```typescript\nabstract class Command {\n    abstract execute(): void;\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. `abstract class PaymentProcessor`:\n   - `abstract process(amount: number): boolean`\n   - `charge(amount: number): { success: boolean; amountCharged: number }`:\n     Calls `this.process(amount)`. Returns `{ success, amountCharged: success ? amount : 0 }`.\n2. `class CreditCardProcessor extends PaymentProcessor`:\n   - `constructor(public minLimit: number = 5)`\n   - `process(amount: number): boolean`: returns `amount >= this.minLimit`.\n\n## Progressive Hints\n- Hint 1: In `charge`, write `const success = this.process(amount); return { success, amountCharged: success ? amount : 0 };`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport abstract class PaymentProcessor {\n    abstract process(amount: number): boolean;\n\n    public charge(amount: number): { success: boolean; amountCharged: number } {\n        const success = this.process(amount);\n        return {\n            success,\n            amountCharged: success ? amount : 0\n        };\n    }\n}\n\nexport class CreditCardProcessor extends PaymentProcessor {\n    public minLimit: number;\n\n    constructor(minLimit: number = 5) {\n        super();\n        this.minLimit = minLimit;\n    }\n\n    process(amount: number): boolean {\n        return amount >= this.minLimit;\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "async function fetchUser(id: number): Promise<{ id: number; name: string }> {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve({ id, name: `User_${id}` }), 20);\n  });\n}\n\nasync function main() {\n  console.log(\"=== 14: Concurrent Async Operations ===\");\n  const users = await Promise.all([fetchUser(1), fetchUser(2), fetchUser(3)]);\n  console.log(\"Fetched users:\", users);\n}\n\nmain();\n"
+            "content": "// Module 14: Abstract Classes Example\n\nabstract class Animal {\n    abstract speak(): string;\n    makeSound() {\n        console.log(\"Sound:\", this.speak());\n    }\n}\n\nclass Dog extends Animal {\n    speak() { return \"Woof!\"; }\n}\n\nnew Dog().makeSound();\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement a promise-based retry helper 'asyncRetry<T>(fn: () => Promise<T>, retries: number): Promise<T>'\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "async function asyncRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {\n  let lastError: unknown;\n  for (let i = 0; i < retries; i++) {\n    try {\n      return await fn();\n    } catch (err) {\n      lastError = err;\n    }\n  }\n  throw lastError;\n}\n\nasyncRetry(() => Promise.resolve(\"Success\")).then(console.log);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 14: Abstract Classes & Polymorphism\n\nexport abstract class PaymentProcessor {\n    abstract process(amount: number): boolean;\n    // TODO: implement charge(amount)\n}\n\nexport class CreditCardProcessor extends PaymentProcessor {\n    public minLimit: number;\n    constructor(minLimit: number = 5) {\n        super();\n        this.minLimit = minLimit;\n    }\n    process(amount: number): boolean {\n        return false;\n    }\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { CreditCardProcessor } from './exercise.ts';\n\ntest('CreditCardProcessor implements PaymentProcessor contract', () => {\n    const processor = new CreditCardProcessor(10);\n    const ok = processor.charge(25);\n    assert.deepEqual(ok, { success: true, amountCharged: 25 });\n\n    const failed = processor.charge(5);\n    assert.deepEqual(failed, { success: false, amountCharged: 0 });\n});\n"
           }
         ]
       },
       {
-        "name": "15-schema-validation-with-zod",
+        "name": "15-function-overloads-and-signatures",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 \u2014 Schema Validation With Zod\n\n## \ud83c\udfaf What is it?\nSchema Validation With Zod is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Schema Validation With Zod, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Schema Validation With Zod executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Runtime Schema Validation with Zod\n\n## \ud83c\udfaf Bridging Static Types & Runtime Data\nTypeScript types vanish at runtime. Zod validates untrusted external payloads and infers static TypeScript types automatically:\n```ts\nconst UserSchema = z.object({ id: z.number(), email: z.string().email() });\ntype User = z.infer<typeof UserSchema>;\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Schema Validation With Zod\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 15 — Function Overloads & Signatures\n\n## What is this?\nFunction overloading allows a single function to declare multiple call signatures specifying different argument and return types, followed by a single compatible implementation signature.\n\n## Why does TypeScript have it?\n- In JavaScript, functions often behave differently based on parameter types or counts (e.g. `Date.parse()` or `createElement()`). Overloads give callers precise return types without returning wide union types.\n\n## Basic Syntax\n```typescript\n// Overload Signatures\nfunction getInfo(id: number): string;\nfunction getInfo(id: number, detailed: true): { id: number; details: string };\n\n// Implementation Signature (hidden from callers)\nfunction getInfo(id: number, detailed?: boolean): string | { id: number; details: string } {\n    if (detailed) {\n        return { id, details: `Detailed data for ${id}` };\n    }\n    return `ID: ${id}`;\n}\n```\n\n## How it Behaves\n1. Visibility: Callers only see the overload signatures, never the implementation signature.\n2. Order of Signatures: TypeScript matches the first overload signature that satisfies the call arguments. List more specific signatures before more general ones.\n\n## Common Mistakes\n1. Making the implementation signature incompatible with the overloads: The implementation signature must be broad enough to accept all overload parameter and return types.\n\n## Small Practical Example\n```typescript\nfunction parseInput(x: string): string[];\nfunction parseInput(x: number): number[];\nfunction parseInput(x: string | number): (string | number)[] {\n    return [x];\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Overloaded function `formatValue`:\n   - Signature 1: `formatValue(val: number): string` -> returns `val.toFixed(2)`\n   - Signature 2: `formatValue(val: string): string` -> returns `val.trim().toUpperCase()`\n   - Signature 3: `formatValue(val: boolean): string` -> returns `val ? \"TRUE\" : \"FALSE\"`\n\n## Progressive Hints\n- Hint 1: Declare the 3 signatures, then the implementation: `export function formatValue(val: number | string | boolean): string { ... }`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport function formatValue(val: number): string;\nexport function formatValue(val: string): string;\nexport function formatValue(val: boolean): string;\nexport function formatValue(val: number | string | boolean): string {\n    if (typeof val === \"number\") {\n        return val.toFixed(2);\n    }\n    if (typeof val === \"string\") {\n        return val.trim().toUpperCase();\n    }\n    return val ? \"TRUE\" : \"FALSE\";\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "// Minimal mock implementation of Zod schema logic\ninterface Schema<T> {\n  parse(data: unknown): T;\n}\n\nconst StringValidator: Schema<string> = {\n  parse(data: unknown): string {\n    if (typeof data !== \"string\") throw new Error(\"Expected string\");\n    return data;\n  },\n};\n\nconsole.log(\"=== 15: Schema Validation ===\");\nconsole.log(\"Parsed:\", StringValidator.parse(\"Valid input\"));\n"
+            "content": "// Module 15: Overloads Example\n\nfunction repeat(val: string, times: number): string;\nfunction repeat(val: number, times: number): number[];\nfunction repeat(val: string | number, times: number): string | number[] {\n    if (typeof val === \"string\") return val.repeat(times);\n    return Array(times).fill(val);\n}\n\nconsole.log(repeat(\"hi\", 3)); // \"hihihi\"\nconsole.log(repeat(5, 3));    // [5, 5, 5]\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Implement a type validator 'validateEmail(raw: unknown): string'\n// that returns string if valid email or throws Error.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "function validateEmail(raw: unknown): string {\n  if (typeof raw !== \"string\" || !raw.includes(\"@\")) {\n    throw new Error(\"Invalid email format\");\n  }\n  return raw;\n}\n\nconsole.log(\"Validated:\", validateEmail(\"ndk123-web@trak.dev\"));\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 15: Function Overloads & Signatures\n\n// TODO: Define overloads for formatValue(val: number), (val: string), (val: boolean)\nexport function formatValue(val: any): string {\n    return \"\";\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { formatValue } from './exercise.ts';\n\ntest('formatValue handles number, string, and boolean overloads', () => {\n    assert.equal(formatValue(42), '42.00');\n    assert.equal(formatValue(3.1415), '3.14');\n    assert.equal(formatValue('  hello  '), 'HELLO');\n    assert.equal(formatValue(true), 'TRUE');\n    assert.equal(formatValue(false), 'FALSE');\n});\n"
           }
         ]
       },
       {
-        "name": "16-testing-with-vitest",
+        "name": "16-advanced-type-guards-and-predicates",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 \u2014 Testing With Vitest\n\n## \ud83c\udfaf What is it?\nTesting With Vitest is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Testing With Vitest, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Testing With Vitest executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Unit Testing & Type-Level Assertions\n\n## \ud83c\udfaf Type-Level Testing\nTest that your types compile correctly:\n```ts\ntype AssertEqual<T, Expected> = [T] extends [Expected] ? ([Expected] extends [T] ? true : false) : false;\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Testing With Vitest\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 16 — Advanced Type Guards & Predicates\n\n## What is this?\nUser-defined type guards are functions whose return type is a **type predicate**: `value is Type`. When the function returns `true`, TypeScript automatically narrows the variable to `Type` in subsequent blocks. TypeScript also supports **assertion signatures**: `asserts condition`.\n\n## Why does TypeScript have it?\n- Allows encapsulating complex validation logic (like checking nested fields or API response shapes) into reusable, type-narrowing functions.\n\n## Basic Syntax\n```typescript\ninterface Cat {\n    meow(): void;\n}\n\n// Type Predicate\nfunction isCat(animal: unknown): animal is Cat {\n    return (\n        typeof animal === \"object\" &&\n        animal !== null &&\n        \"meow\" in animal &&\n        typeof (animal as any).meow === \"function\"\n    );\n}\n\n// Assertion Signature\nfunction assertNonEmpty(str: string): asserts str {\n    if (!str.trim()) throw new Error(\"Empty string!\");\n}\n```\n\n## How it Behaves\n1. Safe Narrowing: If `isCat(a)` evaluates to `true`, the compiler allows `a.meow()` inside the `if` branch without any type casting.\n\n## Common Mistakes\n1. Writing a flawed runtime check: TypeScript trusts your predicate completely. If your runtime check is wrong, TypeScript will still believe the variable is narrowed.\n\n## Small Practical Example\n```typescript\nfunction isNumberArray(arr: unknown): arr is number[] {\n    return Array.isArray(arr) && arr.every(x => typeof x === \"number\");\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define interface `ErrorPayload`: `{ code: number; message: string }`.\n2. `isErrorPayload(obj: unknown): obj is ErrorPayload`:\n   - Returns `true` if `obj` is an object, not null, has `typeof obj.code === \"number\"`, and `typeof obj.message === \"string\"`.\n3. `assertDefined<T>(val: T | null | undefined, message?: string): asserts val is T`:\n   - If `val === null || val === undefined`, throws `new Error(message || \"Value is not defined\")`.\n\n## Progressive Hints\n- Hint 1: In `isErrorPayload`, check `typeof obj === \"object\" && obj !== null && typeof (obj as any).code === \"number\" && typeof (obj as any).message === \"string\"`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport interface ErrorPayload {\n    code: number;\n    message: string;\n}\n\nexport function isErrorPayload(obj: unknown): obj is ErrorPayload {\n    if (typeof obj !== \"object\" || obj === null) return false;\n    const candidate = obj as Record<string, unknown>;\n    return typeof candidate.code === \"number\" && typeof candidate.message === \"string\";\n}\n\nexport function assertDefined<T>(val: T | null | undefined, message?: string): asserts val is T {\n    if (val === null || val === undefined) {\n        throw new Error(message || \"Value is not defined\");\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "function sum(a: number, b: number): number {\n  return a + b;\n}\n\n// Self-contained test assertion runner\nfunction test(name: string, fn: () => void) {\n  try {\n    fn();\n    console.log(`\u2714 [PASS] ${name}`);\n  } catch (e) {\n    console.error(`\u274c [FAIL] ${name}:`, e);\n  }\n}\n\nconsole.log(\"=== 16: Testing ===\");\ntest(\"adds 2 + 3 to equal 5\", () => {\n  if (sum(2, 3) !== 5) throw new Error(\"Assertion failed\");\n});\n"
+            "content": "// Module 16: Type Guards Example\n\nfunction isString(x: unknown): x is string {\n    return typeof x === \"string\";\n}\n\nconst val: unknown = \"TypeScript\";\nif (isString(val)) {\n    console.log(\"Length:\", val.length);\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Write a unit test for a string reverse function.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "function reverseString(s: string): string {\n  return s.split(\"\").reverse().join(\"\");\n}\n\nif (reverseString(\"typescript\") !== \"tpircsepyt\") {\n  throw new Error(\"Test failed!\");\n}\nconsole.log(\"\u2714 Reverse string test passed!\");\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 16: Advanced Type Guards & Predicates\n\nexport interface ErrorPayload {\n    code: number;\n    message: string;\n}\n\nexport function isErrorPayload(obj: unknown): obj is ErrorPayload {\n    // TODO: Return true if obj has number code and string message\n    return false;\n}\n\nexport function assertDefined<T>(val: T | null | undefined, message?: string): asserts val is T {\n    // TODO: Throw Error if val is null or undefined\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { isErrorPayload, assertDefined } from './exercise.ts';\n\ntest('isErrorPayload accurately narrows error objects', () => {\n    assert.equal(isErrorPayload({ code: 404, message: 'Not found' }), true);\n    assert.equal(isErrorPayload({ code: '404', message: 'Not found' }), false);\n    assert.equal(isErrorPayload({ code: 500 }), false);\n    assert.equal(isErrorPayload(null), false);\n});\n\ntest('assertDefined guards values against null and undefined', () => {\n    assert.doesNotThrow(() => assertDefined('valid'));\n    assert.doesNotThrow(() => assertDefined(0));\n    assert.throws(() => assertDefined(null), { message: 'Value is not defined' });\n    assert.throws(() => assertDefined(undefined, 'Missing arg'), { message: 'Missing arg' });\n});\n"
           }
         ]
       },
       {
-        "name": "17-monorepos-and-project-references",
+        "name": "17-branded-and-nominal-types",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 \u2014 Monorepos And Project References\n\n## \ud83c\udfaf What is it?\nMonorepos And Project References is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Monorepos And Project References, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Monorepos And Project References executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Monorepo Architecture & Project References\n\n## \ud83c\udfaf Composite Projects\nEnable incremental compilation across workspace packages with `\"composite\": true` and `\"references\": [{ \"path\": \"../core\" }]`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Monorepos And Project References\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 17 — Branded & Nominal Types\n\n## What is this?\nTypeScript uses structural typing: if two types have the same structure, they are assignable to one another. **Branded Types** (nominal typing) attach a unique compile-time tag (e.g. `& { readonly __brand: unique symbol }`) to distinguish primitive values that share the same underlying type (like `UserId` vs `OrderId`).\n\n## Why does TypeScript have it?\n- Prevents bugs where values of the same primitive type are accidentally swapped (e.g. passing a `UserId` to a function expecting an `OrderId`, or passing unvalidated email strings to an emailer).\n\n## Basic Syntax\n```typescript\ndeclare const brand: unique symbol;\n\ntype Brand<K, T> = K & { readonly [brand]: T };\n\ntype UserId = Brand<string, \"UserId\">;\ntype OrderId = Brand<string, \"OrderId\">;\n\nfunction createUserId(id: string): UserId {\n    return id as UserId;\n}\n```\n\n## How it Behaves\n1. Compile-Time Barrier: A variable of type `UserId` cannot be assigned to `OrderId` even though both are strings at runtime.\n2. Validation on Creation: You enforce constructor/smart validation functions before casting to the branded type.\n\n## Common Mistakes\n1. Casting raw strings everywhere without validation, which defeats the purpose of nominal types.\n\n## Small Practical Example\n```typescript\ntype USD = Brand<number, \"USD\">;\ntype EUR = Brand<number, \"EUR\">;\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define branded type `UserId = string & { readonly __brand: \"UserId\" }`.\n2. Define branded type `EmailAddress = string & { readonly __brand: \"EmailAddress\" }`.\n3. `makeUserId(rawId: string): UserId`: Casts `rawId` as `UserId`.\n4. `makeEmailAddress(rawEmail: string): EmailAddress | null`:\n   - If `rawEmail` contains `\"@\"` and `\".\"`, returns it as `EmailAddress`.\n   - Otherwise returns `null`.\n\n## Progressive Hints\n- Hint 1: `export type UserId = string & { readonly __brand: \"UserId\" };`\n- Hint 2: In `makeEmailAddress`, check `rawEmail.includes(\"@\") && rawEmail.includes(\".\")`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type UserId = string & { readonly __brand: \"UserId\" };\nexport type EmailAddress = string & { readonly __brand: \"EmailAddress\" };\n\nexport function makeUserId(rawId: string): UserId {\n    return rawId as UserId;\n}\n\nexport function makeEmailAddress(rawEmail: string): EmailAddress | null {\n    if (rawEmail.includes(\"@\") && rawEmail.includes(\".\")) {\n        return rawEmail as EmailAddress;\n    }\n    return null;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "console.log(\"=== 17: Monorepo Project References ===\");\nconsole.log(\"Composite build settings verified in tsconfig.json\");\n"
+            "content": "// Module 17: Branded Types Example\n\ntype Meters = number & { readonly __brand: \"Meters\" };\nconst dist = 100 as Meters;\nconsole.log(\"Meters:\", dist);\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Define a shared workspace package configuration interface.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "interface WorkspaceConfig {\n  name: string;\n  version: string;\n  dependencies: Record<string, string>;\n}\n\nconst pkg: WorkspaceConfig = {\n  name: \"@trak/core\",\n  version: \"1.2.0\",\n  dependencies: {},\n};\nconsole.log(\"Workspace package:\", pkg);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 17: Branded & Nominal Types\n\nexport type UserId = string & { readonly __brand: \"UserId\" };\nexport type EmailAddress = string & { readonly __brand: \"EmailAddress\" };\n\nexport function makeUserId(rawId: string): UserId {\n    // TODO: Return rawId as UserId\n    return rawId as any;\n}\n\nexport function makeEmailAddress(rawEmail: string): EmailAddress | null {\n    // TODO: Validate email has @ and ., return as EmailAddress or null\n    return null;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { makeUserId, makeEmailAddress } from './exercise.ts';\n\ntest('makeUserId brands string identifier', () => {\n    const uid = makeUserId('u-12345');\n    assert.equal(uid, 'u-12345');\n});\n\ntest('makeEmailAddress enforces basic validation rules', () => {\n    assert.equal(makeEmailAddress('user@example.com'), 'user@example.com');\n    assert.equal(makeEmailAddress('invalid-email'), null);\n    assert.equal(makeEmailAddress('test@nodomain'), null);\n});\n"
           }
         ]
       },
       {
-        "name": "18-interview-questions-and-drills",
+        "name": "18-utility-types-exclude-extract-returntype",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 \u2014 Interview Questions And Drills\n\n## \ud83c\udfaf What is it?\nInterview Questions And Drills is a core foundational concept in TypeScript Architecture & Type Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Interview Questions And Drills, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Interview Questions And Drills executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Interview Questions And Drills\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 18 — Utility Types: Exclude, Extract, ReturnType\n\n## What is this?\nTypeScript provides type-level operators that manipulate unions and function types: `Exclude<T, U>`, `Extract<T, U>`, `NonNullable<T>`, `ReturnType<T>`, `Parameters<T>`, and `Awaited<T>`.\n\n## Why does TypeScript have it?\n- Allows composing and transforming types dynamically from existing function signatures or union definitions without code duplication.\n\n## Basic Syntax\n```typescript\ntype Status = \"pending\" | \"approved\" | \"rejected\" | \"canceled\";\n\n// Remove elements from union\ntype ActiveStatus = Exclude<Status, \"canceled\" | \"rejected\">; // \"pending\" | \"approved\"\n\n// Extract elements from union\ntype ResolvedStatus = Extract<Status, \"approved\" | \"rejected\">; // \"approved\" | \"rejected\"\n\n// Inspect function types\nfunction createUser(name: string, age: number) {\n    return { id: 1, name, age };\n}\n\ntype User = ReturnType<typeof createUser>; // { id: number; name: string; age: number }\ntype UserArgs = Parameters<typeof createUser>; // [name: string, age: number]\n```\n\n## How it Behaves\n1. `Exclude<T, U>`: Distributes over `T` and excludes any members that are assignable to `U`.\n2. `NonNullable<T>`: Excludes `null` and `undefined` from `T`.\n3. `ReturnType<T>`: Extracts the return type of a function type `T`.\n\n## Common Mistakes\n1. Passing a function value directly to `ReturnType` instead of its type: `ReturnType<myFunc>` is an error; use `ReturnType<typeof myFunc>`.\n\n## Small Practical Example\n```typescript\ntype Primitive = string | number | boolean | null | undefined;\ntype DefinitePrimitive = NonNullable<Primitive>; // string | number | boolean\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Given `type EventType = \"click\" | \"hover\" | \"scroll\" | \"resize\" | \"keydown\"`, define `type MouseEvent = Extract<EventType, \"click\" | \"hover\">`.\n2. Define `type NonMouseEvent = Exclude<EventType, MouseEvent>`.\n3. `unwrapPromiseValue<T>(promise: Promise<T>): Promise<T>`: Returns the input promise directly.\n\n## Progressive Hints\n- Hint 1: `export type MouseEvent = Extract<EventType, \"click\" | \"hover\">;`\n- Hint 2: `export type NonMouseEvent = Exclude<EventType, MouseEvent>;`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport type EventType = \"click\" | \"hover\" | \"scroll\" | \"resize\" | \"keydown\";\n\nexport type MouseEvent = Extract<EventType, \"click\" | \"hover\">;\nexport type NonMouseEvent = Exclude<EventType, MouseEvent>;\n\nexport function unwrapPromiseValue<T>(promise: Promise<T>): Promise<T> {\n    return promise;\n}\n```\n</details>\n"
           },
           {
             "name": "example.ts",
             "type": "file",
-            "content": "console.log(\"=== 18: Master Interview Drill ===\");\nconsole.log(\"1. satisfies operator vs type annotation\");\nconsole.log(\"2. Distributive conditional types\");\nconsole.log(\"3. infer keyword unpacking\");\nconsole.log(\"4. Exhaustive never assertions\");\nconsole.log(\"\ud83d\ude80 You have completed the comprehensive TypeScript Mastery Track!\");\n"
+            "content": "// Module 18: Exclude & Extract Example\n\ntype TaskStatus = \"todo\" | \"doing\" | \"done\" | \"archived\";\ntype OpenStatus = Exclude<TaskStatus, \"done\" | \"archived\">;\n\nconst task: OpenStatus = \"doing\";\nconsole.log(\"Task:\", task);\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.ts",
-                "type": "file",
-                "content": "// TODO: Master Drill: Implement a deep readonly mapped type 'DeepReadonly<T>'\n// that recursively makes all nested object properties readonly.\n"
-              },
-              {
-                "name": "solution.ts",
-                "type": "file",
-                "content": "type DeepReadonly<T> = {\n  readonly [K in keyof T]: T[K] extends Function\n    ? T[K]\n    : T[K] extends object\n    ? DeepReadonly<T[K]>\n    : T[K];\n};\n\ninterface UserProfile {\n  name: string;\n  settings: {\n    theme: string;\n    notifications: boolean;\n  };\n}\n\ntype ImmutableProfile = DeepReadonly<UserProfile>;\n\nconst profile: ImmutableProfile = {\n  name: \"Navnath\",\n  settings: {\n    theme: \"dark\",\n    notifications: true,\n  },\n};\n\nconsole.log(\"DeepReadonly profile:\", profile);\n"
-              }
-            ]
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 18: Utility Types: Exclude, Extract, ReturnType\n\nexport type EventType = \"click\" | \"hover\" | \"scroll\" | \"resize\" | \"keydown\";\n\nexport type MouseEvent = Extract<EventType, \"click\" | \"hover\">;\nexport type NonMouseEvent = Exclude<EventType, MouseEvent>;\n\nexport function unwrapPromiseValue<T>(promise: Promise<T>): Promise<T> {\n    // TODO: Return promise\n    return Promise.resolve(null as any);\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { unwrapPromiseValue, type MouseEvent, type NonMouseEvent } from './exercise.ts';\n\ntest('unwrapPromiseValue returns resolved promise', async () => {\n    const val = await unwrapPromiseValue(Promise.resolve(42));\n    assert.equal(val, 42);\n});\n\ntest('type tests for MouseEvent and NonMouseEvent', () => {\n    const m1: MouseEvent = 'click';\n    const m2: MouseEvent = 'hover';\n    const nm1: NonMouseEvent = 'scroll';\n    assert.equal(m1, 'click');\n    assert.equal(m2, 'hover');\n    assert.equal(nm1, 'scroll');\n});\n"
+          }
+        ]
+      },
+      {
+        "name": "19-modules-and-type-only-imports",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 — Modules & Type-Only Imports\n\n## What is this?\nTypeScript allows separating runtime value imports from type-only imports using `import type` and `export type`. Type-only declarations are guaranteed to be completely erased from the compiled JavaScript output.\n\n## Why does TypeScript have it?\n- Avoids circular dependency issues at runtime when files only import each other's types.\n- Ensures bundling tools (like Vite, esbuild, SWC) can safely transpile files in isolation without knowing whether an import is a type or a value.\n\n## Basic Syntax\n```typescript\n// Type-only import (erased at runtime)\nimport type { UserProfile, Config } from './types.ts';\n\n// Inline type imports\nimport { calculateTotal, type CartItem } from './cart.ts';\n\n// Type-only export\nexport type { UserProfile };\n```\n\n## How it Behaves\n1. Complete Erasure: An `import type { X }` produces zero JavaScript code in the compiled `.js` file.\n2. `verbatimModuleSyntax: true`: A compiler option in `tsconfig.json` that strictly enforces using `import type` for all non-value imports.\n\n## Common Mistakes\n1. Trying to instantiate or use a type-only import as a runtime value (e.g. `new MyClass()` when `MyClass` was imported with `import type`).\n\n## Small Practical Example\n```typescript\nexport interface AppContext {\n    env: string;\n    debug: boolean;\n}\n\nexport function createAppContext(debug: boolean = false): AppContext {\n    return { env: \"production\", debug };\n}\n```\n\n## What to Practice\nImplement in `exercise.ts`:\n1. Define and export interface `ServiceMetadata`: `{ name: string; version: string; isHealthy: boolean; }`.\n2. Define and export function `createServiceMetadata(name: string, version: string): ServiceMetadata`: Returns `{ name, version, isHealthy: true }`.\n\n## Progressive Hints\n- Hint 1: `export interface ServiceMetadata { name: string; version: string; isHealthy: boolean; }`\n- Hint 2: In `createServiceMetadata`, return `{ name, version, isHealthy: true }`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```typescript\nexport interface ServiceMetadata {\n    name: string;\n    version: string;\n    isHealthy: boolean;\n}\n\nexport function createServiceMetadata(name: string, version: string): ServiceMetadata {\n    return {\n        name,\n        version,\n        isHealthy: true\n    };\n}\n```\n</details>\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "// Module 19: Modules Example\n\nexport interface Stats {\n    uptime: number;\n}\n\nexport function getStats(): Stats {\n    return { uptime: 3600 };\n}\n\nconsole.log(\"Stats:\", getStats());\n"
+          },
+          {
+            "name": "exercise.ts",
+            "type": "file",
+            "content": "// Module 19: Modules & Type-Only Imports\n\nexport interface ServiceMetadata {\n    name: string;\n    version: string;\n    isHealthy: boolean;\n}\n\nexport function createServiceMetadata(name: string, version: string): ServiceMetadata {\n    // TODO: Return ServiceMetadata with isHealthy: true\n    return {} as any;\n}\n"
+          },
+          {
+            "name": "exercise_test.ts",
+            "type": "file",
+            "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createServiceMetadata, type ServiceMetadata } from './exercise.ts';\n\ntest('createServiceMetadata returns initialized metadata structure', () => {\n    const meta = createServiceMetadata('AuthService', '1.4.0');\n    assert.deepEqual(meta, {\n        name: 'AuthService',\n        version: '1.4.0',\n        isHealthy: true\n    });\n});\n"
           }
         ]
       }
