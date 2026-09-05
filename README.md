@@ -62,6 +62,26 @@ trak-registry/
 
 ---
 
+## 🏛️ Allowed Categories (5 Canonical Engineering Pillars)
+
+All blueprints—both official (`templates/<category>/`) and community (`users/<username>/<category>/`)—**must be classified under one of the 5 allowed categories**. The Trak CLI relies on this category hierarchy for deterministic route resolution, syllabus indexing, and runtime verification.
+
+| Category | Pillar Name | Curriculum Scope | Example Tools / Blueprints | Verification Engine |
+| :--- | :--- | :--- | :--- | :--- |
+| **`lang`** | **Programming Languages** | Syntax, compiler toolchains, type systems, memory models, concurrency primitives, and standard library. | `go`, `rust`, `python`, `typescript`, `javascript`, `c`, `cpp`, `zig`, `java` | ✅ **Native Compiler Tests** (`trak verify`) |
+| **`os`** | **Operating Systems & Kernels** | Kernel architecture, POSIX syscalls, process scheduling, eBPF, memory paging, filesystems, and Linux administration. | `linux`, `kernel`, `freebsd`, `unix` | 📋 **Milestone Labs** (`trak done <module>`) |
+| **`cloud`** | **Cloud & Distributed Systems** | Cloud infra architecture, distributed consensus, microservices, load balancing, message queues, and cloud networking. | `aws`, `gcp`, `azure`, `distributed-systems` | 📋 **Milestone Labs** (`trak done <module>`) |
+| **`db`** | **Databases & Storage Internals** | Storage engines, Write-Ahead Logging (WAL), B-Trees/LSM-Trees, indexing, query planning, and ACID transaction recovery. | `postgres`, `redis`, `mysql`, `sqlite`, `mongodb` | 📋 **Milestone Labs** (`trak done <module>`) |
+| **`tool`** | **DevOps & Developer Tooling** | Container engines, CI/CD orchestration, Infrastructure as Code, configuration managers, and dev CLI tooling. | `docker`, `kubernetes`, `ansible`, `git`, `terraform` | 📋 **Milestone Labs** (`trak done <module>`) |
+
+> ⚠️ **Strict CI Enforcement:** Any Pull Request introducing custom or arbitrary categories (e.g. `web`, `frontend`, `fullstack`, `misc`, `devops`) will be **immediately rejected** by GitHub Actions CI (`scripts/validate.go: Rule C`).
+>
+> 💡 **Guideline for Blueprint Authors:**
+> - When authoring for **`lang`**, include runnable exercises with test suites (`exercise_test.go`, `exercise_test.py`, `exercise_test.rs`, `exercise_test.c`, etc.) so learners can execute `trak verify` against their native compiler/test runner.
+> - When authoring for **`os`**, **`cloud`**, **`db`**, or **`tool`**, supply realistic declarative configs (`docker-compose.yml`, Ansible playbooks, Terraform manifests, SQL schemas) and comprehensive step-by-step architectural READMEs.
+
+---
+
 ## 🔄 End-to-End GitOps Contribution & CI Verification Workflow
 
 Publishing custom learning tracks to Trak Registry requires **zero custom accounts, zero passwords, and zero API keys**. The entire lifecycle is governed by automated GitOps and GitHub Actions CI:
@@ -197,7 +217,7 @@ users/<your-github-username>/<category>/<tool>.json
 users/<your-github-username>/<category>/<tool>@<version>.json
 ```
 
-> **Allowed Categories:** `lang` (languages), `os` (operating systems), `cloud` (cloud infra), `db` (databases), `tool` (DevOps tools).
+> ⚠️ **Strict Category Rule:** `<category>` must be one of the 5 canonical pillars: `lang`, `os`, `cloud`, `db`, or `tool`. Any other category name will fail the automated CI validation check. See [The 5 Canonical Categories](#-allowed-categories-5-canonical-engineering-pillars) above for details.
 
 ### Step 4: Submit Pull Request (PR)
 1. Push your branch and open a PR against `main`.
