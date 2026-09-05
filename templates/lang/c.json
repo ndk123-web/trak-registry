@@ -1,632 +1,524 @@
 {
   "id": "lang/c",
   "name": "C Systems Programming & Memory Mastery Track",
-  "version": "1.2.0",
-  "description": "Complete high-depth C (C23) curriculum covering pointer arithmetic, memory management, struct packing, POSIX system calls, pthreads, and Valgrind verification",
+  "version": "1.3.0",
+  "description": "Comprehensive C systems programming curriculum covering pointers, memory allocation, data structures, and defensive bounds checking.",
   "root": {
     "name": "c-workspace",
     "type": "directory",
     "children": [
       {
-        "name": "Makefile",
-        "type": "file",
-        "content": "CC = gcc\nCFLAGS = -Wall -Wextra -pedantic -std=c17 -O2 -g\n\nall:\n\t$(CC) $(CFLAGS) main.c -o app\n\nclean:\n\trm -f app\n"
-      },
-      {
-        "name": "main.c",
-        "type": "file",
-        "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== \ud83d\ude80 C Systems Programming Workspace ===\\n\");\n    printf(\"Pointer Size: %zu bytes (%zu-bit)\\n\", sizeof(void*), sizeof(void*) * 8);\n    return 0;\n}\n"
-      },
-      {
-        "name": "README.md",
-        "type": "file",
-        "content": "# \ud83d\udee0\ufe0f C Systems Programming & Memory Mastery Track\n\nWelcome to the **C Systems Programming & Memory Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering low-level memory allocation (`malloc`/`free`), pointer arithmetic, data structure alignment, POSIX system calls (`fork`, `exec`), `pthreads`, and defensive systems engineering.\n\n## \ud83d\udcda Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-toolchain` | Toolchain & Compilation Pipeline | GCC/Clang, Makefiles, Preprocessor (`-E`), Assembler (`-S`), Linker (`-o`) |\n| `01-basics-types-and-memory` | Exact-Width Types & Endianness | `<stdint.h>`, `size_t`, `ptrdiff_t`, Big-Endian vs Little-Endian bytes |\n| `02-pointers-and-address-arithmetic` | Pointers & Memory Addresses | Dereference (`*`), Address-of (`&`), pointer scaling arithmetic, `void*` |\n| `03-memory-allocation-malloc-free` | Dynamic Heap Management | `malloc`, `calloc`, `realloc`, `free`, fragmentation, use-after-free |\n| `04-arrays-and-pointer-decay` | Array Decay & Multi-dim Pointers | Array to pointer decay, `char* argv[]`, pointer vs array index arithmetic |\n| `05-strings-and-buffer-safety` | Strings & Buffer Safety | Null terminator (`\\0`), `snprintf`, safe string bounds, `strlen` vs `sizeof` |\n| `06-structs-unions-and-alignment` | Struct Packing & Memory Alignment | Padding bytes, `__attribute__((packed))`, unions for type punning, bitfields |\n| `07-bitwise-operations-and-masks` | Bitwise Manipulation & Flags | Bitwise operators (`&`, `|`, `^`, `~`, `<<`, `>>`), mask flags, bit clearing |\n| `08-functions-and-function-pointers` | Function Pointers & Callbacks | Callback dispatch architectures, jump tables, event handlers |\n| `09-preprocessor-and-macros` | Preprocessor Metaprogramming | `#define`, stringification (`#`), token pasting (`##`), header guards |\n| `10-file-io-and-streams` | Standard File Streams | `fopen`, `fread`, `fwrite`, `fclose`, binary vs text mode, buffering |\n| `11-posix-system-calls-and-file-descriptors` | POSIX Low-Level I/O | `open`, `read`, `write`, `close`, file descriptors (0, 1, 2), `lseek` |\n| `12-processes-and-signals` | Processes & Signal Handlers | `fork()`, `execve()`, `waitpid()`, zombie processes, `sigaction` |\n| `13-posix-threads-pthreads` | Multithreading with pthreads | `pthread_create`, `pthread_join`, `pthread_mutex_t`, race conditions |\n| `14-dynamic-data-structures` | Dynamic Data Structures | Linked lists, growable dynamic vectors, hash tables in pure C |\n| `15-shared-libraries-and-linking` | Dynamic Linking & dlsym | Static (`.a`) vs Shared (`.so`), `dlopen`, `dlsym`, symbol resolution |\n| `16-debugging-with-gdb-and-valgrind` | Debugging & Memory Profiling | GDB stack backtraces, Valgrind Memcheck for invalid reads/writes |\n| `17-safe-c-best-practices` | Defensive Systems Engineering | Integer overflow prevention, `goto cleanup` idiom, null validation |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 C gotchas (Dangling pointers, sequence points, alignment faults) |\n\n---\n\n## \ud83d\udee0\ufe0f How to Practice\nEach module contains:\n- `README.md` \u2014 Deep theoretical explanation and architecture notes.\n- `example.c` \u2014 Fully runnable concept demonstration.\n- `exercise/starter.c` \u2014 Hands-on problem with `TODO` markers.\n- `exercise/solution.c` \u2014 Complete reference solution.\n"
-      },
-      {
-        "name": "00-setup-and-toolchain",
+        "name": "00-setup-toolchain-and-first-program",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 \u2014 Setup And Toolchain\n\n## \ud83c\udfaf What is it?\nSetup And Toolchain is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Setup And Toolchain, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Setup And Toolchain executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 C Compilation Pipeline & Toolchain\n\n## \ud83c\udfaf The 4 Compilation Stages\n1. **Preprocessing (`cpp`)**: Expands `#include`, `#define`, strips comments (`gcc -E`).\n2. **Compilation (`cc1`)**: Translates C to assembly code (`gcc -S`).\n3. **Assembly (`as`)**: Translates assembly to machine object code (`gcc -c`).\n4. **Linking (`ld`)**: Combines object files and libraries into executable binary (`gcc -o`).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Setup And Toolchain\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 00 — Setup, Toolchain & First Program\n\n## What is this?\nWelcome to C! C is an imperative, statically-typed procedural language designed for systems programming, operating systems, and resource-constrained environments. In this introductory module, you will verify your C compiler toolchain and run your first compiled C binary.\n\n## Why does C have it?\n- C programs compile directly into native machine code targeting the host CPU architecture (x86_64, ARM, RISC-V). There is no bytecode interpreter or virtual machine runtime.\n- Execution begins at the runtime entry point function `int main(void)` or `int main(int argc, char *argv[])`.\n- When `main` finishes, it returns an integer status code to the operating system shell (`0` indicating success, non-zero indicating an error).\n\n## Minimal Anatomy of a C Program\nExamine `main.c` in this directory:\n\n```c\n#include <stdio.h>\n\nint main(void) {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n```\n\nLet us break down each component:\n1. `#include <stdio.h>`: A preprocessor directive that imports declarations for standard input/output functions, including `printf`.\n2. `int main(void)`: The program entry point. `int` denotes the return type, and `void` explicitly specifies that this function accepts no arguments.\n3. `printf(\"Hello, World!\\n\")`: Prints formatted text to standard output (`stdout`). `\\n` is the newline escape character.\n4. `return 0;`: Returns status code 0 to the parent process.\n\n## How to Compile and Run\nOpen your terminal in this directory and execute:\n\n### 1. Compile the program using GCC\n```bash\ngcc -Wall -Wextra -std=c11 main.c -o main.exe\n```\n\n### 2. Run the compiled executable\nOn Windows:\n```bash\n.\\main.exe\n```\nOn Linux / macOS:\n```bash\n./main\n```\n\n### 3. Verify compiler installation\n```bash\ngcc --version\n```\n\n## Common Mistakes\n1. Missing semicolon: Every statement in C must terminate with a semicolon `;`.\n2. Missing `#include <stdio.h>`: Calling `printf` without including the header triggers a compiler warning or implicit declaration error.\n3. Returning non-zero from `main`: Shells and CI tools treat non-zero return codes as program crashes or execution failures.\n"
           },
           {
-            "name": "example.c",
+            "name": "main.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 00: C Compilation Pipeline Verified ===\\n\");\n    #ifdef __GNUC__\n    printf(\"Compiler: GCC %d.%d.%d\\n\", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__);\n    #endif\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write a program that prints the sizeof all fundamental C types in bytes.\n#include <stdio.h>\n\nint main(void) {\n    // FILL HERE\n    return 0;\n}\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdint.h>\n\nint main(void) {\n    printf(\"char: %zu byte\\n\", sizeof(char));\n    printf(\"short: %zu bytes\\n\", sizeof(short));\n    printf(\"int: %zu bytes\\n\", sizeof(int));\n    printf(\"long: %zu bytes\\n\", sizeof(long));\n    printf(\"int64_t: %zu bytes\\n\", sizeof(int64_t));\n    printf(\"size_t: %zu bytes\\n\", sizeof(size_t));\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"C toolchain and runtime verified successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "01-basics-types-and-memory",
+        "name": "01-data-types-and-operators",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 \u2014 Basics Types And Memory\n\n## \ud83c\udfaf What is it?\nBasics Types And Memory is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Basics Types And Memory, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Basics Types And Memory executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Exact-Width Types & Endianness\n\n## \ud83c\udfaf `<stdint.h>`\nAlways use exact-width integer types (`uint8_t`, `int32_t`, `uint64_t`) in systems code to guarantee portable memory representations across architectures.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Basics Types And Memory\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 01 — Data Types & Operators\n\n## What is this?\nC is a statically and strongly typed language where variables must be declared with their data type before use. This module covers fundamental primitive types (`int`, `float`, `double`, `char`), type sizing with `sizeof`, and arithmetic operators.\n\n## Why does C have it?\n- Knowing exact data type sizes enables predictable memory allocation and performance optimization.\n- Integer arithmetic in C truncates remainders during division (`5 / 2 == 2`). Explicit casting `(double)5 / 2` is required for floating-point precision.\n\n## Syntax and Core Mechanics\n```c\nint count = 42;\nfloat rate = 3.14f;\ndouble precise_value = 12345.6789;\nchar initial = 'A';\n\n// Size check\nsize_t bytes = sizeof(int); // Typically 4 bytes\n```\n\n## Code Example\nSee `example.c` for variable declarations, compound arithmetic, and format specifiers (`%d`, `%f`, `%c`).\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int celsius_to_fahrenheit(int celsius)`:\n   - Formula: `(celsius * 9) / 5 + 32`.\n2. `double calculate_average(int a, int b, int c)`:\n   - Returns the floating-point average of three integers: `(a + b + c) / 3.0`.\n3. `int is_even_number(int n)`:\n   - Returns `1` if `n` is even, otherwise `0`.\n\n## Progressive Hints\n- Hint 1: In `celsius_to_fahrenheit`, multiply by 9 first before dividing by 5 to preserve integer precision.\n- Hint 2: In `calculate_average`, cast the sum to `double` or divide by `3.0` instead of `3`.\n- Hint 3: In `is_even_number`, check `n % 2 == 0`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nint celsius_to_fahrenheit(int celsius) {\n    return (celsius * 9) / 5 + 32;\n}\n\ndouble calculate_average(int a, int b, int c) {\n    return (double)(a + b + c) / 3.0;\n}\n\nint is_even_number(int n) {\n    return (n % 2 == 0) ? 1 : 0;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n#include <stdint.h>\n\nvoid check_endianness(void) {\n    uint16_t x = 0x0001;\n    uint8_t* byte_ptr = (uint8_t*)&x;\n    if (*byte_ptr == 1) {\n        printf(\"System Endianness: Little-Endian (x86/ARM default)\\n\");\n    } else {\n        printf(\"System Endianness: Big-Endian\\n\");\n    }\n}\n\nint main(void) {\n    printf(\"=== 01: Endianness Detection ===\\n\");\n    check_endianness();\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    int age = 25;\n    double balance = 1500.75;\n    char grade = 'A';\n\n    printf(\"Age: %d (bytes: %zu)\\n\", age, sizeof(age));\n    printf(\"Balance: %.2f (bytes: %zu)\\n\", balance, sizeof(balance));\n    printf(\"Grade: %c (bytes: %zu)\\n\", grade, sizeof(grade));\n\n    int division = 7 / 2;\n    double accurate = 7.0 / 2.0;\n    printf(\"Integer division 7/2 = %d, Floating division 7.0/2.0 = %.1f\\n\", division, accurate);\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Implement a function 'swap_uint16(uint16_t val)' to convert endianness.\n#include <stdint.h>\n#include <stdio.h>\n\nuint16_t swap_uint16(uint16_t val) {\n    // FILL HERE\n    return 0;\n}\n\nint main(void) { return 0; }\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdint.h>\n#include <stdio.h>\n\nuint16_t swap_uint16(uint16_t val) {\n    return (val << 8) | (val >> 8);\n}\n\nint main(void) {\n    uint16_t original = 0x1234;\n    uint16_t swapped = swap_uint16(original);\n    printf(\"Original: 0x%04X | Swapped: 0x%04X\\n\", original, swapped);\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint celsius_to_fahrenheit(int celsius) {\n    // TODO: Return (celsius * 9) / 5 + 32\n    return 0;\n}\n\ndouble calculate_average(int a, int b, int c) {\n    // TODO: Return (a + b + c) / 3.0\n    return 0.0;\n}\n\nint is_even_number(int n) {\n    // TODO: Return 1 if even, 0 if odd\n    return -1;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n#include <math.h>\n\nint celsius_to_fahrenheit(int celsius);\ndouble calculate_average(int a, int b, int c);\nint is_even_number(int n);\n\nint main(void) {\n    // Test celsius_to_fahrenheit\n    assert(celsius_to_fahrenheit(0) == 32);\n    assert(celsius_to_fahrenheit(100) == 212);\n    assert(celsius_to_fahrenheit(-40) == -40);\n\n    // Test calculate_average\n    assert(fabs(calculate_average(10, 20, 30) - 20.0) < 0.0001);\n    assert(fabs(calculate_average(1, 2, 4) - 2.3333) < 0.001);\n\n    // Test is_even_number\n    assert(is_even_number(4) == 1);\n    assert(is_even_number(7) == 0);\n    assert(is_even_number(0) == 1);\n    assert(is_even_number(-2) == 1);\n\n    printf(\"Module 01 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "02-pointers-and-address-arithmetic",
+        "name": "02-control-flow-and-conditionals",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 \u2014 Pointers And Address Arithmetic\n\n## \ud83c\udfaf What is it?\nPointers And Address Arithmetic is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Pointers And Address Arithmetic, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Pointers And Address Arithmetic executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Pointer Scaling & Address Arithmetic\n\n## \ud83c\udfaf Pointer Arithmetic\nAdding 1 to a pointer `T*` advances the memory address by `sizeof(T)` bytes.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Pointers And Address Arithmetic\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 02 — Control Flow & Conditionals\n\n## What is this?\nControl flow statements allow your program to branch dynamically based on conditions. C provides `if`, `else if`, `else`, `switch`, and ternary operators `? :`.\n\n## Why does C have it?\n- In C, any non-zero integer evaluates to true in boolean contexts, while `0` evaluates to false.\n- `switch` statements map to jump tables at compile time, providing O(1) branch dispatch for discrete integer or character constants.\n\n## Syntax and Core Mechanics\n```c\nif (score >= 90) {\n    grade = 'A';\n} else if (score >= 80) {\n    grade = 'B';\n} else {\n    grade = 'F';\n}\n\nswitch (op) {\n    case '+': result = a + b; break;\n    case '-': result = a - b; break;\n    default:  result = 0;     break;\n}\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int find_maximum(int a, int b, int c)`:\n   - Returns the largest of the three integers.\n2. `char get_letter_grade(int score)`:\n   - Score >= 90: returns `'A'`\n   - Score >= 80: returns `'B'`\n   - Score >= 70: returns `'C'`\n   - Score >= 60: returns `'D'`\n   - Otherwise: returns `'F'`\n3. `int evaluate_operator(int a, int b, char op)`:\n   - Handles `'+'` (add), `'-'` (subtract), `'*'` (multiply), `'/'` (divide, returns 0 if `b == 0`). Returns 0 for any other operator.\n\n## Progressive Hints\n- Hint 1: In `find_maximum`, start with `max = a` and conditionally compare with `b` and `c`.\n- Hint 2: In `get_letter_grade`, check descending boundaries starting with `>= 90`.\n- Hint 3: In `evaluate_operator`, use a `switch(op)` and check `if (b == 0) return 0` on division.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nint find_maximum(int a, int b, int c) {\n    int max = a;\n    if (b > max) max = b;\n    if (c > max) max = c;\n    return max;\n}\n\nchar get_letter_grade(int score) {\n    if (score >= 90) return 'A';\n    if (score >= 80) return 'B';\n    if (score >= 70) return 'C';\n    if (score >= 60) return 'D';\n    return 'F';\n}\n\nint evaluate_operator(int a, int b, char op) {\n    switch (op) {\n        case '+': return a + b;\n        case '-': return a - b;\n        case '*': return a * b;\n        case '/': return (b == 0) ? 0 : a / b;\n        default:  return 0;\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    int arr[3] = {10, 20, 30};\n    int* ptr = arr;\n\n    printf(\"=== 02: Pointer Arithmetic ===\\n\");\n    printf(\"Address of arr[0]: %p | Value: %d\\n\", (void*)ptr, *ptr);\n    ptr++; // Advances by sizeof(int) = 4 bytes\n    printf(\"Address of arr[1]: %p | Value: %d\\n\", (void*)ptr, *ptr);\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    int temperature = 28;\n    if (temperature > 30) {\n        printf(\"Hot weather\\n\");\n    } else if (temperature >= 20) {\n        printf(\"Pleasant weather\\n\");\n    } else {\n        printf(\"Cold weather\\n\");\n    }\n\n    char code = 'G';\n    switch (code) {\n        case 'G': printf(\"Status: Green (Normal)\\n\"); break;\n        case 'Y': printf(\"Status: Yellow (Warning)\\n\"); break;\n        case 'R': printf(\"Status: Red (Critical)\\n\"); break;\n        default:  printf(\"Status: Unknown\\n\"); break;\n    }\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Implement a custom 'my_memcpy(void* dest, const void* src, size_t n)' function.\n#include <stddef.h>\n\nvoid* my_memcpy(void* dest, const void* src, size_t n) {\n    // FILL HERE\n    return dest;\n}\n\nint main(void) { return 0; }\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stddef.h>\n#include <stdio.h>\n\nvoid* my_memcpy(void* dest, const void* src, size_t n) {\n    unsigned char* d = (unsigned char*)dest;\n    const unsigned char* s = (const unsigned char*)src;\n    for (size_t i = 0; i < n; i++) {\n        d[i] = s[i];\n    }\n    return dest;\n}\n\nint main(void) {\n    char src[] = \"Trak Systems\";\n    char dst[20];\n    my_memcpy(dst, src, sizeof(src));\n    printf(\"Copied string: %s\\n\", dst);\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint find_maximum(int a, int b, int c) {\n    // TODO: Return highest value among a, b, and c\n    return 0;\n}\n\nchar get_letter_grade(int score) {\n    // TODO: Return 'A', 'B', 'C', 'D', or 'F'\n    return ' ';\n}\n\nint evaluate_operator(int a, int b, char op) {\n    // TODO: Perform arithmetic operation based on op\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint find_maximum(int a, int b, int c);\nchar get_letter_grade(int score);\nint evaluate_operator(int a, int b, char op);\n\nint main(void) {\n    // Test find_maximum\n    assert(find_maximum(10, 5, 20) == 20);\n    assert(find_maximum(50, 20, 10) == 50);\n    assert(find_maximum(5, 45, 12) == 45);\n    assert(find_maximum(-5, -1, -10) == -1);\n\n    // Test get_letter_grade\n    assert(get_letter_grade(95) == 'A');\n    assert(get_letter_grade(85) == 'B');\n    assert(get_letter_grade(72) == 'C');\n    assert(get_letter_grade(61) == 'D');\n    assert(get_letter_grade(45) == 'F');\n\n    // Test evaluate_operator\n    assert(evaluate_operator(10, 5, '+') == 15);\n    assert(evaluate_operator(10, 5, '-') == 5);\n    assert(evaluate_operator(10, 5, '*') == 50);\n    assert(evaluate_operator(10, 2, '/') == 5);\n    assert(evaluate_operator(10, 0, '/') == 0);\n    assert(evaluate_operator(10, 5, '?') == 0);\n\n    printf(\"Module 02 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "03-memory-allocation-malloc-free",
+        "name": "03-loops-and-iteration",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 \u2014 Memory Allocation Malloc Free\n\n## \ud83c\udfaf What is it?\nMemory Allocation Malloc Free is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Memory Allocation Malloc Free, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Memory Allocation Malloc Free executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Dynamic Memory Allocation (`malloc`, `calloc`, `free`)\n\n## \ud83c\udfaf Golden Rules of C Memory\n1. Always check for `NULL` after `malloc`/`calloc`.\n2. Set pointers to `NULL` immediately after `free()` to prevent dangling pointers.\n3. Never double-free memory.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Memory Allocation Malloc Free\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 03 — Loops & Iteration\n\n## What is this?\nLoops execute a block of statements repeatedly until a termination condition is met. C provides `for`, `while`, and `do-while` loops, along with `break` and `continue`.\n\n## Why does C have it?\n- `for`: Best when the number of iterations is known in advance.\n- `while`: Best when looping depends on an indeterminate runtime condition.\n- `do-while`: Guarantees that the loop body executes at least once before checking the condition.\n\n## Syntax and Core Mechanics\n```c\nfor (int i = 0; i < 10; i++) {\n    if (i == 5) continue; // Skip to next iteration\n    if (i == 8) break;    // Terminate loop\n}\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int sum_range(int start, int end)`:\n   - Returns the sum of all integers from `start` to `end` inclusive. If `start > end`, return 0.\n2. `long long factorial(int n)`:\n   - Returns `n!` (factorial). If `n < 0`, return 0. For `n == 0`, return 1.\n3. `int count_digits(int n)`:\n   - Returns the number of digits in integer `n`. Handles 0 (1 digit) and negative integers.\n\n## Progressive Hints\n- Hint 1: In `sum_range`, use a `for (int i = start; i <= end; i++)` loop and accumulate.\n- Hint 2: In `factorial`, initialize `long long result = 1` and multiply up to `n`.\n- Hint 3: In `count_digits`, handle `n == 0` first, take absolute value if `n < 0`, and divide by 10 in a loop.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nint sum_range(int start, int end) {\n    if (start > end) return 0;\n    int sum = 0;\n    for (int i = start; i <= end; i++) {\n        sum += i;\n    }\n    return sum;\n}\n\nlong long factorial(int n) {\n    if (n < 0) return 0;\n    long long res = 1;\n    for (int i = 2; i <= n; i++) {\n        res *= i;\n    }\n    return res;\n}\n\nint count_digits(int n) {\n    if (n == 0) return 1;\n    if (n < 0) {\n        if (n == -2147483648) return 10;\n        n = -n;\n    }\n    int count = 0;\n    while (n > 0) {\n        count++;\n        n /= 10;\n    }\n    return count;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int* numbers = (int*)malloc(5 * sizeof(int));\n    if (!numbers) {\n        perror(\"malloc failed\");\n        return 1;\n    }\n\n    for (int i = 0; i < 5; i++) numbers[i] = (i + 1) * 10;\n\n    printf(\"=== 03: Dynamic Memory ===\\n\");\n    for (int i = 0; i < 5; i++) printf(\"%d \", numbers[i]);\n    printf(\"\\n\");\n\n    free(numbers);\n    numbers = NULL;\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"Printing even numbers up to 10:\\n\");\n    for (int i = 2; i <= 10; i += 2) {\n        printf(\"%d \", i);\n    }\n    printf(\"\\n\");\n\n    int count = 5;\n    printf(\"Countdown with while loop:\\n\");\n    while (count > 0) {\n        printf(\"%d... \", count);\n        count--;\n    }\n    printf(\"Liftoff!\\n\");\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Allocate dynamic integer buffer, populate it, and safely free it.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    size_t count = 10;\n    int* buffer = (int*)calloc(count, sizeof(int));\n    if (!buffer) return 1;\n    buffer[0] = 42;\n    printf(\"Buffer first element: %d\\n\", buffer[0]);\n    free(buffer);\n    buffer = NULL;\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint sum_range(int start, int end) {\n    // TODO: Return sum of integers from start to end inclusive\n    return 0;\n}\n\nlong long factorial(int n) {\n    // TODO: Return n!\n    return 0;\n}\n\nint count_digits(int n) {\n    // TODO: Return number of digits in n\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint sum_range(int start, int end);\nlong long factorial(int n);\nint count_digits(int n);\n\nint main(void) {\n    // Test sum_range\n    assert(sum_range(1, 5) == 15);\n    assert(sum_range(5, 5) == 5);\n    assert(sum_range(10, 2) == 0);\n    assert(sum_range(-3, 3) == 0);\n\n    // Test factorial\n    assert(factorial(0) == 1);\n    assert(factorial(1) == 1);\n    assert(factorial(5) == 120);\n    assert(factorial(10) == 3628800);\n    assert(factorial(-3) == 0);\n\n    // Test count_digits\n    assert(count_digits(0) == 1);\n    assert(count_digits(7) == 1);\n    assert(count_digits(42) == 2);\n    assert(count_digits(1000) == 4);\n    assert(count_digits(-99) == 2);\n\n    printf(\"Module 03 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "04-arrays-and-pointer-decay",
+        "name": "04-functions-and-prototypes",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 \u2014 Arrays And Pointer Decay\n\n## \ud83c\udfaf What is it?\nArrays And Pointer Decay is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Arrays And Pointer Decay, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Arrays And Pointer Decay executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Array to Pointer Decay\n\n## \ud83c\udfaf Array Decay\nWhen passed to functions, array identifiers decay to a pointer to their first element (`T*`), losing size information.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Arrays And Pointer Decay\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 04 — Functions & Prototypes\n\n## What is this?\nFunctions encapsulate reusable procedures. In C, a function prototype (forward declaration) informs the compiler of a function's name, return type, and parameters before its actual definition appears.\n\n## Why does C have it?\n- Single-pass compilation: The C compiler reads source files from top to bottom. Without prototypes, calling a function declared further down causes compilation errors.\n- Arguments are passed strictly **by value** (copies of arguments are passed into functions).\n\n## Syntax and Core Mechanics\n```c\n// Prototype declaration\nint add(int a, int b);\n\n// Definition\nint add(int a, int b) {\n    return a + b;\n}\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int gcd(int a, int b)`:\n   - Returns the greatest common divisor using Euclid's algorithm: `gcd(b, a % b)`. Returns positive integer.\n2. `int power(int base, int exp)`:\n   - Calculates `base^exp`. Assume `exp >= 0`. `base^0 == 1`.\n3. `int is_prime(int n)`:\n   - Returns `1` if `n` is prime, otherwise `0`. Numbers `<= 1` are not prime.\n\n## Progressive Hints\n- Hint 1: In `gcd`, while `b != 0`, set `int t = b; b = a % b; a = t;` and return absolute value of `a`.\n- Hint 2: In `power`, initialize `int res = 1` and loop `exp` times multiplying by `base`.\n- Hint 3: In `is_prime`, return 0 for `n <= 1`. Loop `i` from 2 up to `i * i <= n`. If `n % i == 0`, return 0.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nint gcd(int a, int b) {\n    if (a < 0) a = -a;\n    if (b < 0) b = -b;\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n\nint power(int base, int exp) {\n    int result = 1;\n    for (int i = 0; i < exp; i++) {\n        result *= base;\n    }\n    return result;\n}\n\nint is_prime(int n) {\n    if (n <= 1) return 0;\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0) return 0;\n    }\n    return 1;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nvoid print_size(int arr[]) {\n    printf(\"Inside function sizeof(arr): %zu (Pointer size!)\\n\", sizeof(arr));\n}\n\nint main(void) {\n    int arr[10];\n    printf(\"In main sizeof(arr): %zu (40 bytes)\\n\", sizeof(arr));\n    print_size(arr);\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\n// Forward prototype declarations\nint square(int x);\nvoid print_header(const char *title);\n\nint main(void) {\n    print_header(\"Math Utilities Demo\");\n    printf(\"5 squared is %d\\n\", square(5));\n    return 0;\n}\n\nvoid print_header(const char *title) {\n    printf(\"=== %s ===\\n\", title);\n}\n\nint square(int x) {\n    return x * x;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Implement an array sum function that requires passing length explicitly.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n\nint sum_array(const int* arr, size_t len) {\n    int sum = 0;\n    for (size_t i = 0; i < len; i++) sum += arr[i];\n    return sum;\n}\n\nint main(void) {\n    int numbers[] = {1, 2, 3, 4, 5};\n    printf(\"Sum: %d\\n\", sum_array(numbers, 5));\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint gcd(int a, int b) {\n    // TODO: Return Greatest Common Divisor\n    return 0;\n}\n\nint power(int base, int exp) {\n    // TODO: Return base^exp\n    return 0;\n}\n\nint is_prime(int n) {\n    // TODO: Return 1 if n is prime, 0 otherwise\n    return -1;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint gcd(int a, int b);\nint power(int base, int exp);\nint is_prime(int n);\n\nint main(void) {\n    // Test gcd\n    assert(gcd(48, 18) == 6);\n    assert(gcd(101, 10) == 1);\n    assert(gcd(0, 5) == 5);\n    assert(gcd(-20, 15) == 5);\n\n    // Test power\n    assert(power(2, 0) == 1);\n    assert(power(2, 3) == 8);\n    assert(power(5, 2) == 25);\n    assert(power(3, 4) == 81);\n\n    // Test is_prime\n    assert(is_prime(1) == 0);\n    assert(is_prime(2) == 1);\n    assert(is_prime(3) == 1);\n    assert(is_prime(4) == 0);\n    assert(is_prime(17) == 1);\n    assert(is_prime(25) == 0);\n    assert(is_prime(-7) == 0);\n\n    printf(\"Module 04 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "05-strings-and-buffer-safety",
+        "name": "05-arrays-and-pointer-basics",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 \u2014 Strings And Buffer Safety\n\n## \ud83c\udfaf What is it?\nStrings And Buffer Safety is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Strings And Buffer Safety, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Strings And Buffer Safety executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Strings & Buffer Overflow Safety\n\n## \ud83c\udfaf Null-Terminated Strings\nC strings are character arrays ending in `\\0`. Never use unsafe functions like `strcpy` or `gets`; always use `snprintf`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Strings And Buffer Safety\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 05 — Arrays & Pointer Basics\n\n## What is this?\nAn array is a contiguous block of memory holding elements of the same type. A pointer is a variable that stores the memory address of another variable. In C, array names decay into pointers to their first element when passed into functions.\n\n## Why does C have it?\n- Pointers allow direct memory manipulation, pass-by-reference mutation, and zero-overhead array traversal.\n- `&x`: Address-of operator (obtains memory address of `x`).\n- `*ptr`: Dereference operator (reads or writes value at memory address `ptr`).\n\n## Syntax and Core Mechanics\n```c\nint val = 10;\nint *ptr = &val;  // ptr holds address of val\n*ptr = 20;        // val is now 20\n\nint arr[3] = {10, 20, 30};\nint *p = arr;     // points to arr[0]\n*(p + 1) = 25;    // modifies arr[1] to 25\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `void swap_integers(int *a, int *b)`:\n   - Swaps the values pointed to by `a` and `b`.\n2. `int array_sum(const int *arr, int length)`:\n   - Returns the sum of all elements in array `arr` of size `length`. If `length <= 0`, return 0.\n3. `int array_max(const int *arr, int length)`:\n   - Returns the maximum element in array `arr`. If `length <= 0`, return 0.\n\n## Progressive Hints\n- Hint 1: In `swap_integers`, use a temporary variable `int temp = *a; *a = *b; *b = temp;`.\n- Hint 2: In `array_sum`, loop `for (int i = 0; i < length; i++)` and accumulate `arr[i]`.\n- Hint 3: In `array_max`, initialize `max = arr[0]` and compare each element.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nvoid swap_integers(int *a, int *b) {\n    if (a == 0 || b == 0) return;\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint array_sum(const int *arr, int length) {\n    if (arr == 0 || length <= 0) return 0;\n    int sum = 0;\n    for (int i = 0; i < length; i++) {\n        sum += arr[i];\n    }\n    return sum;\n}\n\nint array_max(const int *arr, int length) {\n    if (arr == 0 || length <= 0) return 0;\n    int max = arr[0];\n    for (int i = 1; i < length; i++) {\n        if (arr[i] > max) {\n            max = arr[i];\n        }\n    }\n    return max;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    char buffer[32];\n    snprintf(buffer, sizeof(buffer), \"Track: %s | Version: %d.%d\", \"C23\", 1, 2);\n    printf(\"Safe formatted string: %s\\n\", buffer);\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    int numbers[4] = {10, 20, 30, 40};\n    int *ptr = numbers;\n\n    printf(\"First element via array: %d, via pointer: %d\\n\", numbers[0], *ptr);\n    printf(\"Second element via pointer offset: %d\\n\", *(ptr + 1));\n\n    int x = 100, y = 200;\n    printf(\"Before swap: x=%d, y=%d\\n\", x, y);\n    int t = x; x = y; y = t;\n    printf(\"After swap:  x=%d, y=%d\\n\", x, y);\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Implement a safe string concatenation function.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <string.h>\n\nint main(void) {\n    char dest[64] = \"Hello, \";\n    strncat(dest, \"World from C Systems!\", sizeof(dest) - strlen(dest) - 1);\n    printf(\"Result: %s\\n\", dest);\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nvoid swap_integers(int *a, int *b) {\n    // TODO: Swap values using pointers\n}\n\nint array_sum(const int *arr, int length) {\n    // TODO: Return sum of array elements\n    return 0;\n}\n\nint array_max(const int *arr, int length) {\n    // TODO: Return maximum value in array\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nvoid swap_integers(int *a, int *b);\nint array_sum(const int *arr, int length);\nint array_max(const int *arr, int length);\n\nint main(void) {\n    // Test swap_integers\n    int x = 10, y = 20;\n    swap_integers(&x, &y);\n    assert(x == 20 && y == 10);\n\n    // Test array_sum\n    int nums1[5] = {1, 2, 3, 4, 5};\n    assert(array_sum(nums1, 5) == 15);\n    assert(array_sum(nums1, 0) == 0);\n\n    // Test array_max\n    int nums2[6] = {4, 12, 8, 42, 19, 7};\n    assert(array_max(nums2, 6) == 42);\n    int nums3[3] = {-10, -5, -20};\n    assert(array_max(nums3, 3) == -5);\n\n    printf(\"Module 05 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "06-structs-unions-and-alignment",
+        "name": "06-strings-and-string-h",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 \u2014 Structs Unions And Alignment\n\n## \ud83c\udfaf What is it?\nStructs Unions And Alignment is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Structs Unions And Alignment, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Structs Unions And Alignment executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Struct Padding, Alignment & Unions\n\n## \ud83c\udfaf Struct Padding\nCompilers insert invisible padding bytes so fields align with word boundaries.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Structs Unions And Alignment\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 06 — Strings & string.h\n\n## What is this?\nIn C, strings are not a distinct primitive data type. A string is simply an array of `char` terminated by a null character `\\0` (ASCII value 0).\n\n## Why does C have it?\n- The null terminator `\\0` allows string processing functions to know where text ends without having to carry an explicit length variable everywhere.\n- `<string.h>` provides standard utility functions: `strlen`, `strcpy`, `strcmp`, `strcat`, `strchr`.\n\n## Syntax and Core Mechanics\n```c\nchar msg[] = \"Hello\"; // Takes 6 bytes in memory: 'H','e','l','l','o','\\0'\nsize_t len = strlen(msg); // Returns 5 (does not count \\0)\n\n// String comparison\nif (strcmp(msg, \"Hello\") == 0) {\n    // strings are identical\n}\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `size_t custom_strlen(const char *str)`:\n   - Computes string length without using `<string.h>`'s `strlen`. Stops counting at `\\0`.\n2. `int count_char_occurrences(const char *str, char target)`:\n   - Counts how many times `target` appears in `str`.\n3. `void reverse_string(char *str)`:\n   - Reverses null-terminated string `str` in-place.\n\n## Progressive Hints\n- Hint 1: In `custom_strlen`, loop `while (str[len] != '\\0') len++;` and return `len`.\n- Hint 2: In `count_char_occurrences`, iterate until `*str == '\\0'`, checking `if (*str == target) count++`.\n- Hint 3: In `reverse_string`, find the length `n`, then swap `str[i]` and `str[n - 1 - i]` for `i < n / 2`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\n#include <stddef.h>\n\nsize_t custom_strlen(const char *str) {\n    if (str == 0) return 0;\n    size_t len = 0;\n    while (str[len] != '\\0') {\n        len++;\n    }\n    return len;\n}\n\nint count_char_occurrences(const char *str, char target) {\n    if (str == 0) return 0;\n    int count = 0;\n    for (int i = 0; str[i] != '\\0'; i++) {\n        if (str[i] == target) {\n            count++;\n        }\n    }\n    return count;\n}\n\nvoid reverse_string(char *str) {\n    if (str == 0) return;\n    int len = 0;\n    while (str[len] != '\\0') len++;\n    for (int i = 0; i < len / 2; i++) {\n        char temp = str[i];\n        str[i] = str[len - 1 - i];\n        str[len - 1 - i] = temp;\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nstruct PackedData {\n    char a;\n    int b;\n} __attribute__((packed));\n\nint main(void) {\n    printf(\"=== 06: Packed Struct ===\\n\");\n    printf(\"Packed Struct Size: %zu bytes (5 bytes!)\\n\", sizeof(struct PackedData));\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n#include <string.h>\n\nint main(void) {\n    char greeting[32] = \"Hello\";\n    strcat(greeting, \", C Developers!\");\n\n    printf(\"Full message: %s\\n\", greeting);\n    printf(\"Length: %zu characters\\n\", strlen(greeting));\n\n    if (strcmp(greeting, \"Hello\") != 0) {\n        printf(\"String is not equal to 'Hello'\\n\");\n    }\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Create a union 'IPAddress' representing an IPv4 address as 4 bytes or 1 uint32_t.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdint.h>\n\nunion IPAddress {\n    uint32_t full_address;\n    uint8_t octets[4];\n};\n\nint main(void) {\n    union IPAddress ip;\n    ip.octets[0] = 127;\n    ip.octets[1] = 0;\n    ip.octets[2] = 0;\n    ip.octets[3] = 1;\n    printf(\"IP as 32-bit integer: 0x%08X\\n\", ip.full_address);\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "#include <stddef.h>\n\n// Complete the functions below according to README.md specifications.\n\nsize_t custom_strlen(const char *str) {\n    // TODO: Compute length without string.h strlen\n    return 0;\n}\n\nint count_char_occurrences(const char *str, char target) {\n    // TODO: Count occurrences of target in str\n    return 0;\n}\n\nvoid reverse_string(char *str) {\n    // TODO: Reverse str in place\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <string.h>\n#include <assert.h>\n\nsize_t custom_strlen(const char *str);\nint count_char_occurrences(const char *str, char target);\nvoid reverse_string(char *str);\n\nint main(void) {\n    // Test custom_strlen\n    assert(custom_strlen(\"hello\") == 5);\n    assert(custom_strlen(\"\") == 0);\n    assert(custom_strlen(\"C Programming\") == 13);\n\n    // Test count_char_occurrences\n    assert(count_char_occurrences(\"banana\", 'a') == 3);\n    assert(count_char_occurrences(\"banana\", 'b') == 1);\n    assert(count_char_occurrences(\"banana\", 'z') == 0);\n\n    // Test reverse_string\n    char s1[] = \"hello\";\n    reverse_string(s1);\n    assert(strcmp(s1, \"olleh\") == 0);\n\n    char s2[] = \"racecar\";\n    reverse_string(s2);\n    assert(strcmp(s2, \"racecar\") == 0);\n\n    printf(\"Module 06 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "07-bitwise-operations-and-masks",
+        "name": "07-dynamic-memory-malloc-free",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 \u2014 Bitwise Operations And Masks\n\n## \ud83c\udfaf What is it?\nBitwise Operations And Masks is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Bitwise Operations And Masks, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Bitwise Operations And Masks executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Bitwise Operations & Flag Masks\n\n## \ud83c\udfaf Common Bit Operations\n- Set bit: `flags |= (1 << n)`\n- Clear bit: `flags &= ~(1 << n)`\n- Toggle bit: `flags ^= (1 << n)`\n- Test bit: `(flags & (1 << n)) != 0`\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Bitwise Operations And Masks\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 07 — Dynamic Memory (malloc & free)\n\n## What is this?\nDynamic memory allocation allows programs to request heap memory at runtime whose size does not need to be known at compile time. C provides `malloc`, `calloc`, `realloc`, and `free` via `<stdlib.h>`.\n\n## Why does C have it?\n- Stack variables are automatically deallocated when their declaring function exits. Heap memory persists until explicitly deallocated with `free()`.\n- Failure to free memory causes memory leaks. Dereferencing memory after freeing causes use-after-free bugs.\n\n## Syntax and Core Mechanics\n```c\nint *buffer = (int *)malloc(10 * sizeof(int));\nif (buffer == NULL) {\n    // Allocation failed\n    return -1;\n}\n\n// Use allocated memory\nbuffer[0] = 42;\n\n// Must always free when finished\nfree(buffer);\nbuffer = NULL;\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int* create_range(int start, int count)`:\n   - Dynamically allocates an array of `count` integers containing `start, start+1, ..., start+count-1`.\n   - If `count <= 0`, return `NULL`.\n2. `int sum_and_free(int *arr, int count)`:\n   - Sums all `count` elements in `arr`, then frees `arr`, and returns the sum.\n   - If `arr == NULL` or `count <= 0`, returns 0 without crashing.\n3. `int* duplicate_array(const int *src, int count)`:\n   - Dynamically allocates a new array and copies `count` elements from `src`.\n   - If `src == NULL` or `count <= 0`, returns `NULL`.\n\n## Progressive Hints\n- Hint 1: In `create_range`, allocate with `int *arr = (int *)malloc(count * sizeof(int));`. Check `if (arr == NULL) return NULL;`.\n- Hint 2: In `sum_and_free`, accumulate sum first in a variable, call `free(arr)`, then return the sum.\n- Hint 3: In `duplicate_array`, use `malloc` and copy element-by-element with a loop.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\n#include <stdlib.h>\n\nint* create_range(int start, int count) {\n    if (count <= 0) return NULL;\n    int *arr = (int *)malloc(count * sizeof(int));\n    if (arr == NULL) return NULL;\n    for (int i = 0; i < count; i++) {\n        arr[i] = start + i;\n    }\n    return arr;\n}\n\nint sum_and_free(int *arr, int count) {\n    if (arr == NULL || count <= 0) {\n        if (arr != NULL) free(arr);\n        return 0;\n    }\n    int sum = 0;\n    for (int i = 0; i < count; i++) {\n        sum += arr[i];\n    }\n    free(arr);\n    return sum;\n}\n\nint* duplicate_array(const int *src, int count) {\n    if (src == NULL || count <= 0) return NULL;\n    int *copy = (int *)malloc(count * sizeof(int));\n    if (copy == NULL) return NULL;\n    for (int i = 0; i < count; i++) {\n        copy[i] = src[i];\n    }\n    return copy;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\n#define FLAG_READ    (1 << 0) // 0x01\n#define FLAG_WRITE   (1 << 1) // 0x02\n#define FLAG_EXECUTE (1 << 2) // 0x04\n\nint main(void) {\n    int permissions = FLAG_READ | FLAG_WRITE;\n    printf(\"Can read? %s\\n\", (permissions & FLAG_READ) ? \"Yes\" : \"No\");\n    printf(\"Can execute? %s\\n\", (permissions & FLAG_EXECUTE) ? \"Yes\" : \"No\");\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int n = 5;\n    int *data = (int *)malloc(n * sizeof(int));\n    if (data == NULL) {\n        fprintf(stderr, \"Allocation failed!\\n\");\n        return 1;\n    }\n\n    for (int i = 0; i < n; i++) {\n        data[i] = (i + 1) * 10;\n        printf(\"data[%d] = %d\\n\", i, data[i]);\n    }\n\n    free(data);\n    data = NULL;\n    printf(\"Heap memory freed cleanly.\\n\");\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write a function to count set bits (popcount) in a uint32_t.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdint.h>\n\nint count_set_bits(uint32_t n) {\n    int count = 0;\n    while (n > 0) {\n        count += (n & 1);\n        n >>= 1;\n    }\n    return count;\n}\n\nint main(void) {\n    printf(\"Set bits in 0b1011 (11): %d\\n\", count_set_bits(11));\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "#include <stdlib.h>\n\n// Complete the functions below according to README.md specifications.\n\nint* create_range(int start, int count) {\n    // TODO: Allocate and populate range\n    return NULL;\n}\n\nint sum_and_free(int *arr, int count) {\n    // TODO: Sum elements, free array, return sum\n    return 0;\n}\n\nint* duplicate_array(const int *src, int count) {\n    // TODO: Allocate and copy array\n    return NULL;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <stdlib.h>\n#include <assert.h>\n\nint* create_range(int start, int count);\nint sum_and_free(int *arr, int count);\nint* duplicate_array(const int *src, int count);\n\nint main(void) {\n    // Test create_range\n    int *r = create_range(10, 3);\n    assert(r != NULL);\n    assert(r[0] == 10 && r[1] == 11 && r[2] == 12);\n\n    // Test sum_and_free\n    int total = sum_and_free(r, 3);\n    assert(total == 33);\n\n    // Test duplicate_array\n    int original[4] = {5, 10, 15, 20};\n    int *copied = duplicate_array(original, 4);\n    assert(copied != NULL);\n    assert(copied != original); // must be a distinct pointer\n    for (int i = 0; i < 4; i++) {\n        assert(copied[i] == original[i]);\n    }\n    free(copied);\n\n    // Edge cases\n    assert(create_range(5, 0) == NULL);\n    assert(duplicate_array(NULL, 5) == NULL);\n\n    printf(\"Module 07 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "08-functions-and-function-pointers",
+        "name": "08-structs-and-typedef",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 \u2014 Functions And Function Pointers\n\n## \ud83c\udfaf What is it?\nFunctions And Function Pointers is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Functions And Function Pointers, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Functions And Function Pointers executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Function Pointers & Callback Dispatch\n\n## \ud83c\udfaf Syntax\n`return_type (*func_ptr_name)(param_types)`\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Functions And Function Pointers\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 08 — Structs & typedef\n\n## What is this?\nA `struct` (structure) groups related variables of different types into a single user-defined aggregate data type. `typedef` creates a convenient type alias.\n\n## Why does C have it?\n- Structs provide the foundation for modeling domain entities, records, and complex data structures (points, users, nodes).\n- Access fields directly via the dot operator `.` or via pointers with arrow operator `->`.\n\n## Syntax and Core Mechanics\n```c\ntypedef struct {\n    int x;\n    int y;\n} Point;\n\nPoint p1 = {10, 20};\nPoint *ptr = &p1;\nptr->x = 15; // Equivalent to (*ptr).x = 15\n```\n\n## What to Practice\nIn `exercise.c`:\nGiven definition:\n```c\ntypedef struct {\n    int id;\n    int score;\n} Student;\n```\nImplement:\n1. `Student create_student(int id, int score)`:\n   - Returns a `Student` struct with given `id` and `score`.\n2. `void boost_score(Student *s, int points)`:\n   - Increases student's `score` by `points` via pointer. Caps maximum score at 100.\n3. `int find_top_student(const Student *students, int count)`:\n   - Returns the `id` of the student with the highest `score`. If `count <= 0`, return -1.\n\n## Progressive Hints\n- Hint 1: In `create_student`, declare `Student s; s.id = id; s.score = score; return s;`.\n- Hint 2: In `boost_score`, use `s->score += points; if (s->score > 100) s->score = 100;`.\n- Hint 3: In `find_top_student`, track highest score and corresponding `id`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\ntypedef struct {\n    int id;\n    int score;\n} Student;\n\nStudent create_student(int id, int score) {\n    Student s;\n    s.id = id;\n    s.score = score;\n    return s;\n}\n\nvoid boost_score(Student *s, int points) {\n    if (s == 0) return;\n    s->score += points;\n    if (s->score > 100) {\n        s->score = 100;\n    }\n}\n\nint find_top_student(const Student *students, int count) {\n    if (students == 0 || count <= 0) return -1;\n    int best_id = students[0].id;\n    int best_score = students[0].score;\n    for (int i = 1; i < count; i++) {\n        if (students[i].score > best_score) {\n            best_score = students[i].score;\n            best_id = students[i].id;\n        }\n    }\n    return best_id;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint add(int a, int b) { return a + b; }\nint multiply(int a, int b) { return a * b; }\n\nvoid execute(int (*operation)(int, int), int x, int y) {\n    printf(\"Result: %d\\n\", operation(x, y));\n}\n\nint main(void) {\n    execute(add, 5, 3);\n    execute(multiply, 5, 3);\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\ntypedef struct {\n    char name[32];\n    double price;\n    int in_stock;\n} Product;\n\nint main(void) {\n    Product item = {\"Mechanical Keyboard\", 89.99, 15};\n    Product *p = &item;\n\n    printf(\"Product: %s\\n\", p->name);\n    printf(\"Price: $%.2f\\n\", p->price);\n    printf(\"Stock: %d units\\n\", p->in_stock);\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Implement a comparison callback for standard library qsort.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint compare_ints(const void* a, const void* b) {\n    int arg1 = *(const int*)a;\n    int arg2 = *(const int*)b;\n    return (arg1 > arg2) - (arg1 < arg2);\n}\n\nint main(void) {\n    int arr[] = {5, 2, 8, 1, 4};\n    qsort(arr, 5, sizeof(int), compare_ints);\n    for (int i = 0; i < 5; i++) printf(\"%d \", arr[i]);\n    printf(\"\\n\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "typedef struct {\n    int id;\n    int score;\n} Student;\n\n// Complete the functions below according to README.md specifications.\n\nStudent create_student(int id, int score) {\n    Student s = {0, 0};\n    // TODO: Initialize and return\n    return s;\n}\n\nvoid boost_score(Student *s, int points) {\n    // TODO: Increase score capped at 100\n}\n\nint find_top_student(const Student *students, int count) {\n    // TODO: Return id of student with highest score\n    return -1;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\ntypedef struct {\n    int id;\n    int score;\n} Student;\n\nStudent create_student(int id, int score);\nvoid boost_score(Student *s, int points);\nint find_top_student(const Student *students, int count);\n\nint main(void) {\n    // Test create_student\n    Student s = create_student(101, 85);\n    assert(s.id == 101);\n    assert(s.score == 85);\n\n    // Test boost_score\n    boost_score(&s, 10);\n    assert(s.score == 95);\n    boost_score(&s, 20);\n    assert(s.score == 100); // capped at 100\n\n    // Test find_top_student\n    Student class_list[3] = {\n        {1, 78},\n        {2, 92},\n        {3, 88}\n    };\n    assert(find_top_student(class_list, 3) == 2);\n    assert(find_top_student(NULL, 0) == -1);\n\n    printf(\"Module 08 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "09-preprocessor-and-macros",
+        "name": "09-unions-and-enums",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 \u2014 Preprocessor And Macros\n\n## \ud83c\udfaf What is it?\nPreprocessor And Macros is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Preprocessor And Macros, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Preprocessor And Macros executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Preprocessor & Stringification\n\n## \ud83c\udfaf Operators\n- `#var`: Stringifies the macro argument.\n- `a ## b`: Token concatenation.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Preprocessor And Macros\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 09 — Unions & Enums\n\n## What is this?\n- An `enum` defines a set of named integer constants for readable, symbolic code.\n- A `union` is a special data structure where all member variables share the **exact same memory location**. The size of a union is the size of its largest member.\n\n## Why does C have it?\n- `enum`: Replaces brittle magic numbers with clear state machine indicators.\n- `union`: Optimizes memory usage when a value can only be one of several types at any given time (tagged union / variant pattern).\n\n## Syntax and Core Mechanics\n```c\ntypedef enum {\n    STATUS_OK = 0,\n    STATUS_ERROR = 1,\n    STATUS_TIMEOUT = 2\n} Status;\n\ntypedef union {\n    int i_val;\n    float f_val;\n} DataValue;\n```\n\n## What to Practice\nIn `exercise.c`:\nGiven:\n```c\ntypedef enum {\n    TYPE_INT,\n    TYPE_FLOAT\n} ValueType;\n\ntypedef union {\n    int i_val;\n    float f_val;\n} NumberUnion;\n\ntypedef struct {\n    ValueType type;\n    NumberUnion value;\n} TaggedNumber;\n```\nImplement:\n1. `TaggedNumber create_int_tagged(int n)`: Returns a TaggedNumber with type `TYPE_INT` and `value.i_val = n`.\n2. `TaggedNumber create_float_tagged(float f)`: Returns a TaggedNumber with type `TYPE_FLOAT` and `value.f_val = f`.\n3. `double to_double(TaggedNumber num)`:\n   - Returns the value as `double` regardless of whether it holds an `int` or a `float`.\n\n## Progressive Hints\n- Hint 1: In `create_int_tagged`, set `res.type = TYPE_INT; res.value.i_val = n; return res;`.\n- Hint 2: In `to_double`, check `if (num.type == TYPE_INT) return (double)num.value.i_val; else return (double)num.value.f_val;`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\ntypedef enum {\n    TYPE_INT,\n    TYPE_FLOAT\n} ValueType;\n\ntypedef union {\n    int i_val;\n    float f_val;\n} NumberUnion;\n\ntypedef struct {\n    ValueType type;\n    NumberUnion value;\n} TaggedNumber;\n\nTaggedNumber create_int_tagged(int n) {\n    TaggedNumber res;\n    res.type = TYPE_INT;\n    res.value.i_val = n;\n    return res;\n}\n\nTaggedNumber create_float_tagged(float f) {\n    TaggedNumber res;\n    res.type = TYPE_FLOAT;\n    res.value.f_val = f;\n    return res;\n}\n\ndouble to_double(TaggedNumber num) {\n    if (num.type == TYPE_INT) {\n        return (double)num.value.i_val;\n    }\n    return (double)num.value.f_val;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\n#define PRINT_INT(x) printf(#x \" = %d\\n\", x)\n\nint main(void) {\n    int counter = 42;\n    PRINT_INT(counter);\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\ntypedef enum {\n    LOG_INFO,\n    LOG_WARN,\n    LOG_ERROR\n} LogLevel;\n\ntypedef union {\n    int error_code;\n    char error_char;\n} ErrorDetail;\n\nint main(void) {\n    LogLevel level = LOG_WARN;\n    printf(\"Log Level enum value: %d\\n\", level);\n\n    ErrorDetail detail;\n    detail.error_code = 404;\n    printf(\"Error code stored: %d\\n\", detail.error_code);\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Create a safe MIN(a, b) macro avoiding multiple evaluation traps.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n\n#define MIN(a, b) ((a) < (b) ? (a) : (b))\n\nint main(void) {\n    printf(\"Min(10, 25) = %d\\n\", MIN(10, 25));\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "typedef enum {\n    TYPE_INT,\n    TYPE_FLOAT\n} ValueType;\n\ntypedef union {\n    int i_val;\n    float f_val;\n} NumberUnion;\n\ntypedef struct {\n    ValueType type;\n    NumberUnion value;\n} TaggedNumber;\n\n// Complete the functions below according to README.md specifications.\n\nTaggedNumber create_int_tagged(int n) {\n    TaggedNumber res;\n    // TODO: Initialize as integer tagged number\n    return res;\n}\n\nTaggedNumber create_float_tagged(float f) {\n    TaggedNumber res;\n    // TODO: Initialize as float tagged number\n    return res;\n}\n\ndouble to_double(TaggedNumber num) {\n    // TODO: Convert to double based on type\n    return 0.0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n#include <math.h>\n\ntypedef enum {\n    TYPE_INT,\n    TYPE_FLOAT\n} ValueType;\n\ntypedef union {\n    int i_val;\n    float f_val;\n} NumberUnion;\n\ntypedef struct {\n    ValueType type;\n    NumberUnion value;\n} TaggedNumber;\n\nTaggedNumber create_int_tagged(int n);\nTaggedNumber create_float_tagged(float f);\ndouble to_double(TaggedNumber num);\n\nint main(void) {\n    TaggedNumber n1 = create_int_tagged(42);\n    assert(n1.type == TYPE_INT);\n    assert(n1.value.i_val == 42);\n    assert(fabs(to_double(n1) - 42.0) < 0.0001);\n\n    TaggedNumber n2 = create_float_tagged(3.14f);\n    assert(n2.type == TYPE_FLOAT);\n    assert(fabs(n2.value.f_val - 3.14f) < 0.0001);\n    assert(fabs(to_double(n2) - 3.14) < 0.01);\n\n    printf(\"Module 09 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "10-file-io-and-streams",
+        "name": "10-pointer-arithmetic-and-pointer-arrays",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 \u2014 File Io And Streams\n\n## \ud83c\udfaf What is it?\nFile Io And Streams is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering File Io And Streams, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, File Io And Streams executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Standard File I/O (`fopen`, `fread`, `fwrite`)\n\n## \ud83c\udfaf Buffered I/O\nStandard library `FILE*` provides user-space buffered I/O above kernel system calls.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for File Io And Streams\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 10 — Pointer Arithmetic & Pointer Arrays\n\n## What is this?\nPointer arithmetic operates based on the byte size of the pointed-to type. Adding `1` to an `int*` advances the address by `sizeof(int)` (typically 4 bytes). A pointer array (`char *argv[]`) stores a collection of addresses.\n\n## Why does C have it?\n- Enables zero-copy slicing, string table lookup, and jagged 2D arrays without contiguous block constraints.\n- Multi-level indirection (`int**`) allows modifying pointers held by the caller.\n\n## Syntax and Core Mechanics\n```c\nint arr[] = {10, 20, 30};\nint *p = arr;\nint second = *(p + 1); // 20\n\n// Array of string literals\nconst char *names[] = {\"Alice\", \"Bob\", \"Charlie\"};\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int find_string_index(const char *const list[], int count, const char *target)`:\n   - Returns the 0-based index of the first string matching `target` in `list`. If not found, returns -1.\n2. `void fill_matrix_diagonal(int *matrix, int size, int value)`:\n   - Treats flat array `matrix` as an `N x N` matrix (`size x size`). Sets diagonal elements `matrix[i * size + i] = value`.\n\n## Progressive Hints\n- Hint 1: In `find_string_index`, use `strcmp(list[i], target) == 0`.\n- Hint 2: In `fill_matrix_diagonal`, iterate `i` from 0 to `size - 1` and set `matrix[i * size + i] = value`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\n#include <string.h>\n\nint find_string_index(const char *const list[], int count, const char *target) {\n    if (list == 0 || target == 0 || count <= 0) return -1;\n    for (int i = 0; i < count; i++) {\n        if (strcmp(list[i], target) == 0) {\n            return i;\n        }\n    }\n    return -1;\n}\n\nvoid fill_matrix_diagonal(int *matrix, int size, int value) {\n    if (matrix == 0 || size <= 0) return;\n    for (int i = 0; i < size; i++) {\n        matrix[i * size + i] = value;\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 10: Standard File Streams ===\\n\");\n    fprintf(stdout, \"Standard output stream working.\\n\");\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    int numbers[3] = {100, 200, 300};\n    int *ptr = numbers;\n\n    for (int i = 0; i < 3; i++) {\n        printf(\"Element %d at %p is %d\\n\", i, (void*)(ptr + i), *(ptr + i));\n    }\n\n    const char *colors[] = {\"Red\", \"Green\", \"Blue\"};\n    printf(\"First color: %s\\n\", colors[0]);\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write a program that writes binary integers to a file and reads them back.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n\nint main(void) {\n    int data[3] = {100, 200, 300};\n    FILE* f = fopen(\"test.bin\", \"wb\");\n    if (f) {\n        fwrite(data, sizeof(int), 3, f);\n        fclose(f);\n    }\n    printf(\"Binary data written.\\n\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint find_string_index(const char *const list[], int count, const char *target) {\n    // TODO: Return index of target string or -1\n    return -1;\n}\n\nvoid fill_matrix_diagonal(int *matrix, int size, int value) {\n    // TODO: Set diagonal elements matrix[i * size + i] = value\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint find_string_index(const char *const list[], int count, const char *target);\nvoid fill_matrix_diagonal(int *matrix, int size, int value);\n\nint main(void) {\n    // Test find_string_index\n    const char *fruits[] = {\"apple\", \"banana\", \"cherry\", \"date\"};\n    assert(find_string_index(fruits, 4, \"cherry\") == 2);\n    assert(find_string_index(fruits, 4, \"apple\") == 0);\n    assert(find_string_index(fruits, 4, \"mango\") == -1);\n\n    // Test fill_matrix_diagonal\n    int grid[9] = {0};\n    fill_matrix_diagonal(grid, 3, 7);\n    assert(grid[0] == 7); // [0][0]\n    assert(grid[4] == 7); // [1][1]\n    assert(grid[8] == 7); // [2][2]\n    assert(grid[1] == 0 && grid[3] == 0);\n\n    printf(\"Module 10 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "11-posix-system-calls-and-file-descriptors",
+        "name": "11-function-pointers-and-callbacks",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 \u2014 Posix System Calls And File Descriptors\n\n## \ud83c\udfaf What is it?\nPosix System Calls And File Descriptors is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Posix System Calls And File Descriptors, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Posix System Calls And File Descriptors executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 POSIX System Calls (`open`, `read`, `write`)\n\n## \ud83c\udfaf File Descriptors\nSmall non-negative integers representing open files in the kernel table (`0: STDIN`, `1: STDOUT`, `2: STDERR`).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Posix System Calls And File Descriptors\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 11 — Function Pointers & Callbacks\n\n## What is this?\nA function pointer holds the memory address of executable code rather than data. This allows functions to be passed as arguments, enabling callback mechanisms, pluggable behaviors, and dispatch tables.\n\n## Why does C have it?\n- Standard library functions like `qsort` and `bsearch` rely entirely on function pointers for sorting and searching arbitrary data types.\n\n## Syntax and Core Mechanics\n```c\n// Declares a pointer to a function taking two ints and returning int\nint (*operation)(int, int);\n\nint add(int a, int b) { return a + b; }\noperation = add;\nint res = operation(10, 20); // 30\n```\n\n## What to Practice\nIn `exercise.c`:\nGiven:\n```c\ntypedef int (*Predicate)(int);\ntypedef int (*BinaryOp)(int, int);\n```\nImplement:\n1. `int count_matching(const int *arr, int len, Predicate pred)`:\n   - Counts elements in `arr` for which `pred(element)` returns non-zero.\n2. `int reduce_array(const int *arr, int len, int initial, BinaryOp op)`:\n   - Folds `arr` from left to right using `op`: `op(acc, arr[i])`. Returns `initial` if `len <= 0`.\n\n## Progressive Hints\n- Hint 1: In `count_matching`, loop `for (int i = 0; i < len; i++) if (pred(arr[i])) count++;`.\n- Hint 2: In `reduce_array`, set `int acc = initial;` and for each element set `acc = op(acc, arr[i]);`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\ntypedef int (*Predicate)(int);\ntypedef int (*BinaryOp)(int, int);\n\nint count_matching(const int *arr, int len, Predicate pred) {\n    if (arr == 0 || pred == 0 || len <= 0) return 0;\n    int count = 0;\n    for (int i = 0; i < len; i++) {\n        if (pred(arr[i])) {\n            count++;\n        }\n    }\n    return count;\n}\n\nint reduce_array(const int *arr, int len, int initial, BinaryOp op) {\n    if (arr == 0 || op == 0 || len <= 0) return initial;\n    int acc = initial;\n    for (int i = 0; i < len; i++) {\n        acc = op(acc, arr[i]);\n    }\n    return acc;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n#include <unistd.h>\n\nint main(void) {\n    const char msg[] = \"Direct system call write() to STDOUT\\n\";\n    write(1, msg, sizeof(msg) - 1);\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint multiply(int a, int b) { return a * b; }\nint add(int a, int b) { return a + b; }\n\nint compute(int x, int y, int (*func)(int, int)) {\n    return func(x, y);\n}\n\nint main(void) {\n    printf(\"Compute add: %d\\n\", compute(5, 3, add));\n    printf(\"Compute mul: %d\\n\", compute(5, 3, multiply));\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write a program that prints the standard descriptor numbers.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <unistd.h>\n\nint main(void) {\n    printf(\"STDIN_FILENO: %d\\n\", STDIN_FILENO);\n    printf(\"STDOUT_FILENO: %d\\n\", STDOUT_FILENO);\n    printf(\"STDERR_FILENO: %d\\n\", STDERR_FILENO);\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "typedef int (*Predicate)(int);\ntypedef int (*BinaryOp)(int, int);\n\n// Complete the functions below according to README.md specifications.\n\nint count_matching(const int *arr, int len, Predicate pred) {\n    // TODO: Count elements where pred(elem) is true\n    return 0;\n}\n\nint reduce_array(const int *arr, int len, int initial, BinaryOp op) {\n    // TODO: Accumulate array with op\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\ntypedef int (*Predicate)(int);\ntypedef int (*BinaryOp)(int, int);\n\nint count_matching(const int *arr, int len, Predicate pred);\nint reduce_array(const int *arr, int len, int initial, BinaryOp op);\n\nstatic int is_positive(int n) { return n > 0; }\nstatic int is_even(int n) { return n % 2 == 0; }\nstatic int op_add(int a, int b) { return a + b; }\nstatic int op_mul(int a, int b) { return a * b; }\n\nint main(void) {\n    int nums[5] = {-2, 1, 4, -5, 6};\n    assert(count_matching(nums, 5, is_positive) == 3);\n    assert(count_matching(nums, 5, is_even) == 3);\n\n    int small[3] = {2, 3, 4};\n    assert(reduce_array(small, 3, 0, op_add) == 9);\n    assert(reduce_array(small, 3, 1, op_mul) == 24);\n\n    printf(\"Module 11 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "12-processes-and-signals",
+        "name": "12-bitwise-operations-and-masks",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 \u2014 Processes And Signals\n\n## \ud83c\udfaf What is it?\nProcesses And Signals is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Processes And Signals, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Processes And Signals executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Process Lifecycle & Signals (`fork`, `waitpid`)\n\n## \ud83c\udfaf Process Creation\n`fork()` creates an exact duplicate child process with Copy-on-Write (COW) memory pages.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Processes And Signals\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 12 — Bitwise Operations & Masks\n\n## What is this?\nBitwise operators manipulate individual binary bits of integers. C provides `&` (AND), `|` (OR), `^` (XOR), `~` (NOT), `<<` (left shift), and `>>` (right shift).\n\n## Why does C have it?\n- Essential for systems programming, device drivers, network protocols, flags, and embedded microcontrollers.\n\n## Syntax and Core Mechanics\n```c\nint flags = 0;\nint MASK = (1 << 3); // Bit 3 mask\n\nflags |= MASK;  // Set bit 3\nflags &= ~MASK; // Clear bit 3\nflags ^= MASK;  // Toggle bit 3\nint is_set = (flags & MASK) != 0; // Check bit 3\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int set_bit(int n, int bit_pos)`:\n   - Returns `n` with bit at `bit_pos` (0-indexed) set to 1.\n2. `int clear_bit(int n, int bit_pos)`:\n   - Returns `n` with bit at `bit_pos` cleared to 0.\n3. `int is_bit_set(int n, int bit_pos)`:\n   - Returns 1 if bit at `bit_pos` is 1, otherwise 0.\n4. `int count_set_bits(unsigned int n)`:\n   - Returns the total number of 1s in the binary representation of `n`.\n\n## Progressive Hints\n- Hint 1: `set_bit`: `n | (1 << bit_pos)`.\n- Hint 2: `clear_bit`: `n & ~(1 << bit_pos)`.\n- Hint 3: `is_bit_set`: `(n & (1 << bit_pos)) ? 1 : 0`.\n- Hint 4: `count_set_bits`: Loop `while (n > 0) { count += n & 1; n >>= 1; }`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nint set_bit(int n, int bit_pos) {\n    return n | (1 << bit_pos);\n}\n\nint clear_bit(int n, int bit_pos) {\n    return n & ~(1 << bit_pos);\n}\n\nint is_bit_set(int n, int bit_pos) {\n    return ((n & (1 << bit_pos)) != 0) ? 1 : 0;\n}\n\nint count_set_bits(unsigned int n) {\n    int count = 0;\n    while (n > 0) {\n        count += (n & 1);\n        n >>= 1;\n    }\n    return count;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 12: Process Architecture ===\\n\");\n    printf(\"Processes isolated via virtual address spaces.\\n\");\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    int permissions = 0;\n    int READ = 1 << 0;  // 1\n    int WRITE = 1 << 1; // 2\n    int EXEC = 1 << 2;  // 4\n\n    permissions |= (READ | WRITE);\n    printf(\"Can read? %s\\n\", (permissions & READ) ? \"Yes\" : \"No\");\n    printf(\"Can exec? %s\\n\", (permissions & EXEC) ? \"Yes\" : \"No\");\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write a program that demonstrates signal handling concepts.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <signal.h>\n\nvoid handle_sig(int sig) {\n    printf(\"Caught signal %d\\n\", sig);\n}\n\nint main(void) {\n    signal(SIGINT, handle_sig);\n    printf(\"Signal handler configured for SIGINT.\\n\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint set_bit(int n, int bit_pos) {\n    // TODO: Set bit at bit_pos\n    return 0;\n}\n\nint clear_bit(int n, int bit_pos) {\n    // TODO: Clear bit at bit_pos\n    return 0;\n}\n\nint is_bit_set(int n, int bit_pos) {\n    // TODO: Return 1 if bit is set, 0 otherwise\n    return -1;\n}\n\nint count_set_bits(unsigned int n) {\n    // TODO: Count set bits (Hamming weight)\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint set_bit(int n, int bit_pos);\nint clear_bit(int n, int bit_pos);\nint is_bit_set(int n, int bit_pos);\nint count_set_bits(unsigned int n);\n\nint main(void) {\n    // Test set_bit\n    assert(set_bit(0, 0) == 1);\n    assert(set_bit(0, 3) == 8);\n\n    // Test clear_bit\n    assert(clear_bit(15, 1) == 13); // 1111 -> 1101\n    assert(clear_bit(8, 3) == 0);\n\n    // Test is_bit_set\n    assert(is_bit_set(5, 0) == 1); // 101 -> bit 0 is 1\n    assert(is_bit_set(5, 1) == 0); // bit 1 is 0\n    assert(is_bit_set(5, 2) == 1); // bit 2 is 1\n\n    // Test count_set_bits\n    assert(count_set_bits(0) == 0);\n    assert(count_set_bits(7) == 3);  // 111\n    assert(count_set_bits(16) == 1); // 10000\n\n    printf(\"Module 12 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "13-posix-threads-pthreads",
+        "name": "13-preprocessor-and-macros",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 \u2014 Posix Threads Pthreads\n\n## \ud83c\udfaf What is it?\nPosix Threads Pthreads is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Posix Threads Pthreads, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Posix Threads Pthreads executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 POSIX Threads (`pthreads`) & Mutexes\n\n## \ud83c\udfaf Thread Synchronization\nThreads share the same virtual address space; access to shared memory must be guarded with `pthread_mutex_t`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Posix Threads Pthreads\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 13 — Preprocessor & Macros\n\n## What is this?\nThe C preprocessor runs before actual compilation, performing text substitutions, file inclusions (`#include`), and conditional compilation (`#ifdef`, `#ifndef`).\n\n## Why does C have it?\n- Creates configurable constants (`#define BUFFER_SIZE 1024`).\n- Implements header guards preventing duplicate symbol errors.\n- Always wrap macro parameters in parentheses to prevent operator precedence bugs (`#define SQUARE(x) ((x) * (x))`).\n\n## Syntax and Core Mechanics\n```c\n#define MAX(a, b) (((a) > (b)) ? (a) : (b))\n#define CLAMP(x, low, high) (((x) < (low)) ? (low) : (((x) > (high)) ? (high) : (x)))\n```\n\n## What to Practice\nImplement in `exercise.c` functions or macros:\n1. `int macro_max(int a, int b)`: Returns larger of `a` and `b`.\n2. `int macro_clamp(int val, int min_val, int max_val)`:\n   - Clamps `val` to range `[min_val, max_val]`.\n3. `int macro_abs(int x)`:\n   - Returns absolute value of `x`.\n\n## Progressive Hints\n- Hint 1: In `macro_max`, `return (a > b) ? a : b;`.\n- Hint 2: In `macro_clamp`, if `val < min_val` return `min_val`, if `val > max_val` return `max_val`, else `val`.\n- Hint 3: In `macro_abs`, `return (x < 0) ? -x : x;`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nint macro_max(int a, int b) {\n    return (a > b) ? a : b;\n}\n\nint macro_clamp(int val, int min_val, int max_val) {\n    if (val < min_val) return min_val;\n    if (val > max_val) return max_val;\n    return val;\n}\n\nint macro_abs(int x) {\n    return (x < 0) ? -x : x;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 13: POSIX Threads ===\\n\");\n    printf(\"Thread synchronization requires mutex locks.\\n\");\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\n#define PI 3.14159\n#define MIN(a, b) (((a) < (b)) ? (a) : (b))\n\nint main(void) {\n    printf(\"PI: %f\\n\", PI);\n    printf(\"Min of 10 and 20 is %d\\n\", MIN(10, 20));\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write thread worker simulation.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"\u2714 POSIX Threads synchronization verified!\\n\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint macro_max(int a, int b) {\n    // TODO: Return larger value\n    return 0;\n}\n\nint macro_clamp(int val, int min_val, int max_val) {\n    // TODO: Clamp val between min_val and max_val\n    return 0;\n}\n\nint macro_abs(int x) {\n    // TODO: Return absolute value\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint macro_max(int a, int b);\nint macro_clamp(int val, int min_val, int max_val);\nint macro_abs(int x);\n\nint main(void) {\n    assert(macro_max(10, 20) == 20);\n    assert(macro_max(-5, -2) == -2);\n\n    assert(macro_clamp(5, 10, 20) == 10);\n    assert(macro_clamp(25, 10, 20) == 20);\n    assert(macro_clamp(15, 10, 20) == 15);\n\n    assert(macro_abs(-42) == 42);\n    assert(macro_abs(42) == 42);\n    assert(macro_abs(0) == 0);\n\n    printf(\"Module 13 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "14-dynamic-data-structures",
+        "name": "14-file-io-and-streams",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 \u2014 Dynamic Data Structures\n\n## \ud83c\udfaf What is it?\nDynamic Data Structures is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Dynamic Data Structures, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Dynamic Data Structures executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Dynamic Data Structures in Pure C\n\n## \ud83c\udfaf Singly & Doubly Linked Lists\nBuilding node structures and managing pointers manually.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Dynamic Data Structures\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 14 — File I/O & Streams\n\n## What is this?\nC handles file input/output via standard streams defined in `<stdio.h>`. Functions include `fopen`, `fclose`, `fputs`, `fgets`, `fread`, and `fwrite`.\n\n## Why does C have it?\n- A `FILE*` represents an operating system file descriptor buffer. Always verify `fopen` does not return `NULL` and close streams with `fclose`.\n\n## Syntax and Core Mechanics\n```c\nFILE *f = fopen(\"test.txt\", \"w\");\nif (f != NULL) {\n    fputs(\"Hello File!\\n\", f);\n    fclose(f);\n}\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int write_text_file(const char *path, const char *content)`:\n   - Writes `content` to file at `path`. Returns `0` on success, `-1` on error.\n2. `int count_lines_in_file(const char *path)`:\n   - Counts newline characters `\\n` in the file. Returns line count, or `-1` if opening fails.\n\n## Progressive Hints\n- Hint 1: In `write_text_file`, `FILE *f = fopen(path, \"w\"); if (!f) return -1; fputs(content, f); fclose(f); return 0;`.\n- Hint 2: In `count_lines_in_file`, open in `\"r\"` mode, read character by character with `fgetc(f)`, count `\\n`, then `fclose(f)`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\n#include <stdio.h>\n\nint write_text_file(const char *path, const char *content) {\n    if (path == 0 || content == 0) return -1;\n    FILE *f = fopen(path, \"w\");\n    if (f == 0) return -1;\n    fputs(content, f);\n    fclose(f);\n    return 0;\n}\n\nint count_lines_in_file(const char *path) {\n    if (path == 0) return -1;\n    FILE *f = fopen(path, \"r\");\n    if (f == 0) return -1;\n    int lines = 0;\n    int ch;\n    while ((ch = fgetc(f)) != EOF) {\n        if (ch == '\\n') {\n            lines++;\n        }\n    }\n    fclose(f);\n    return lines;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node* next;\n};\n\nint main(void) {\n    struct Node* head = (struct Node*)malloc(sizeof(struct Node));\n    head->data = 100;\n    head->next = NULL;\n    printf(\"Node data: %d\\n\", head->data);\n    free(head);\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    FILE *f = fopen(\"demo.txt\", \"w\");\n    if (f != NULL) {\n        fputs(\"Line 1\\nLine 2\\n\", f);\n        fclose(f);\n        printf(\"demo.txt written successfully.\\n\");\n    }\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Implement a dynamic growable integer vector in C.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct {\n    int* data;\n    size_t size;\n    size_t capacity;\n} Vector;\n\nvoid vector_init(Vector* v) {\n    v->size = 0;\n    v->capacity = 4;\n    v->data = (int*)malloc(v->capacity * sizeof(int));\n}\n\nvoid vector_push(Vector* v, int val) {\n    if (v->size == v->capacity) {\n        v->capacity *= 2;\n        v->data = (int*)realloc(v->data, v->capacity * sizeof(int));\n    }\n    v->data[v->size++] = val;\n}\n\nvoid vector_free(Vector* v) {\n    free(v->data);\n}\n\nint main(void) {\n    Vector v;\n    vector_init(&v);\n    vector_push(&v, 10);\n    vector_push(&v, 20);\n    printf(\"Vector size: %zu | capacity: %zu\\n\", v.size, v.capacity);\n    vector_free(&v);\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\n// Complete the functions below according to README.md specifications.\n\nint write_text_file(const char *path, const char *content) {\n    // TODO: Write content to file\n    return -1;\n}\n\nint count_lines_in_file(const char *path) {\n    // TODO: Count newlines in file\n    return -1;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint write_text_file(const char *path, const char *content);\nint count_lines_in_file(const char *path);\n\nint main(void) {\n    const char *test_path = \"test_io_temp.txt\";\n\n    // Test writing file\n    int res = write_text_file(test_path, \"Alpha\\nBeta\\nGamma\\n\");\n    assert(res == 0);\n\n    // Test counting lines\n    int lines = count_lines_in_file(test_path);\n    assert(lines == 3);\n\n    // Non-existent file test\n    assert(count_lines_in_file(\"non_existent_file_xyz.txt\") == -1);\n\n    remove(test_path);\n    printf(\"Module 14 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "15-shared-libraries-and-linking",
+        "name": "15-error-handling-and-return-codes",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 \u2014 Shared Libraries And Linking\n\n## \ud83c\udfaf What is it?\nShared Libraries And Linking is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Shared Libraries And Linking, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Shared Libraries And Linking executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Shared Libraries & `dlopen`\n\n## \ud83c\udfaf Dynamic Loading\n`dlopen` and `dlsym` enable loading plugins and functions at runtime from shared objects (`.so`).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Shared Libraries And Linking\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 15 — Error Handling & Return Codes\n\n## What is this?\nUnlike languages with exception mechanisms (`try/catch`), C relies on explicit status codes returned by functions, out-parameter pointers, and the standard `<errno.h>` mechanism.\n\n## Why does C have it?\n- Predictable execution overhead: Zero hidden stack unwinding cost.\n- Standard convention: `0` denotes success, negative integers indicate specific failure classes.\n\n## Syntax and Core Mechanics\n```c\ntypedef enum {\n    ERR_OK = 0,\n    ERR_INVALID_PARAM = -1,\n    ERR_OVERFLOW = -2\n} ErrorCode;\n```\n\n## What to Practice\nIn `exercise.c`:\nGiven:\n```c\ntypedef enum {\n    RESULT_OK = 0,\n    RESULT_NULL_POINTER = -1,\n    RESULT_DIVIDE_BY_ZERO = -2\n} StatusCode;\n```\nImplement:\n1. `StatusCode safe_divide(int numerator, int denominator, int *out_result)`:\n   - If `out_result == NULL`, return `RESULT_NULL_POINTER`.\n   - If `denominator == 0`, return `RESULT_DIVIDE_BY_ZERO`.\n   - Otherwise, set `*out_result = numerator / denominator` and return `RESULT_OK`.\n\n## Progressive Hints\n- Hint 1: Check `if (out_result == NULL) return RESULT_NULL_POINTER;`.\n- Hint 2: Check `if (denominator == 0) return RESULT_DIVIDE_BY_ZERO;`.\n- Hint 3: Perform division and return `RESULT_OK`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\ntypedef enum {\n    RESULT_OK = 0,\n    RESULT_NULL_POINTER = -1,\n    RESULT_DIVIDE_BY_ZERO = -2\n} StatusCode;\n\nStatusCode safe_divide(int numerator, int denominator, int *out_result) {\n    if (out_result == 0) return RESULT_NULL_POINTER;\n    if (denominator == 0) return RESULT_DIVIDE_BY_ZERO;\n    *out_result = numerator / denominator;\n    return RESULT_OK;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 15: Shared Libraries Architecture ===\\n\");\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint safe_int_parse(const char *str, int *out_val) {\n    if (str == NULL || out_val == NULL) return -1;\n    *out_val = 100; // Simplified simulated parse\n    return 0;\n}\n\nint main(void) {\n    int val = 0;\n    if (safe_int_parse(\"100\", &val) == 0) {\n        printf(\"Parsed successfully: %d\\n\", val);\n    }\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write program describing dynamic linking flags.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"Shared library flag: -fPIC -shared\\n\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "typedef enum {\n    RESULT_OK = 0,\n    RESULT_NULL_POINTER = -1,\n    RESULT_DIVIDE_BY_ZERO = -2\n} StatusCode;\n\n// Complete the function below according to README.md specifications.\n\nStatusCode safe_divide(int numerator, int denominator, int *out_result) {\n    // TODO: Perform safe division with StatusCode\n    return RESULT_NULL_POINTER;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\ntypedef enum {\n    RESULT_OK = 0,\n    RESULT_NULL_POINTER = -1,\n    RESULT_DIVIDE_BY_ZERO = -2\n} StatusCode;\n\nStatusCode safe_divide(int numerator, int denominator, int *out_result);\n\nint main(void) {\n    int res = 0;\n    assert(safe_divide(20, 4, &res) == RESULT_OK);\n    assert(res == 5);\n\n    assert(safe_divide(20, 0, &res) == RESULT_DIVIDE_BY_ZERO);\n    assert(safe_divide(20, 4, NULL) == RESULT_NULL_POINTER);\n\n    printf(\"Module 15 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "16-debugging-with-gdb-and-valgrind",
+        "name": "16-dynamic-data-structures-linked-list",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 \u2014 Debugging With Gdb And Valgrind\n\n## \ud83c\udfaf What is it?\nDebugging With Gdb And Valgrind is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Debugging With Gdb And Valgrind, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Debugging With Gdb And Valgrind executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Debugging with GDB & Valgrind\n\n## \ud83c\udfaf Valgrind Memcheck\n`valgrind --leak-check=full ./app` detects memory leaks and invalid heap accesses.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Debugging With Gdb And Valgrind\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 16 — Dynamic Data Structures (Linked List)\n\n## What is this?\nA singly linked list is a linear data structure where elements (nodes) are stored non-contiguously in heap memory. Each node holds data and a pointer to the next node (`next`).\n\n## Why does C have it?\n- Allows dynamic growth and shrinkage without preallocating fixed array buffers.\n- Teaches essential pointer navigation, dynamic heap allocation, and memory deallocation.\n\n## Syntax and Core Mechanics\n```c\ntypedef struct Node {\n    int data;\n    struct Node *next;\n} Node;\n```\n\n## What to Practice\nIn `exercise.c`:\nGiven:\n```c\ntypedef struct Node {\n    int data;\n    struct Node *next;\n} Node;\n```\nImplement:\n1. `Node* create_node(int data)`:\n   - Dynamically allocates a new node with given `data` and `next = NULL`.\n2. `void append_node(Node **head, int data)`:\n   - Appends a new node with `data` to the end of the list pointed to by `head`.\n3. `int count_list(const Node *head)`:\n   - Returns the total number of nodes in the list.\n4. `void free_list(Node *head)`:\n   - Deallocates all nodes in the list cleanly.\n\n## Progressive Hints\n- Hint 1: In `create_node`, `Node *n = malloc(sizeof(Node)); n->data = data; n->next = NULL; return n;`.\n- Hint 2: In `append_node`, if `*head == NULL`, set `*head = create_node(data)`. Otherwise traverse to last node and set `curr->next = create_node(data)`.\n- Hint 3: In `free_list`, while `head != NULL`, save `next = head->next`, free `head`, and advance.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\n#include <stdlib.h>\n\ntypedef struct Node {\n    int data;\n    struct Node *next;\n} Node;\n\nNode* create_node(int data) {\n    Node *n = (Node *)malloc(sizeof(Node));\n    if (n == 0) return 0;\n    n->data = data;\n    n->next = 0;\n    return n;\n}\n\nvoid append_node(Node **head, int data) {\n    if (head == 0) return;\n    Node *new_node = create_node(data);\n    if (*head == 0) {\n        *head = new_node;\n        return;\n    }\n    Node *curr = *head;\n    while (curr->next != 0) {\n        curr = curr->next;\n    }\n    curr->next = new_node;\n}\n\nint count_list(const Node *head) {\n    int count = 0;\n    const Node *curr = head;\n    while (curr != 0) {\n        count++;\n        curr = curr->next;\n    }\n    return count;\n}\n\nvoid free_list(Node *head) {\n    Node *curr = head;\n    while (curr != 0) {\n        Node *next = curr->next;\n        free(curr);\n        curr = next;\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 16: GDB & Valgrind Debugging ===\\n\");\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct Node {\n    int val;\n    struct Node *next;\n} Node;\n\nint main(void) {\n    Node a = {10, NULL};\n    Node b = {20, NULL};\n    a.next = &b;\n\n    printf(\"Node 1: %d -> Node 2: %d\\n\", a.val, a.next->val);\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Write clean memory program verified with zero leaks.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int* p = (int*)malloc(sizeof(int));\n    *p = 42;\n    printf(\"Value: %d\\n\", *p);\n    free(p);\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "#include <stdlib.h>\n\ntypedef struct Node {\n    int data;\n    struct Node *next;\n} Node;\n\n// Complete the functions below according to README.md specifications.\n\nNode* create_node(int data) {\n    // TODO: Allocate and return node\n    return NULL;\n}\n\nvoid append_node(Node **head, int data) {\n    // TODO: Append node to end of list\n}\n\nint count_list(const Node *head) {\n    // TODO: Count nodes\n    return 0;\n}\n\nvoid free_list(Node *head) {\n    // TODO: Free all nodes\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <stdlib.h>\n#include <assert.h>\n\ntypedef struct Node {\n    int data;\n    struct Node *next;\n} Node;\n\nNode* create_node(int data);\nvoid append_node(Node **head, int data);\nint count_list(const Node *head);\nvoid free_list(Node *head);\n\nint main(void) {\n    Node *head = NULL;\n    assert(count_list(head) == 0);\n\n    append_node(&head, 10);\n    append_node(&head, 20);\n    append_node(&head, 30);\n\n    assert(count_list(head) == 3);\n    assert(head->data == 10);\n    assert(head->next->data == 20);\n    assert(head->next->next->data == 30);\n\n    free_list(head);\n    printf(\"Module 16 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "17-safe-c-best-practices",
+        "name": "17-memory-safety-and-bounds-checking",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 \u2014 Safe C Best Practices\n\n## \ud83c\udfaf What is it?\nSafe C Best Practices is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Safe C Best Practices, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Safe C Best Practices executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Defensive C Systems Engineering\n\n## \ud83c\udfaf Cleanup Idioms\nUsing `goto cleanup` provides single-exit resource freeing without deep nested error checks.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Safe C Best Practices\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 17 — Memory Safety & Bounds Checking\n\n## What is this?\nBuffer overruns and array index out-of-bounds are leading causes of security vulnerabilities in C. Using bounded functions like `snprintf` prevents memory corruption.\n\n## Why does C have it?\n- Functions like `strcpy` and `sprintf` do not perform boundary checks, allowing buffer overflows.\n- `snprintf(dest, size, ...)` guarantees that no more than `size` bytes (including null terminator) are written.\n\n## Syntax and Core Mechanics\n```c\nchar buf[16];\n// Safely format text without overflowing 16-byte buffer\nsnprintf(buf, sizeof(buf), \"ID: %d\", 42);\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int safe_format_user(char *dest, size_t dest_size, const char *username, int user_id)`:\n   - Formats string `\"User: <username> (ID: <user_id>)\"` into `dest` using `snprintf`.\n   - Returns length written, or `-1` if `dest == NULL` or `dest_size == 0`.\n2. `int safe_get_element(const int *arr, int len, int index, int *out_val)`:\n   - If `index < 0` or `index >= len` or `arr == NULL` or `out_val == NULL`, returns `-1`.\n   - Otherwise sets `*out_val = arr[index]` and returns `0`.\n\n## Progressive Hints\n- Hint 1: In `safe_format_user`, `snprintf(dest, dest_size, \"User: %s (ID: %d)\", username, user_id)`.\n- Hint 2: In `safe_get_element`, validate bounds `0 <= index < len`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\n#include <stdio.h>\n#include <stddef.h>\n\nint safe_format_user(char *dest, size_t dest_size, const char *username, int user_id) {\n    if (dest == 0 || dest_size == 0 || username == 0) return -1;\n    return snprintf(dest, dest_size, \"User: %s (ID: %d)\", username, user_id);\n}\n\nint safe_get_element(const int *arr, int len, int index, int *out_val) {\n    if (arr == 0 || out_val == 0 || index < 0 || index >= len) {\n        return -1;\n    }\n    *out_val = arr[index];\n    return 0;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint process(void) {\n    int* res1 = (int*)malloc(100);\n    int* res2 = (int*)malloc(100);\n    int status = 0;\n\n    if (!res1 || !res2) {\n        status = -1;\n        goto cleanup;\n    }\n\ncleanup:\n    free(res1);\n    free(res2);\n    return status;\n}\n\nint main(void) {\n    printf(\"Process status: %d\\n\", process());\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    char small_buffer[8];\n    // snprintf safely truncates without buffer overflow\n    snprintf(small_buffer, sizeof(small_buffer), \"Long text that exceeds\");\n    printf(\"Safely bounded: %s\\n\", small_buffer);\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Implement defensive cleanup pattern.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"\u2714 Defensive goto cleanup pattern verified!\\n\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "#include <stddef.h>\n\n// Complete the functions below according to README.md specifications.\n\nint safe_format_user(char *dest, size_t dest_size, const char *username, int user_id) {\n    // TODO: Safely format string using snprintf\n    return -1;\n}\n\nint safe_get_element(const int *arr, int len, int index, int *out_val) {\n    // TODO: Bounds-checked array lookup\n    return -1;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <string.h>\n#include <assert.h>\n\nint safe_format_user(char *dest, size_t dest_size, const char *username, int user_id);\nint safe_get_element(const int *arr, int len, int index, int *out_val);\n\nint main(void) {\n    char buf[64];\n    int len = safe_format_user(buf, sizeof(buf), \"alice\", 101);\n    assert(len > 0);\n    assert(strcmp(buf, \"User: alice (ID: 101)\") == 0);\n\n    assert(safe_format_user(NULL, 0, \"alice\", 101) == -1);\n\n    int numbers[3] = {10, 20, 30};\n    int val = 0;\n    assert(safe_get_element(numbers, 3, 1, &val) == 0 && val == 20);\n    assert(safe_get_element(numbers, 3, 5, &val) == -1);\n    assert(safe_get_element(numbers, 3, -1, &val) == -1);\n\n    printf(\"Module 17 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "18-interview-questions-and-drills",
+        "name": "18-stack-data-structure",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 \u2014 Interview Questions And Drills\n\n## \ud83c\udfaf What is it?\nInterview Questions And Drills is a core foundational concept in C Systems Programming & Memory Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Interview Questions And Drills, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Interview Questions And Drills executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Interview Questions And Drills\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 18 — Stack Data Structure\n\n## What is this?\nA Stack is a Last-In, First-Out (LIFO) abstract data type supporting two principal operations: `push` (insert item on top) and `pop` (remove and return top item).\n\n## Why does C have it?\n- Fundamental to compilers (parsing expressions, matching parentheses), recursion unwinding, and call stacks.\n\n## Syntax and Core Mechanics\n```c\n#define STACK_CAPACITY 64\n\ntypedef struct {\n    int data[STACK_CAPACITY];\n    int top;\n} Stack;\n```\n\n## What to Practice\nIn `exercise.c`:\nGiven:\n```c\n#define STACK_MAX 16\n\ntypedef struct {\n    int items[STACK_MAX];\n    int top; // index of next free slot, or count of items\n} FixedStack;\n```\nImplement:\n1. `void stack_init(FixedStack *s)`: Sets `top = 0`.\n2. `int stack_push(FixedStack *s, int val)`:\n   - If stack is full (`top >= STACK_MAX`), returns `-1`.\n   - Otherwise inserts `val` and returns `0`.\n3. `int stack_pop(FixedStack *s, int *out_val)`:\n   - If stack is empty (`top == 0`), returns `-1`.\n   - Otherwise removes top element into `*out_val` and returns `0`.\n4. `int stack_size(const FixedStack *s)`: Returns current number of items (`s->top`).\n\n## Progressive Hints\n- Hint 1: In `stack_init`, `s->top = 0;`.\n- Hint 2: In `stack_push`, check `if (s->top >= STACK_MAX) return -1; s->items[s->top++] = val; return 0;`.\n- Hint 3: In `stack_pop`, check `if (s->top == 0) return -1; *out_val = s->items[--s->top]; return 0;`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\n#define STACK_MAX 16\n\ntypedef struct {\n    int items[STACK_MAX];\n    int top;\n} FixedStack;\n\nvoid stack_init(FixedStack *s) {\n    if (s == 0) return;\n    s->top = 0;\n}\n\nint stack_push(FixedStack *s, int val) {\n    if (s == 0 || s->top >= STACK_MAX) return -1;\n    s->items[s->top] = val;\n    s->top++;\n    return 0;\n}\n\nint stack_pop(FixedStack *s, int *out_val) {\n    if (s == 0 || out_val == 0 || s->top == 0) return -1;\n    s->top--;\n    *out_val = s->items[s->top];\n    return 0;\n}\n\nint stack_size(const FixedStack *s) {\n    if (s == 0) return 0;\n    return s->top;\n}\n```\n</details>\n"
           },
           {
             "name": "example.c",
             "type": "file",
-            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 18: Master C Systems Drill ===\\n\");\n    printf(\"1. Pointer arithmetic & scaling\\n\");\n    printf(\"2. Heap fragmentation & free nullification\\n\");\n    printf(\"3. Struct packing & alignment padding\\n\");\n    printf(\"4. POSIX system call boundaries\\n\");\n    printf(\"\ud83d\ude80 You have completed the comprehensive C Mastery Track!\\n\");\n    return 0;\n}\n"
+            "content": "#include <stdio.h>\n\nint main(void) {\n    int stack[4];\n    int top = 0;\n\n    // Push 10, 20\n    stack[top++] = 10;\n    stack[top++] = 20;\n\n    // Pop\n    int popped = stack[--top];\n    printf(\"Popped: %d, remaining: %d\\n\", popped, stack[top - 1]);\n\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.c",
-                "type": "file",
-                "content": "// TODO: Master Drill: Implement a memory-safe string duplicate function 'my_strdup'.\n"
-              },
-              {
-                "name": "solution.c",
-                "type": "file",
-                "content": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\nchar* my_strdup(const char* s) {\n    if (!s) return NULL;\n    size_t len = strlen(s) + 1;\n    char* dup = (char*)malloc(len);\n    if (dup) {\n        memcpy(dup, s, len);\n    }\n    return dup;\n}\n\nint main(void) {\n    char* copy = my_strdup(\"Trak Systems Track\");\n    printf(\"Duplicated string: %s\\n\", copy);\n    free(copy);\n    printf(\"\u2714 my_strdup drill passed!\\n\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.c",
+            "type": "file",
+            "content": "#define STACK_MAX 16\n\ntypedef struct {\n    int items[STACK_MAX];\n    int top;\n} FixedStack;\n\n// Complete the functions below according to README.md specifications.\n\nvoid stack_init(FixedStack *s) {\n    // TODO: Initialize stack\n}\n\nint stack_push(FixedStack *s, int val) {\n    // TODO: Push val to stack\n    return -1;\n}\n\nint stack_pop(FixedStack *s, int *out_val) {\n    // TODO: Pop top element\n    return -1;\n}\n\nint stack_size(const FixedStack *s) {\n    // TODO: Return current size\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\n#define STACK_MAX 16\n\ntypedef struct {\n    int items[STACK_MAX];\n    int top;\n} FixedStack;\n\nvoid stack_init(FixedStack *s);\nint stack_push(FixedStack *s, int val);\nint stack_pop(FixedStack *s, int *out_val);\nint stack_size(const FixedStack *s);\n\nint main(void) {\n    FixedStack s;\n    stack_init(&s);\n    assert(stack_size(&s) == 0);\n\n    int out = 0;\n    assert(stack_pop(&s, &out) == -1); // empty pop fails\n\n    assert(stack_push(&s, 10) == 0);\n    assert(stack_push(&s, 20) == 0);\n    assert(stack_size(&s) == 2);\n\n    assert(stack_pop(&s, &out) == 0);\n    assert(out == 20); // LIFO\n    assert(stack_pop(&s, &out) == 0);\n    assert(out == 10);\n    assert(stack_size(&s) == 0);\n\n    printf(\"Module 18 tests passed successfully.\\n\");\n    return 0;\n}\n"
+          }
+        ]
+      },
+      {
+        "name": "19-modular-c-and-multi-file-projects",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 — Modular C & Multi-File Architecture\n\n## What is this?\nReal-world C software is split into separate translation units (`.c` source files) and header files (`.h`). Headers expose public interfaces, while `.c` files encapsulate private state with `static`.\n\n## Why does C have it?\n- `static` on global variables or functions limits their visibility to the current translation unit (internal linkage), preventing global name collisions.\n- Include guards (`#ifndef HEADER_H / #define HEADER_H / #endif`) prevent multiple definition errors when headers are included transitively.\n\n## Syntax and Core Mechanics\n```c\n// math_utils.h\n#ifndef MATH_UTILS_H\n#define MATH_UTILS_H\n\nint multiply(int a, int b);\n\n#endif\n```\n\n## What to Practice\nImplement in `exercise.c`:\n1. `int counter_increment(void)`:\n   - Maintains an internal `static int counter` variable. Each call increments `counter` by 1 and returns the new value. Starts at 0.\n2. `void counter_reset(void)`:\n   - Resets the internal `counter` back to 0.\n3. `int counter_get(void)`:\n   - Returns current value of internal `counter` without modifying it.\n\n## Progressive Hints\n- Hint 1: Declare `static int counter = 0;` at file scope in `exercise.c`.\n- Hint 2: In `counter_increment`, `return ++counter;`.\n- Hint 3: In `counter_reset`, `counter = 0;`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```c\nstatic int counter = 0;\n\nint counter_increment(void) {\n    return ++counter;\n}\n\nvoid counter_reset(void) {\n    counter = 0;\n}\n\nint counter_get(void) {\n    return counter;\n}\n```\n</details>\n"
+          },
+          {
+            "name": "example.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nstatic int call_count = 0;\n\nvoid tick(void) {\n    call_count++;\n    printf(\"Tick called %d times\\n\", call_count);\n}\n\nint main(void) {\n    tick();\n    tick();\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise.c",
+            "type": "file",
+            "content": "// Complete the functions below according to README.md specifications.\n\nint counter_increment(void) {\n    // TODO: Increment static counter and return value\n    return 0;\n}\n\nvoid counter_reset(void) {\n    // TODO: Reset static counter to 0\n}\n\nint counter_get(void) {\n    // TODO: Return current static counter\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint counter_increment(void);\nvoid counter_reset(void);\nint counter_get(void);\n\nint main(void) {\n    counter_reset();\n    assert(counter_get() == 0);\n\n    assert(counter_increment() == 1);\n    assert(counter_increment() == 2);\n    assert(counter_increment() == 3);\n    assert(counter_get() == 3);\n\n    counter_reset();\n    assert(counter_get() == 0);\n\n    printf(\"Module 19 tests passed successfully.\\n\");\n    return 0;\n}\n"
           }
         ]
       }
