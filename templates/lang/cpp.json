@@ -1,632 +1,524 @@
 {
   "id": "lang/cpp",
   "name": "Modern C++ Systems & Performance Mastery Track",
-  "version": "1.2.0",
-  "description": "Complete high-depth Modern C++ (C++20/C++23) curriculum covering RAII, Rule of 5, move semantics, smart pointers, C++20 concepts, coroutines, and lock-free concurrency",
+  "version": "1.3.0",
+  "description": "Comprehensive Modern C++ curriculum covering references, RAII, smart pointers, STL containers, lambdas, and templates.",
   "root": {
     "name": "cpp-workspace",
     "type": "directory",
     "children": [
       {
-        "name": "CMakeLists.txt",
-        "type": "file",
-        "content": "cmake_minimum_required(VERSION 3.20)\nproject(cpp_workspace CXX)\n\nset(CMAKE_CXX_STANDARD 20)\nset(CMAKE_CXX_STANDARD_REQUIRED ON)\n\nadd_executable(app main.cpp)\n"
-      },
-      {
-        "name": "main.cpp",
-        "type": "file",
-        "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=== \ud83d\ude80 Modern C++ Systems Track ===\\n\";\n    std::cout << \"Standard: C++20 / C++23\\n\";\n    std::cout << \"Pointer Size: \" << sizeof(void*) * 8 << \"-bit\\n\";\n    return 0;\n}\n"
-      },
-      {
-        "name": "README.md",
-        "type": "file",
-        "content": "# \u26a1 Modern C++ Systems & Performance Mastery Track\n\nWelcome to the **Modern C++ Systems & Performance Mastery Track** materialized by **Trak**.\n\nThis workspace covers Modern C++ (C++20/C++23) from systems memory mechanics to RAII, Rule of 5, template metaprogramming, C++20 concepts, atomics, and high-performance multithreading.\n\n## \ud83d\udcda Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-cmake-toolchain` | CMake & Toolchain | `CMakeLists.txt`, Clang/GCC, sanitizers (`-fsanitize=address,undefined`) |\n| `01-basics-types-and-references` | Value Categories & Const | lvalues, rvalues, xvalues, `const` correctness, `constexpr`, references (`&` vs `&&`) |\n| `02-raii-and-rule-of-five` | RAII & The Rule of 5 | Destructor, Copy/Move Constructor, Copy/Move Assignment, Rule of Zero |\n| `03-memory-stack-heap-and-layout` | Memory Layout & Alignment | Stack frames, heap `new`/`delete`, memory alignment, `sizeof`, structure padding |\n| `04-smart-pointers-unique-shared-weak` | Smart Pointers | `std::unique_ptr`, `std::shared_ptr`, `std::weak_ptr`, control blocks, `make_unique` |\n| `05-move-semantics-and-perfect-forwarding` | Move Semantics & Forwarding | `std::move`, `std::forward`, universal/forwarding references (`T&&`), zero-copy |\n| `06-templates-and-type-traits` | Templates & SFINAE | Function/Class templates, SFINAE (`std::enable_if_t`), `std::is_same_v` |\n| `07-modern-concepts-and-constraints` | C++20 Concepts | `template<typename T> requires`, `std::integral`, constrained auto syntax |\n| `08-stl-containers-and-complexity` | STL Containers Internals | `std::vector` doubling growth, `std::unordered_map` bucket hashing, `std::map` RB-tree |\n| `09-stl-iterators-and-algorithms` | Iterators & C++20 Ranges | `<algorithm>`, `std::sort`, `std::views::filter`, `std::views::transform` pipelines |\n| `10-lambdas-and-std-function` | Lambdas & Closures | Capture clauses (`[&]`, `[=]`, `[x = std::move(x)]`), generic lambdas, `std::function` |\n| `11-oop-virtual-tables-and-rtti` | Dynamic Polymorphism | Virtual tables (`vtable`), virtual pointer (`vptr`), abstract interfaces, `override` |\n| `12-error-handling-and-exceptions` | Exception Safety & std::expected | `noexcept` specifier, strong exception guarantee, `std::expected` (C++23) |\n| `13-concurrency-threads-and-mutexes` | Multithreading & Locks | `std::jthread` (C++20), `std::mutex`, `std::lock_guard`, `std::condition_variable` |\n| `14-atomics-and-memory-models` | Lock-Free Atomics | `std::atomic<T>`, memory orderings (`acquire`, `release`, `seq_cst`), CAS loops |\n| `15-async-futures-and-coroutines` | Futures & C++20 Coroutines | `std::async`, `std::future`, `co_await`, `co_yield`, `co_return`, `promise_type` |\n| `16-modules-and-header-units` | C++20 Modules | `export module`, `import`, zero-cost compile boundary isolation |\n| `17-testing-and-benchmarking` | Testing & Verification | Unit test assertions, memory leak checks with Valgrind/ASan |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 C++ gotchas (Object slicing, undefined behavior, move after use) |\n\n---\n\n## \ud83d\udee0\ufe0f How to Practice\nEach module contains:\n- `README.md` \u2014 Deep theoretical explanation and architecture notes.\n- `example.cpp` \u2014 Fully runnable concept demonstration.\n- `exercise/starter.cpp` \u2014 Hands-on problem with `TODO` markers.\n- `exercise/solution.cpp` \u2014 Complete reference solution.\n"
-      },
-      {
-        "name": "00-setup-cmake-toolchain",
+        "name": "00-setup-toolchain-and-first-program",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 \u2014 Setup Cmake Toolchain\n\n## \ud83c\udfaf What is it?\nSetup Cmake Toolchain is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Setup Cmake Toolchain, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Setup Cmake Toolchain executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Modern CMake & Compiler Sanitizers\n\n## \ud83c\udfaf Learning Objectives\n- Understand CMake target-based build architecture (`add_executable`, `target_include_directories`)\n- Enable AddressSanitizer (ASan) and UndefinedBehaviorSanitizer (UBSan) for catching memory bugs at runtime\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Setup Cmake Toolchain\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 00 — Setup, Toolchain & First Program\n\n## What is this?\nWelcome to C++! C++ is a high-performance, multi-paradigm systems programming language offering object-oriented programming, generic templates, low-level memory control, and zero-cost abstractions. In this introductory module, you will verify your C++ compiler toolchain and run your first compiled C++ binary.\n\n## Why does C++ have it?\n- C++ compiles directly to machine code using modern optimizing compilers (GCC, Clang, MSVC).\n- The standard input/output stream library `<iostream>` provides type-safe stream operations via `std::cout` and `std::cin` without brittle format specifiers.\n\n## Minimal Anatomy of a C++ Program\nExamine `main.cpp`:\n\n```cpp\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\\n\";\n    return 0;\n}\n```\n\n## How to Compile and Run\nOpen your terminal in this directory and execute:\n\n### 1. Compile the program using G++\n```bash\ng++ -Wall -Wextra -std=c++17 main.cpp -o main.exe\n```\n\n### 2. Run the compiled executable\nOn Windows:\n```bash\n.\\main.exe\n```\nOn Linux / macOS:\n```bash\n./main\n```\n\n### 3. Verify compiler installation\n```bash\ng++ --version\n```\n\n## Common Mistakes\n1. Forgetting the `std::` namespace prefix when using `cout` or `endl`.\n2. Omitting `#include <iostream>`.\n"
           },
           {
-            "name": "example.cpp",
+            "name": "main.cpp",
             "type": "file",
-            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=== 00: Modern C++ Toolchain ===\\n\";\n    std::cout << \"C++ Standard: C++\" << (__cplusplus / 100 % 100) << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Write a program that prints the byte size of standard types:\n// bool, char, int, long long, double, void*\n#include <iostream>\n\nint main() {\n    // FILL HERE\n    return 0;\n}\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n\nint main() {\n    std::cout << \"bool: \" << sizeof(bool) << \" byte\\n\";\n    std::cout << \"char: \" << sizeof(char) << \" byte\\n\";\n    std::cout << \"int: \" << sizeof(int) << \" bytes\\n\";\n    std::cout << \"long long: \" << sizeof(long long) << \" bytes\\n\";\n    std::cout << \"double: \" << sizeof(double) << \" bytes\\n\";\n    std::cout << \"void*: \" << sizeof(void*) << \" bytes\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"C++ toolchain and runtime verified successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "01-basics-types-and-references",
+        "name": "01-variables-references-and-const",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 \u2014 Basics Types And References\n\n## \ud83c\udfaf What is it?\nBasics Types And References is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Basics Types And References, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Basics Types And References executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Value Categories & Constexpr\n\n## \ud83c\udfaf Value Categories\n- **lvalue**: Has an identity and identifiable memory address (`int x = 10`).\n- **prvalue**: Pure rvalue, temporary calculation result (`10 + 20`).\n- **xvalue**: \"eXpiring\" value whose resources can be reused (result of `std::move`).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Basics Types And References\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 01 — Variables, References & Const\n\n## What is this?\nC++ introduces true **references** (`Type&`) as transparent aliases to existing variables. `const` enforces immutability, while `constexpr` specifies compile-time evaluation.\n\n## Why does C++ have it?\n- References provide pass-by-reference semantics with clean syntax, avoiding pointer syntax (`*`, `&`) and null-pointer hazards.\n- Passing large objects by `const Type&` eliminates expensive copy overhead while guaranteeing the original object cannot be mutated.\n\n## Syntax and Core Mechanics\n```cpp\nint x = 10;\nint& ref = x; // ref is an alias to x\nref = 20;     // x is now 20\n\nconst int max_users = 100; // immutable\n```\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `void double_value(int& val)`: Doubles the value of `val` in place via reference.\n2. `void swap_values(int& a, int& b)`: Swaps `a` and `b` using references.\n3. `constexpr int compute_square(int n)`: Returns `n * n`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\nvoid double_value(int& val) {\n    val *= 2;\n}\n\nvoid swap_values(int& a, int& b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}\n\nconstexpr int compute_square(int n) {\n    return n * n;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n\nconstexpr int factorial(int n) {\n    return (n <= 1) ? 1 : n * factorial(n - 1);\n}\n\nint main() {\n    std::cout << \"=== 01: Constexpr Computation ===\\n\";\n    constexpr int val = factorial(5); // Computed at compile-time!\n    std::cout << \"Factorial(5) at compile-time: \" << val << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nvoid increment(int& x) { x++; }\n\nint main() {\n    int count = 5;\n    increment(count);\n    std::cout << \"Count after increment: \" << count << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Implement a constexpr function 'is_even(int n)' and verify it with static_assert.\n#include <iostream>\n\nconstexpr bool is_even(int n) {\n    // FILL HERE\n    return false;\n}\n\nint main() { return 0; }\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n\nconstexpr bool is_even(int n) {\n    return n % 2 == 0;\n}\n\nint main() {\n    static_assert(is_even(4), \"4 must be even\");\n    static_assert(!is_even(7), \"7 must be odd\");\n    std::cout << \"\u2714 Compile-time static assertions passed!\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "void double_value(int& val) {\n    // TODO: Double val in place\n}\n\nvoid swap_values(int& a, int& b) {\n    // TODO: Swap a and b using references\n}\n\nconstexpr int compute_square(int n) {\n    // TODO: Return square of n\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\nvoid double_value(int& val);\nvoid swap_values(int& a, int& b);\nconstexpr int compute_square(int n);\n\nint main() {\n    int num = 15;\n    double_value(num);\n    assert(num == 30);\n\n    int x = 5, y = 10;\n    swap_values(x, y);\n    assert(x == 10 && y == 5);\n\n    assert(compute_square(4) == 16);\n    assert(compute_square(-3) == 9);\n\n    std::cout << \"Module 01 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "02-raii-and-rule-of-five",
+        "name": "02-control-flow-and-functions",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 \u2014 Raii And Rule Of Five\n\n## \ud83c\udfaf What is it?\nRaii And Rule Of Five is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Raii And Rule Of Five, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Raii And Rule Of Five executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 RAII & The Rule of 5\n\n## \ud83c\udfaf The Rule of 5\nIf you manage a raw resource and implement any of these, you must implement all 5:\n1. Destructor `~ClassName()`\n2. Copy Constructor `ClassName(const ClassName&)`\n3. Copy Assignment `ClassName& operator=(const ClassName&)`\n4. Move Constructor `ClassName(ClassName&&) noexcept`\n5. Move Assignment `ClassName& operator=(ClassName&&) noexcept`\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Raii And Rule Of Five\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 02 — Control Flow & Functions\n\n## What is this?\nC++ supports function overloading (multiple functions sharing the same name with different parameter signatures) and default parameter values.\n\n## Why does C++ have it?\n- Function overloading allows creating uniform, intuitive APIs (e.g. `print(int)` and `print(double)`).\n- Default arguments simplify function calls by allowing callers to omit optional parameters.\n\n## Syntax and Core Mechanics\n```cpp\nint multiply(int a, int b = 2); // default b to 2\n\n// Overloaded functions\nint add(int a, int b);\ndouble add(double a, double b);\n```\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `int clamp(int val, int low, int high)`: Returns `low` if `val < low`, `high` if `val > high`, else `val`.\n2. Overloaded functions:\n   - `int calculate_area(int side)`: Computes square area (`side * side`).\n   - `int calculate_area(int width, int height)`: Computes rectangle area (`width * height`).\n3. `int power_with_default(int base, int exp = 2)`: Computes `base^exp`. Assume `exp >= 0`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\nint clamp(int val, int low, int high) {\n    if (val < low) return low;\n    if (val > high) return high;\n    return val;\n}\n\nint calculate_area(int side) {\n    return side * side;\n}\n\nint calculate_area(int width, int height) {\n    return width * height;\n}\n\nint power_with_default(int base, int exp) {\n    int res = 1;\n    for (int i = 0; i < exp; i++) {\n        res *= base;\n    }\n    return res;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <utility>\n\nclass Buffer {\n    int* data;\n    size_t size;\npublic:\n    Buffer(size_t s) : size(s), data(new int[s]{}) {\n        std::cout << \"Allocated buffer of size \" << size << \"\\n\";\n    }\n    ~Buffer() {\n        delete[] data;\n        std::cout << \"Freed buffer\\n\";\n    }\n    // Move Constructor\n    Buffer(Buffer&& other) noexcept : data(other.data), size(other.size) {\n        other.data = nullptr;\n        other.size = 0;\n        std::cout << \"Moved buffer\\n\";\n    }\n};\n\nint main() {\n    std::cout << \"=== 02: RAII & Move ===\\n\";\n    Buffer b1(1024);\n    Buffer b2 = std::move(b1);\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nvoid greet(const char* name = \"Guest\") {\n    std::cout << \"Hello, \" << name << \"\\n\";\n}\n\nint main() {\n    greet();\n    greet(\"Alice\");\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Implement a scoped FileDescriptor wrapper using RAII.\n#include <iostream>\n\nclass ScopedFD {\n    // FILL HERE\n};\n\nint main() { return 0; }\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n\nclass ScopedFD {\n    int fd;\npublic:\n    explicit ScopedFD(int descriptor) : fd(descriptor) {}\n    ~ScopedFD() {\n        if (fd >= 0) {\n            std::cout << \"Closed fd \" << fd << \"\\n\";\n        }\n    }\n    // Prevent copying to avoid double close\n    ScopedFD(const ScopedFD&) = delete;\n    ScopedFD& operator=(const ScopedFD&) = delete;\n};\n\nint main() {\n    ScopedFD file(3);\n    std::cout << \"ScopedFD active in scope\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "int clamp(int val, int low, int high) {\n    return 0;\n}\n\nint calculate_area(int side) {\n    return 0;\n}\n\nint calculate_area(int width, int height) {\n    return 0;\n}\n\nint power_with_default(int base, int exp = 2) {\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\nint clamp(int val, int low, int high);\nint calculate_area(int side);\nint calculate_area(int width, int height);\nint power_with_default(int base, int exp = 2);\n\nint main() {\n    assert(clamp(5, 10, 20) == 10);\n    assert(clamp(25, 10, 20) == 20);\n    assert(clamp(15, 10, 20) == 15);\n\n    assert(calculate_area(5) == 25);\n    assert(calculate_area(4, 6) == 24);\n\n    assert(power_with_default(5) == 25);     // default exp = 2\n    assert(power_with_default(2, 3) == 8);\n\n    std::cout << \"Module 02 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "03-memory-stack-heap-and-layout",
+        "name": "03-strings-and-string-view",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 \u2014 Memory Stack Heap And Layout\n\n## \ud83c\udfaf What is it?\nMemory Stack Heap And Layout is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Memory Stack Heap And Layout, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Memory Stack Heap And Layout executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Memory Alignment, Padding & Layout\n\n## \ud83c\udfaf Structure Padding\nCompilers align struct members to multiples of their natural size (e.g. 8 bytes for 64-bit pointers and `double`).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Memory Stack Heap And Layout\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 03 — Strings & string_view\n\n## What is this?\n`std::string` manages heap-allocated dynamic text with automatic memory management. `std::string_view` (C++17) provides a zero-copy, read-only non-owning view over any character sequence.\n\n## Why does C++ have it?\n- Eliminates manual `malloc`, buffer overflows, and null terminator bugs common in C string manipulation.\n- `std::string_view` avoids unnecessary string allocations when passing substrings or string literals into inspection functions.\n\n## Syntax and Core Mechanics\n```cpp\n#include <string>\n#include <string_view>\n\nstd::string s = \"Hello\";\ns += \", World!\";\n\nstd::string_view sv = s; // Non-owning reference\n```\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `bool is_palindrome(std::string_view sv)`:\n   - Returns `true` if characters read the same forwards and backwards, else `false`.\n2. `std::string repeat_string(std::string_view sv, int times)`:\n   - Returns a new `std::string` containing `sv` repeated `times` times. Returns empty string if `times <= 0`.\n3. `int count_vowels(std::string_view sv)`:\n   - Counts vowels (`a, e, i, o, u`, case-insensitive).\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <string>\n#include <string_view>\n#include <cctype>\n\nbool is_palindrome(std::string_view sv) {\n    if (sv.empty()) return true;\n    size_t left = 0;\n    size_t right = sv.size() - 1;\n    while (left < right) {\n        if (sv[left] != sv[right]) return false;\n        left++;\n        right--;\n    }\n    return true;\n}\n\nstd::string repeat_string(std::string_view sv, int times) {\n    if (times <= 0) return \"\";\n    std::string result;\n    result.reserve(sv.size() * times);\n    for (int i = 0; i < times; i++) {\n        result += sv;\n    }\n    return result;\n}\n\nint count_vowels(std::string_view sv) {\n    int count = 0;\n    for (char ch : sv) {\n        char lower = std::tolower(static_cast<unsigned char>(ch));\n        if (lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u') {\n            count++;\n        }\n    }\n    return count;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n\nstruct Unpadded {\n    char c;     // 1 byte\n    // 7 bytes padding\n    double d;   // 8 bytes\n    int i;      // 4 bytes\n    // 4 bytes padding\n};\n\nint main() {\n    std::cout << \"=== 03: Memory Alignment ===\\n\";\n    std::cout << \"Unpadded struct sizeof: \" << sizeof(Unpadded) << \" bytes (Expected 24)\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <string>\n#include <string_view>\n\nvoid inspect(std::string_view sv) {\n    std::cout << \"Viewing: \" << sv << \" (len: \" << sv.size() << \")\\n\";\n}\n\nint main() {\n    std::string text = \"Modern C++\";\n    inspect(text);\n    inspect(\"Literal string\");\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Reorder the struct fields to minimize total struct size.\nstruct Suboptimal {\n    char a;\n    double b;\n    char c;\n    int d;\n};\n\nint main() { return 0; }\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n\nstruct Optimal {\n    double b; // 8 bytes\n    int d;    // 4 bytes\n    char a;   // 1 byte\n    char c;   // 1 byte\n    // 2 bytes padding\n};\n\nint main() {\n    std::cout << \"Optimal sizeof: \" << sizeof(Optimal) << \" bytes (16 bytes)\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <string>\n#include <string_view>\n\nbool is_palindrome(std::string_view sv) {\n    return false;\n}\n\nstd::string repeat_string(std::string_view sv, int times) {\n    return \"\";\n}\n\nint count_vowels(std::string_view sv) {\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <string>\n#include <string_view>\n\nbool is_palindrome(std::string_view sv);\nstd::string repeat_string(std::string_view sv, int times);\nint count_vowels(std::string_view sv);\n\nint main() {\n    assert(is_palindrome(\"racecar\") == true);\n    assert(is_palindrome(\"hello\") == false);\n    assert(is_palindrome(\"\") == true);\n\n    assert(repeat_string(\"abc\", 3) == \"abcabcabc\");\n    assert(repeat_string(\"xyz\", 0) == \"\");\n\n    assert(count_vowels(\"C++ Programming\") == 3); // o, a, i\n    assert(count_vowels(\"AEIOU\") == 5);\n\n    std::cout << \"Module 03 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "04-smart-pointers-unique-shared-weak",
+        "name": "04-stl-vectors-and-iteration",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 \u2014 Smart Pointers Unique Shared Weak\n\n## \ud83c\udfaf What is it?\nSmart Pointers Unique Shared Weak is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Smart Pointers Unique Shared Weak, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Smart Pointers Unique Shared Weak executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Modern Smart Pointers\n\n## \ud83c\udfaf The Triad\n- `std::unique_ptr<T>`: Single unique ownership. Zero runtime overhead vs raw pointer.\n- `std::shared_ptr<T>`: Reference counted ownership. Control block on heap.\n- `std::weak_ptr<T>`: Non-owning observer preventing cyclic reference leaks.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Smart Pointers Unique Shared Weak\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 04 — STL Vectors & Iteration\n\n## What is this?\n`std::vector<T>` is the default sequence container in C++. It encapsulates a dynamically resizing contiguous array on the heap.\n\n## Why does C++ have it?\n- Guarantees O(1) random access via `operator[]` and amortized O(1) appending via `push_back`.\n- Integrates with modern C++ range-based `for` loops (`for (const auto& item : vec)`).\n\n## Syntax and Core Mechanics\n```cpp\n#include <vector>\n\nstd::vector<int> nums = {1, 2, 3};\nnums.push_back(4);\nfor (int n : nums) { /* ... */ }\n```\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `int sum_vector(const std::vector<int>& vec)`: Returns sum of all elements.\n2. `std::vector<int> filter_even(const std::vector<int>& vec)`:\n   - Returns a new vector containing only the even integers in `vec`.\n3. `std::vector<int> reverse_vector(const std::vector<int>& vec)`:\n   - Returns a new vector with elements in reverse order.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <vector>\n\nint sum_vector(const std::vector<int>& vec) {\n    int total = 0;\n    for (int n : vec) {\n        total += n;\n    }\n    return total;\n}\n\nstd::vector<int> filter_even(const std::vector<int>& vec) {\n    std::vector<int> result;\n    for (int n : vec) {\n        if (n % 2 == 0) {\n            result.push_back(n);\n        }\n    }\n    return result;\n}\n\nstd::vector<int> reverse_vector(const std::vector<int>& vec) {\n    std::vector<int> result;\n    result.reserve(vec.size());\n    for (int i = static_cast<int>(vec.size()) - 1; i >= 0; i--) {\n        result.push_back(vec[i]);\n    }\n    return result;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <memory>\n\nstruct Node {\n    int val;\n    std::unique_ptr<Node> next;\n    Node(int v) : val(v), next(nullptr) {}\n};\n\nint main() {\n    std::cout << \"=== 04: Smart Pointers ===\\n\";\n    auto head = std::make_unique<Node>(10);\n    head->next = std::make_unique<Node>(20);\n    std::cout << \"Node 1: \" << head->val << \" -> Node 2: \" << head->next->val << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<std::string> fruits = {\"Apple\", \"Banana\"};\n    fruits.push_back(\"Cherry\");\n\n    for (const auto& fruit : fruits) {\n        std::cout << fruit << \" \";\n    }\n    std::cout << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Break the memory leak in the cyclic shared_ptr graph using std::weak_ptr.\n#include <iostream>\n#include <memory>\n\nint main() { return 0; }\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <memory>\n\nstruct Person {\n    std::string name;\n    std::weak_ptr<Person> friendNode; // Weak pointer prevents cycle\n    Person(std::string n) : name(std::move(n)) {}\n    ~Person() { std::cout << \"Destroyed \" << name << \"\\n\"; }\n};\n\nint main() {\n    auto p1 = std::make_shared<Person>(\"Alice\");\n    auto p2 = std::make_shared<Person>(\"Bob\");\n    p1->friendNode = p2;\n    p2->friendNode = p1;\n    std::cout << \"Cyclic graph safely deallocated without leaks!\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <vector>\n\nint sum_vector(const std::vector<int>& vec) {\n    return 0;\n}\n\nstd::vector<int> filter_even(const std::vector<int>& vec) {\n    return {};\n}\n\nstd::vector<int> reverse_vector(const std::vector<int>& vec) {\n    return {};\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <vector>\n\nint sum_vector(const std::vector<int>& vec);\nstd::vector<int> filter_even(const std::vector<int>& vec);\nstd::vector<int> reverse_vector(const std::vector<int>& vec);\n\nint main() {\n    std::vector<int> numbers = {1, 2, 3, 4, 5};\n    assert(sum_vector(numbers) == 15);\n\n    auto evens = filter_even(numbers);\n    assert(evens.size() == 2 && evens[0] == 2 && evens[1] == 4);\n\n    auto rev = reverse_vector(numbers);\n    assert(rev.size() == 5 && rev[0] == 5 && rev[4] == 1);\n\n    std::cout << \"Module 04 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "05-move-semantics-and-perfect-forwarding",
+        "name": "05-classes-and-encapsulation",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 \u2014 Move Semantics And Perfect Forwarding\n\n## \ud83c\udfaf What is it?\nMove Semantics And Perfect Forwarding is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Move Semantics And Perfect Forwarding, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Move Semantics And Perfect Forwarding executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Move Semantics & Perfect Forwarding\n\n## \ud83c\udfaf Perfect Forwarding\n`std::forward<T>(arg)` preserves the exact value category (lvalue vs rvalue) when passing arguments across template boundaries.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Move Semantics And Perfect Forwarding\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 05 — Classes & Encapsulation\n\n## What is this?\nClasses encapsulate member state (`private`) and public interface methods (`public`). In C++, members are `private` by default in a `class`, and `public` by default in a `struct`.\n\n## Why does C++ have it?\n- Enforces invariant validation and prevents outside code from putting objects into corrupted states.\n- Member functions marked `const` guarantee they will not mutate object state.\n\n## Syntax and Core Mechanics\n```cpp\nclass BankAccount {\nprivate:\n    double balance_ = 0.0;\npublic:\n    BankAccount(double initial) : balance_(initial) {}\n    double get_balance() const { return balance_; }\n};\n```\n\n## What to Practice\nIn `exercise.cpp`, implement class `Rectangle`:\n- Constructor: `Rectangle(double width, double height)` (stores width and height, defaults to 0 if negative).\n- `double get_width() const`\n- `double get_height() const`\n- `double get_area() const`\n- `double get_perimeter() const`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\nclass Rectangle {\nprivate:\n    double width_ = 0.0;\n    double height_ = 0.0;\npublic:\n    Rectangle(double width, double height)\n        : width_(width > 0 ? width : 0.0),\n          height_(height > 0 ? height : 0.0) {}\n\n    double get_width() const { return width_; }\n    double get_height() const { return height_; }\n    double get_area() const { return width_ * height_; }\n    double get_perimeter() const { return 2 * (width_ + height_); }\n};\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <string>\n#include <utility>\n\ntemplate <typename T>\nvoid process(T&& arg) {\n    std::cout << \"Processing forwarded argument...\\n\";\n}\n\nint main() {\n    std::string s = \"trak\";\n    process(s);            // Lvalue forwarded\n    process(std::move(s)); // Rvalue forwarded\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nclass Counter {\nprivate:\n    int count_ = 0;\npublic:\n    void increment() { count_++; }\n    int get() const { return count_; }\n};\n\nint main() {\n    Counter c;\n    c.increment();\n    std::cout << \"Count: \" << c.get() << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Implement a generic factory function 'make_boxed<T>(args...)'\n// that constructs an object on heap using perfect forwarding.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <memory>\n#include <utility>\n\ntemplate <typename T, typename... Args>\nstd::unique_ptr<T> make_boxed(Args&&... args) {\n    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));\n}\n\nstruct Item {\n    int id;\n    std::string name;\n    Item(int i, std::string n) : id(i), name(std::move(n)) {}\n};\n\nint main() {\n    auto item = make_boxed<Item>(101, \"C++ Book\");\n    std::cout << \"Created Item: \" << item->id << \" - \" << item->name << \"\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "class Rectangle {\npublic:\n    Rectangle(double width, double height) {}\n    double get_width() const { return 0.0; }\n    double get_height() const { return 0.0; }\n    double get_area() const { return 0.0; }\n    double get_perimeter() const { return 0.0; }\n};\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <cmath>\n\nclass Rectangle {\nprivate:\n    double width_ = 0.0;\n    double height_ = 0.0;\npublic:\n    Rectangle(double width, double height);\n    double get_width() const;\n    double get_height() const;\n    double get_area() const;\n    double get_perimeter() const;\n};\n\n// Pull in definition from exercise.cpp\n#include \"exercise.cpp\"\n\nint main() {\n    Rectangle r(4.0, 5.0);\n    assert(r.get_width() == 4.0);\n    assert(r.get_height() == 5.0);\n    assert(r.get_area() == 20.0);\n    assert(r.get_perimeter() == 18.0);\n\n    Rectangle r_neg(-5.0, 10.0);\n    assert(r_neg.get_width() == 0.0);\n\n    std::cout << \"Module 05 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "06-templates-and-type-traits",
+        "name": "06-destructors-and-raii",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 \u2014 Templates And Type Traits\n\n## \ud83c\udfaf What is it?\nTemplates And Type Traits is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Templates And Type Traits, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Templates And Type Traits executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Templates & SFINAE Metaprogramming\n\n## \ud83c\udfaf SFINAE (Substitution Failure Is Not An Error)\nAllows disabling function template overloads based on compile-time type traits (`std::enable_if_t`).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Templates And Type Traits\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 06 — Destructors & RAII\n\n## What is this?\nResource Acquisition Is Initialization (RAII) ties resource lifecycle to object lifetime. The constructor acquires resources, and the destructor (`~ClassName()`) automatically releases them when the object goes out of scope.\n\n## Why does C++ have it?\n- Eliminates resource leaks (memory, sockets, file descriptors, mutex locks) even when exceptions are thrown.\n\n## Syntax and Core Mechanics\n```cpp\nclass FileGuard {\n    FILE* file_;\npublic:\n    FileGuard(FILE* f) : file_(f) {}\n    ~FileGuard() { if (file_) fclose(file_); }\n};\n```\n\n## What to Practice\nIn `exercise.cpp`, implement class `BufferGuard`:\n- Allocates an array of `size` integers dynamically in heap memory (`new int[size]`).\n- Stores pointer `data_` and `size_`.\n- Destructor `~BufferGuard()` deallocates the array via `delete[] data_`.\n- Methods:\n  - `int get_size() const`\n  - `void set(int index, int val)`\n  - `int get(int index) const` (returns -1 if out of bounds)\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\nclass BufferGuard {\nprivate:\n    int* data_ = nullptr;\n    int size_ = 0;\npublic:\n    explicit BufferGuard(int size) : size_(size > 0 ? size : 0) {\n        if (size_ > 0) {\n            data_ = new int[size_]();\n        }\n    }\n\n    ~BufferGuard() {\n        delete[] data_;\n        data_ = nullptr;\n    }\n\n    // Disable copying for RAII ownership simplicity\n    BufferGuard(const BufferGuard&) = delete;\n    BufferGuard& operator=(const BufferGuard&) = delete;\n\n    int get_size() const { return size_; }\n\n    void set(int index, int val) {\n        if (index >= 0 && index < size_ && data_) {\n            data_[index] = val;\n        }\n    }\n\n    int get(int index) const {\n        if (index >= 0 && index < size_ && data_) {\n            return data_[index];\n        }\n        return -1;\n    }\n};\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <type_traits>\n\ntemplate <typename T>\nenable_if_t<std::is_integral_v<T>, void>\nprint_type_info(T val) {\n    std::cout << \"Integral value: \" << val << \"\\n\";\n}\n\nint main() {\n    print_type_info(42);\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nstruct Tracker {\n    Tracker() { std::cout << \"Acquired\\n\"; }\n    ~Tracker() { std::cout << \"Released\\n\"; }\n};\n\nint main() {\n    { Tracker t; } // Automatically destroyed at end of scope\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Write a template function 'get_byte_size<T>()' that returns sizeof(T).\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n\ntemplate <typename T>\nconstexpr size_t get_byte_size() {\n    return sizeof(T);\n}\n\nint main() {\n    static_assert(get_byte_size<int>() == 4, \"int must be 4 bytes\");\n    std::cout << \"\u2714 Template size checker verified!\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "class BufferGuard {\npublic:\n    explicit BufferGuard(int size) {}\n    ~BufferGuard() {}\n    BufferGuard(const BufferGuard&) = delete;\n    BufferGuard& operator=(const BufferGuard&) = delete;\n\n    int get_size() const { return 0; }\n    void set(int index, int val) {}\n    int get(int index) const { return -1; }\n};\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include \"exercise.cpp\"\n\nint main() {\n    {\n        BufferGuard buf(5);\n        assert(buf.get_size() == 5);\n        buf.set(0, 100);\n        buf.set(1, 200);\n        assert(buf.get(0) == 100);\n        assert(buf.get(1) == 200);\n        assert(buf.get(10) == -1); // out of bounds\n    } // destructor deletes buffer cleanly\n\n    std::cout << \"Module 06 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "07-modern-concepts-and-constraints",
+        "name": "07-operator-overloading",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 \u2014 Modern Concepts And Constraints\n\n## \ud83c\udfaf What is it?\nModern Concepts And Constraints is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Modern Concepts And Constraints, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Modern Concepts And Constraints executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 C++20 Concepts & Constraints\n\n## \ud83c\udfaf Concepts vs SFINAE\nConcepts replace cryptic SFINAE templates with clean, readable constraints and readable compiler error messages:\n```cpp\ntemplate <typename T>\nconcept Numeric = std::is_arithmetic_v<T>;\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Modern Concepts And Constraints\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 07 — Operator Overloading\n\n## What is this?\nOperator overloading allows custom classes to define behavior for standard operators like `+`, `==`, and `!=`.\n\n## What to Practice\nIn `exercise.cpp`, implement class `Vector2D`:\n- Fields: `int x`, `int y`.\n- Constructor `Vector2D(int x = 0, int y = 0)`.\n- Overload `Vector2D operator+(const Vector2D& other) const`\n- Overload `bool operator==(const Vector2D& other) const`\n- Overload `bool operator!=(const Vector2D& other) const`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\nclass Vector2D {\npublic:\n    int x;\n    int y;\n\n    Vector2D(int x_val = 0, int y_val = 0) : x(x_val), y(y_val) {}\n\n    Vector2D operator+(const Vector2D& other) const {\n        return Vector2D(x + other.x, y + other.y);\n    }\n\n    bool operator==(const Vector2D& other) const {\n        return x == other.x && y == other.y;\n    }\n\n    bool operator!=(const Vector2D& other) const {\n        return !(*this == other);\n    }\n};\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <concepts>\n\ntemplate <typename T>\nconcept Numeric = std::integral<T> || std::floating_point<T>;\n\ntemplate <Numeric T>\nT add(T a, T b) {\n    return a + b;\n}\n\nint main() {\n    std::cout << \"=== 07: C++20 Concepts ===\\n\";\n    std::cout << \"Add integers: \" << add(10, 20) << \"\\n\";\n    std::cout << \"Add floats: \" << add(3.14, 2.71) << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nstruct Complex {\n    double real, imag;\n    Complex operator+(const Complex& o) const { return {real + o.real, imag + o.imag}; }\n};\n\nint main() {\n    Complex c1{1.0, 2.0}, c2{3.0, 4.0};\n    Complex c3 = c1 + c2;\n    std::cout << \"Result: \" << c3.real << \" + \" << c3.imag << \"i\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Define a concept 'Hashable' requiring std::hash<T>{}(t) to be valid.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <concepts>\n#include <string>\n\ntemplate <typename T>\nconcept Hashable = requires(T a) {\n    { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;\n};\n\ntemplate <Hashable T>\nstd::size_t compute_hash(const T& val) {\n    return std::hash<T>{}(val);\n}\n\nint main() {\n    std::cout << \"Hash of 'trak': \" << compute_hash(std::string(\"trak\")) << \"\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "class Vector2D {\npublic:\n    int x = 0;\n    int y = 0;\n\n    Vector2D(int x_val = 0, int y_val = 0) : x(x_val), y(y_val) {}\n\n    Vector2D operator+(const Vector2D& other) const {\n        return Vector2D();\n    }\n\n    bool operator==(const Vector2D& other) const {\n        return false;\n    }\n\n    bool operator!=(const Vector2D& other) const {\n        return false;\n    }\n};\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include \"exercise.cpp\"\n\nint main() {\n    Vector2D a(2, 3);\n    Vector2D b(4, 5);\n    Vector2D c = a + b;\n\n    assert(c.x == 6 && c.y == 8);\n    assert(a == Vector2D(2, 3));\n    assert(a != b);\n\n    std::cout << \"Module 07 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "08-stl-containers-and-complexity",
+        "name": "08-inheritance-and-virtual-functions",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 \u2014 Stl Containers And Complexity\n\n## \ud83c\udfaf What is it?\nStl Containers And Complexity is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Stl Containers And Complexity, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Stl Containers And Complexity executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 STL Containers & Memory Layout\n\n## \ud83c\udfaf Containers\n- `std::vector<T>`: Contiguous dynamic array (Pointer to Start, Finish, End of Storage).\n- `std::unordered_map<K, V>`: Hash table with linked-list bucket collision chaining.\n- `std::map<K, V>`: Balanced Red-Black tree with O(log N) operations.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Stl Containers And Complexity\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 08 — Inheritance & Virtual Functions\n\n## What is this?\nDynamic polymorphism in C++ is achieved through inheritance and `virtual` member functions dispatched via virtual method tables (`vtable`).\n\n## Syntax and Core Mechanics\n```cpp\nclass Shape {\npublic:\n    virtual ~Shape() = default;\n    virtual double area() const = 0; // Pure virtual interface\n};\n```\n\n## What to Practice\nIn `exercise.cpp`:\n1. Base class `Shape`:\n   - Virtual destructor `virtual ~Shape() = default;`\n   - Pure virtual method `virtual double area() const = 0;`\n2. Derived class `Circle : public Shape`:\n   - Constructor `Circle(double radius)`\n   - Override `double area() const override` (`3.14159 * radius * radius`)\n3. Derived class `Square : public Shape`:\n   - Constructor `Square(double side)`\n   - Override `double area() const override` (`side * side`)\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\nclass Shape {\npublic:\n    virtual ~Shape() = default;\n    virtual double area() const = 0;\n};\n\nclass Circle : public Shape {\nprivate:\n    double radius_;\npublic:\n    explicit Circle(double radius) : radius_(radius) {}\n    double area() const override {\n        return 3.14159 * radius_ * radius_;\n    }\n};\n\nclass Square : public Shape {\nprivate:\n    double side_;\npublic:\n    explicit Square(double side) : side_(side) {}\n    double area() const override {\n        return side_ * side_;\n    }\n};\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <vector>\n\nint main() {\n    std::cout << \"=== 08: Vector Capacity Growth ===\\n\";\n    std::vector<int> v;\n    for (int i = 0; i < 5; ++i) {\n        v.push_back(i);\n        std::cout << \"Size: \" << v.size() << \" | Capacity: \" << v.capacity() << \"\\n\";\n    }\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nclass Animal {\npublic:\n    virtual ~Animal() = default;\n    virtual void speak() const { std::cout << \"Animal sound\\n\"; }\n};\n\nclass Dog : public Animal {\npublic:\n    void speak() const override { std::cout << \"Woof!\\n\"; }\n};\n\nint main() {\n    Dog d;\n    Animal* ptr = &d;\n    ptr->speak();\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Use std::unordered_map to compute word frequencies.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <unordered_map>\n#include <vector>\n#include <string>\n\nint main() {\n    std::vector<std::string> words = {\"cpp\", \"rust\", \"cpp\", \"go\", \"cpp\"};\n    std::unordered_map<std::string, int> freq;\n    for (const auto& w : words) {\n        freq[w]++;\n    }\n    std::cout << \"Count of 'cpp': \" << freq[\"cpp\"] << \"\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "class Shape {\npublic:\n    virtual ~Shape() = default;\n    virtual double area() const = 0;\n};\n\nclass Circle : public Shape {\npublic:\n    explicit Circle(double radius) {}\n    double area() const override { return 0.0; }\n};\n\nclass Square : public Shape {\npublic:\n    explicit Square(double side) {}\n    double area() const override { return 0.0; }\n};\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <cmath>\n#include \"exercise.cpp\"\n\nint main() {\n    Circle c(2.0);\n    Square s(3.0);\n\n    Shape* p1 = &c;\n    Shape* p2 = &s;\n\n    assert(std::fabs(p1->area() - (3.14159 * 4.0)) < 0.001);\n    assert(std::fabs(p2->area() - 9.0) < 0.001);\n\n    std::cout << \"Module 08 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "09-stl-iterators-and-algorithms",
+        "name": "09-smart-pointers-unique-ptr",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 \u2014 Stl Iterators And Algorithms\n\n## \ud83c\udfaf What is it?\nStl Iterators And Algorithms is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Stl Iterators And Algorithms, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Stl Iterators And Algorithms executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Algorithms & C++20 Ranges\n\n## \ud83c\udfaf C++20 Ranges\nComposable, non-allocating pipelines:\n```cpp\nauto evens = nums | std::views::filter([](int x) { return x % 2 == 0; })\n                  | std::views::transform([](int x) { return x * 2; });\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Stl Iterators And Algorithms\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 09 — Smart Pointers (unique_ptr)\n\n## What is this?\n`std::unique_ptr<T>` (defined in `<memory>`) manages heap objects with exclusive ownership. It cannot be copied, only moved. When the `unique_ptr` goes out of scope, it automatically destroys the managed object.\n\n## Syntax and Core Mechanics\n```cpp\n#include <memory>\n\nauto ptr = std::make_unique<int>(42);\n// Ownership transfer\nauto other = std::move(ptr); // ptr is now nullptr\n```\n\n## What to Practice\nIn `exercise.cpp`:\nGiven:\n```cpp\nstruct Task {\n    int id;\n    std::string title;\n};\n```\nImplement:\n1. `std::unique_ptr<Task> create_task(int id, std::string title)`:\n   - Allocates and returns a `std::unique_ptr<Task>`.\n2. `int get_task_id(const std::unique_ptr<Task>& task)`:\n   - Returns task id, or -1 if `task == nullptr`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <memory>\n#include <string>\n\nstruct Task {\n    int id;\n    std::string title;\n};\n\nstd::unique_ptr<Task> create_task(int id, std::string title) {\n    return std::make_unique<Task>(Task{id, std::move(title)});\n}\n\nint get_task_id(const std::unique_ptr<Task>& task) {\n    if (!task) return -1;\n    return task->id;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nint main() {\n    std::vector<int> v = {5, 2, 8, 1, 9};\n    std::sort(v.begin(), v.end());\n    std::cout << \"=== 09: STL Sort ===\\n\";\n    for (int x : v) std::cout << x << \" \";\n    std::cout << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <memory>\n\nint main() {\n    std::unique_ptr<int> val = std::make_unique<int>(100);\n    std::cout << \"Val: \" << *val << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Use std::accumulate to sum a vector of integers.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::vector<int> nums = {10, 20, 30, 40};\n    int sum = std::accumulate(nums.begin(), nums.end(), 0);\n    std::cout << \"Sum: \" << sum << \"\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <memory>\n#include <string>\n\nstruct Task {\n    int id;\n    std::string title;\n};\n\nstd::unique_ptr<Task> create_task(int id, std::string title) {\n    return nullptr;\n}\n\nint get_task_id(const std::unique_ptr<Task>& task) {\n    return -1;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <memory>\n#include <string>\n#include \"exercise.cpp\"\n\nint main() {\n    auto t = create_task(101, \"Deploy Service\");\n    assert(t != nullptr);\n    assert(t->id == 101);\n    assert(t->title == \"Deploy Service\");\n    assert(get_task_id(t) == 101);\n\n    std::unique_ptr<Task> empty_task = nullptr;\n    assert(get_task_id(empty_task) == -1);\n\n    std::cout << \"Module 09 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "10-lambdas-and-std-function",
+        "name": "10-smart-pointers-shared-and-weak",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 \u2014 Lambdas And Std Function\n\n## \ud83c\udfaf What is it?\nLambdas And Std Function is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Lambdas And Std Function, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Lambdas And Std Function executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Lambdas, Closures & Type Erasure\n\n## \ud83c\udfaf Lambda Syntax\n`[captures](parameters) mutable noexcept -> return_type { body }`\n- `[&]`: Capture all by reference.\n- `[=]`: Capture all by value.\n- `[ptr = std::move(p)]`: Generalized init-capture.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Lambdas And Std Function\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 10 — Smart Pointers (shared_ptr & weak_ptr)\n\n## What is this?\n`std::shared_ptr<T>` maintains shared ownership via an atomic reference count. `std::weak_ptr<T>` provides a non-owning observer to break circular reference cycles.\n\n## Syntax and Core Mechanics\n```cpp\n#include <memory>\n\nauto s1 = std::make_shared<int>(50);\nauto s2 = s1; // Ref count is now 2\nlong count = s1.use_count(); // 2\n```\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `std::shared_ptr<int> make_shared_int(int val)`: Allocates and returns a shared pointer to `val`.\n2. `long get_ref_count(const std::shared_ptr<int>& ptr)`: Returns `ptr.use_count()`.\n3. `bool is_expired(const std::weak_ptr<int>& w_ptr)`: Returns `w_ptr.expired()`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <memory>\n\nstd::shared_ptr<int> make_shared_int(int val) {\n    return std::make_shared<int>(val);\n}\n\nlong get_ref_count(const std::shared_ptr<int>& ptr) {\n    return ptr.use_count();\n}\n\nbool is_expired(const std::weak_ptr<int>& w_ptr) {\n    return w_ptr.expired();\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <functional>\n\nint main() {\n    int multiplier = 3;\n    auto triple = [multiplier](int x) { return x * multiplier; };\n    std::cout << \"=== 10: Lambdas ===\\n\";\n    std::cout << \"3 * 7 = \" << triple(7) << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <memory>\n\nint main() {\n    std::shared_ptr<int> p1 = std::make_shared<int>(42);\n    std::weak_ptr<int> wp = p1;\n    std::cout << \"Count: \" << p1.use_count() << \", Expired: \" << wp.expired() << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Write a function that accepts a std::function<int(int)> transformer and applies it.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <functional>\n\nint transform(int val, const std::function<int(int)>& fn) {\n    return fn(val);\n}\n\nint main() {\n    int res = transform(5, [](int x) { return x * x; });\n    std::cout << \"Transformed result: \" << res << \"\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <memory>\n\nstd::shared_ptr<int> make_shared_int(int val) {\n    return nullptr;\n}\n\nlong get_ref_count(const std::shared_ptr<int>& ptr) {\n    return 0;\n}\n\nbool is_expired(const std::weak_ptr<int>& w_ptr) {\n    return true;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <memory>\n#include \"exercise.cpp\"\n\nint main() {\n    auto p1 = make_shared_int(42);\n    assert(p1 != nullptr && *p1 == 42);\n    assert(get_ref_count(p1) == 1);\n\n    auto p2 = p1;\n    assert(get_ref_count(p1) == 2);\n\n    std::weak_ptr<int> wp = p1;\n    assert(!is_expired(wp));\n\n    p1.reset();\n    p2.reset();\n    assert(is_expired(wp));\n\n    std::cout << \"Module 10 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "11-oop-virtual-tables-and-rtti",
+        "name": "11-move-semantics-and-rvalues",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 \u2014 Oop Virtual Tables And Rtti\n\n## \ud83c\udfaf What is it?\nOop Virtual Tables And Rtti is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Oop Virtual Tables And Rtti, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Oop Virtual Tables And Rtti executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Virtual Tables & Dynamic Polymorphism\n\n## \ud83c\udfaf How Vtables Work\nWhen a class has virtual functions, the compiler embeds a hidden pointer (`vptr`) pointing to the class's `vtable` (array of function pointers).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Oop Virtual Tables And Rtti\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 11 — Move Semantics & Rvalues\n\n## What is this?\nMove semantics transfer internal resources (pointers, buffers) from temporary rvalue objects (`Type&&`) without performing expensive deep memory allocations. `std::move` casts an lvalue to an rvalue.\n\n## Syntax and Core Mechanics\n```cpp\nstd::string a = \"Large data\";\nstd::string b = std::move(a); // a is now empty\n```\n\n## What to Practice\nIn `exercise.cpp`, implement class `StringWrapper`:\n- Holds `std::string data_`.\n- Constructor: `StringWrapper(std::string s) : data_(std::move(s)) {}`\n- Move constructor: `StringWrapper(StringWrapper&& other) noexcept : data_(std::move(other.data_)) {}`\n- Method: `const std::string& get() const { return data_; }`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <string>\n#include <utility>\n\nclass StringWrapper {\nprivate:\n    std::string data_;\npublic:\n    explicit StringWrapper(std::string s) : data_(std::move(s)) {}\n    StringWrapper(StringWrapper&& other) noexcept : data_(std::move(other.data_)) {}\n    StringWrapper& operator=(StringWrapper&& other) noexcept {\n        if (this != &other) {\n            data_ = std::move(other.data_);\n        }\n        return *this;\n    }\n    const std::string& get() const { return data_; }\n};\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n\nclass Shape {\npublic:\n    virtual void draw() const = 0;\n    virtual ~Shape() = default;\n};\n\nclass Circle : public Shape {\npublic:\n    void draw() const override {\n        std::cout << \"Drawing Circle (vtable dispatch)\\n\";\n    }\n};\n\nint main() {\n    Shape* s = new Circle();\n    s->draw();\n    delete s;\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <string>\n#include <utility>\n\nint main() {\n    std::string s1 = \"Alpha\";\n    std::string s2 = std::move(s1);\n    std::cout << \"s2: \" << s2 << \", s1 empty? \" << s1.empty() << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Implement an interface 'Logger' and a concrete class 'ConsoleLogger'.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <string>\n\nclass Logger {\npublic:\n    virtual void log(const std::string& msg) = 0;\n    virtual ~Logger() = default;\n};\n\nclass ConsoleLogger : public Logger {\npublic:\n    void log(const std::string& msg) override {\n        std::cout << \"[LOG] \" << msg << \"\\n\";\n    }\n};\n\nint main() {\n    ConsoleLogger logger;\n    logger.log(\"Trak engine running\");\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <string>\n\nclass StringWrapper {\nprivate:\n    std::string data_;\npublic:\n    explicit StringWrapper(std::string s) {}\n    StringWrapper(StringWrapper&& other) noexcept {}\n    const std::string& get() const { return data_; }\n};\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <string>\n#include \"exercise.cpp\"\n\nint main() {\n    StringWrapper w1(\"Persistent Resource\");\n    assert(w1.get() == \"Persistent Resource\");\n\n    StringWrapper w2 = std::move(w1);\n    assert(w2.get() == \"Persistent Resource\");\n\n    std::cout << \"Module 11 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "12-error-handling-and-exceptions",
+        "name": "12-function-templates",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 \u2014 Error Handling And Exceptions\n\n## \ud83c\udfaf What is it?\nError Handling And Exceptions is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Error Handling And Exceptions, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Error Handling And Exceptions executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Exception Safety & `std::expected`\n\n## \ud83c\udfaf Exception Guarantees\n1. **Basic Guarantee**: No resource leaks; objects remain in valid states.\n2. **Strong Guarantee**: Commit-or-rollback semantics (operation succeeds or leaves state unchanged).\n3. **Nothrow Guarantee (`noexcept`)**: Operation will never throw.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Error Handling And Exceptions\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 12 — Function Templates\n\n## What is this?\nTemplates allow writing type-agnostic code parameterized by types at compile time.\n\n## Syntax and Core Mechanics\n```cpp\ntemplate <typename T>\nT max_val(T a, T b) { return (a > b) ? a : b; }\n```\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `template <typename T> T find_min(T a, T b)`: Returns smaller of `a` and `b`.\n2. `template <typename T> void swap_generic(T& a, T& b)`: Swaps two items of type `T`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\ntemplate <typename T>\nT find_min(T a, T b) {\n    return (a < b) ? a : b;\n}\n\ntemplate <typename T>\nvoid swap_generic(T& a, T& b) {\n    T temp = a;\n    a = b;\n    b = temp;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <stdexcept>\n\nvoid validate_age(int age) {\n    if (age < 0) throw std::invalid_argument(\"Age cannot be negative\");\n}\n\nint main() {\n    try {\n        validate_age(-5);\n    } catch (const std::exception& e) {\n        std::cout << \"Caught expected exception: \" << e.what() << \"\\n\";\n    }\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\ntemplate <typename T>\nvoid display(T val) { std::cout << \"Val: \" << val << \"\\n\"; }\n\nint main() {\n    display(42);\n    display(\"Template string\");\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Write a safe division function returning custom Result structure.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n\nstruct Result {\n    bool success;\n    double value;\n    std::string error;\n};\n\nResult safe_divide(double a, double b) {\n    if (b == 0.0) return {false, 0.0, \"Division by zero\"};\n    return {true, a / b, \"\"};\n}\n\nint main() {\n    auto r = safe_divide(10.0, 2.0);\n    if (r.success) std::cout << \"Result: \" << r.value << \"\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "template <typename T>\nT find_min(T a, T b) {\n    return a;\n}\n\ntemplate <typename T>\nvoid swap_generic(T& a, T& b) {\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <string>\n#include \"exercise.cpp\"\n\nint main() {\n    assert(find_min(10, 20) == 10);\n    assert(find_min(3.14, 2.71) == 2.71);\n\n    int a = 1, b = 2;\n    swap_generic(a, b);\n    assert(a == 2 && b == 1);\n\n    std::string s1 = \"first\", s2 = \"second\";\n    swap_generic(s1, s2);\n    assert(s1 == \"second\" && s2 == \"first\");\n\n    std::cout << \"Module 12 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "13-concurrency-threads-and-mutexes",
+        "name": "13-class-templates",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 \u2014 Concurrency Threads And Mutexes\n\n## \ud83c\udfaf What is it?\nConcurrency Threads And Mutexes is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Concurrency Threads And Mutexes, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Concurrency Threads And Mutexes executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Modern Concurrency & `std::jthread`\n\n## \ud83c\udfaf `std::jthread` (C++20)\nAutomatically joins upon destruction, eliminating thread dangling bugs.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Concurrency Threads And Mutexes\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 13 — Class Templates\n\n## What is this?\nClass templates define generic classes capable of operating over arbitrary types.\n\n## What to Practice\nIn `exercise.cpp`, implement class template `Box<T>`:\n- Private member `T value_`.\n- Constructor `Box(T val) : value_(val) {}`\n- Method `T get() const`\n- Method `void set(T val)`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\ntemplate <typename T>\nclass Box {\nprivate:\n    T value_;\npublic:\n    explicit Box(T val) : value_(val) {}\n    T get() const { return value_; }\n    void set(T val) { value_ = val; }\n};\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <thread>\n#include <mutex>\n\nstd::mutex mtx;\nint counter = 0;\n\nvoid increment() {\n    std::lock_guard<std::mutex> lock(mtx);\n    counter++;\n}\n\nint main() {\n    std::thread t1(increment);\n    std::thread t2(increment);\n    t1.join();\n    t2.join();\n    std::cout << \"Final Counter: \" << counter << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\ntemplate <typename T>\nstruct Pair { T first, second; };\n\nint main() {\n    Pair<int> p{1, 2};\n    std::cout << p.first << \", \" << p.second << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Implement multi-threaded worker pool.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <vector>\n#include <thread>\n\nint main() {\n    std::vector<std::thread> workers;\n    for (int i = 0; i < 4; ++i) {\n        workers.emplace_back([i]() {\n            std::cout << \"Worker \" << i << \" active\\n\";\n        });\n    }\n    for (auto& w : workers) w.join();\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "template <typename T>\nclass Box {\npublic:\n    explicit Box(T val) {}\n    T get() const { return T(); }\n    void set(T val) {}\n};\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <string>\n#include \"exercise.cpp\"\n\nint main() {\n    Box<int> int_box(42);\n    assert(int_box.get() == 42);\n    int_box.set(100);\n    assert(int_box.get() == 100);\n\n    Box<std::string> str_box(\"Hello\");\n    assert(str_box.get() == \"Hello\");\n\n    std::cout << \"Module 13 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "14-atomics-and-memory-models",
+        "name": "14-stl-associative-containers",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 \u2014 Atomics And Memory Models\n\n## \ud83c\udfaf What is it?\nAtomics And Memory Models is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Atomics And Memory Models, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Atomics And Memory Models executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Lock-Free Atomics & Memory Ordering\n\n## \ud83c\udfaf Memory Models\n- `memory_order_relaxed`: Atomicity without ordering guarantees.\n- `memory_order_acquire` / `release`: Synchronizes memory across producer/consumer threads.\n- `memory_order_seq_cst`: Sequentially consistent (default, strictest).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Atomics And Memory Models\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 14 — STL Associative Containers\n\n## What is this?\nAssociative containers include `std::map` (ordered Red-Black tree, O(log N)) and `std::unordered_map` (hash table, average O(1)).\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `void record_word(std::unordered_map<std::string, int>& counts, const std::string& word)`:\n   - Increments the frequency count of `word` in `counts`.\n2. `int get_word_count(const std::unordered_map<std::string, int>& counts, const std::string& word)`:\n   - Returns count of `word`, or 0 if not present.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <string>\n#include <unordered_map>\n\nvoid record_word(std::unordered_map<std::string, int>& counts, const std::string& word) {\n    counts[word]++;\n}\n\nint get_word_count(const std::unordered_map<std::string, int>& counts, const std::string& word) {\n    auto it = counts.find(word);\n    if (it != counts.end()) {\n        return it->second;\n    }\n    return 0;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <atomic>\n\nstd::atomic<int> atomic_counter{0};\n\nint main() {\n    atomic_counter.fetch_add(1, std::memory_order_relaxed);\n    std::cout << \"Atomic counter: \" << atomic_counter.load() << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <unordered_map>\n\nint main() {\n    std::unordered_map<std::string, int> ages;\n    ages[\"Alice\"] = 30;\n    std::cout << \"Alice: \" << ages[\"Alice\"] << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Implement a spinlock using std::atomic_flag.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <atomic>\n\nclass Spinlock {\n    std::atomic_flag flag = ATOMIC_FLAG_INIT;\npublic:\n    void lock() {\n        while (flag.test_and_set(std::memory_order_acquire)) {}\n    }\n    void unlock() {\n        flag.clear(std::memory_order_release);\n    }\n};\n\nint main() {\n    Spinlock lock;\n    lock.lock();\n    std::cout << \"Spinlock acquired successfully!\\n\";\n    lock.unlock();\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <string>\n#include <unordered_map>\n\nvoid record_word(std::unordered_map<std::string, int>& counts, const std::string& word) {\n}\n\nint get_word_count(const std::unordered_map<std::string, int>& counts, const std::string& word) {\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <string>\n#include <unordered_map>\n#include \"exercise.cpp\"\n\nint main() {\n    std::unordered_map<std::string, int> map;\n    record_word(map, \"apple\");\n    record_word(map, \"banana\");\n    record_word(map, \"apple\");\n\n    assert(get_word_count(map, \"apple\") == 2);\n    assert(get_word_count(map, \"banana\") == 1);\n    assert(get_word_count(map, \"cherry\") == 0);\n\n    std::cout << \"Module 14 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "15-async-futures-and-coroutines",
+        "name": "15-stl-algorithms-and-iterators",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 \u2014 Async Futures And Coroutines\n\n## \ud83c\udfaf What is it?\nAsync Futures And Coroutines is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Async Futures And Coroutines, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Async Futures And Coroutines executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Asynchronous Futures & Coroutines\n\n## \ud83c\udfaf `std::async` & `std::future`\nHigh-level abstraction for running tasks asynchronously and querying their return values.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Async Futures And Coroutines\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 15 — STL Algorithms & Iterators\n\n## What is this?\nThe `<algorithm>` library provides standardized algorithms like `std::sort`, `std::count_if`, and `std::transform`.\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `void sort_descending(std::vector<int>& vec)`: Sorts vector elements in descending order.\n2. `int count_greater_than(const std::vector<int>& vec, int threshold)`:\n   - Counts elements strictly greater than `threshold`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <vector>\n#include <algorithm>\n\nvoid sort_descending(std::vector<int>& vec) {\n    std::sort(vec.begin(), vec.end(), [](int a, int b) { return a > b; });\n}\n\nint count_greater_than(const std::vector<int>& vec, int threshold) {\n    return static_cast<int>(std::count_if(vec.begin(), vec.end(), [threshold](int n) {\n        return n > threshold;\n    }));\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <future>\n\nint async_task() {\n    return 42;\n}\n\nint main() {\n    std::future<int> fut = std::async(std::launch::async, async_task);\n    std::cout << \"Async result: \" << fut.get() << \"\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nint main() {\n    std::vector<int> v = {3, 1, 4};\n    std::sort(v.begin(), v.end());\n    std::cout << \"First: \" << v[0] << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Use std::promise and std::future to pass a computed value across threads.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <future>\n#include <thread>\n\nvoid compute(std::promise<int> prom) {\n    prom.set_value(100);\n}\n\nint main() {\n    std::promise<int> prom;\n    std::future<int> fut = prom.get_future();\n    std::thread t(compute, std::move(prom));\n    std::cout << \"Promise received value: \" << fut.get() << \"\\n\";\n    t.join();\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <vector>\n\nvoid sort_descending(std::vector<int>& vec) {\n}\n\nint count_greater_than(const std::vector<int>& vec, int threshold) {\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <vector>\n#include \"exercise.cpp\"\n\nint main() {\n    std::vector<int> nums = {4, 1, 9, 2};\n    sort_descending(nums);\n    assert(nums[0] == 9 && nums[1] == 4 && nums[2] == 2 && nums[3] == 1);\n\n    assert(count_greater_than(nums, 3) == 2); // 9 and 4\n\n    std::cout << \"Module 15 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "16-modules-and-header-units",
+        "name": "16-lambdas-and-std-function",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 \u2014 Modules And Header Units\n\n## \ud83c\udfaf What is it?\nModules And Header Units is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Modules And Header Units, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Modules And Header Units executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 C++20 Modules Architecture\n\n## \ud83c\udfaf Key Advantages\n- Eliminates preprocessor `#include` macro leaks.\n- Reduces compilation times by 5x-10x via pre-compiled module interfaces.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Modules And Header Units\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 16 — Lambdas & std::function\n\n## What is this?\nC++ lambdas define anonymous closures: `[capture](params) -> return_type { body }`. `std::function` wraps any callable.\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `std::function<int(int)> make_multiplier(int factor)`:\n   - Returns a lambda that multiplies its argument by `factor`.\n2. `std::vector<int> transform_values(const std::vector<int>& vec, const std::function<int(int)>& op)`:\n   - Applies `op` to each element and returns new vector.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <functional>\n#include <vector>\n\nstd::function<int(int)> make_multiplier(int factor) {\n    return [factor](int x) { return x * factor; };\n}\n\nstd::vector<int> transform_values(const std::vector<int>& vec, const std::function<int(int)>& op) {\n    std::vector<int> result;\n    result.reserve(vec.size());\n    for (int n : vec) {\n        result.push_back(op(n));\n    }\n    return result;\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=== 16: C++20 Modules Architecture ===\\n\";\n    std::cout << \"Modules provide isolated symbol export boundaries.\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n\nint main() {\n    auto sq = [](int x) { return x * x; };\n    std::cout << \"5 sq: \" << sq(5) << \"\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Write a program that displays module build targets.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n\nint main() {\n    std::cout << \"Module export syntax: export module math_core;\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <functional>\n#include <vector>\n\nstd::function<int(int)> make_multiplier(int factor) {\n    return nullptr;\n}\n\nstd::vector<int> transform_values(const std::vector<int>& vec, const std::function<int(int)>& op) {\n    return {};\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <vector>\n#include <functional>\n#include \"exercise.cpp\"\n\nint main() {\n    auto triple = make_multiplier(3);\n    assert(triple(5) == 15);\n\n    std::vector<int> input = {1, 2, 3};\n    auto out = transform_values(input, triple);\n    assert(out.size() == 3 && out[0] == 3 && out[1] == 6 && out[2] == 9);\n\n    std::cout << \"Module 16 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "17-testing-and-benchmarking",
+        "name": "17-error-handling-and-exceptions",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 \u2014 Testing And Benchmarking\n\n## \ud83c\udfaf What is it?\nTesting And Benchmarking is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Testing And Benchmarking, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Testing And Benchmarking executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Unit Testing & Assertions\n\n## \ud83c\udfaf Testing Architecture\n- Use `assert()` or testing frameworks (Catch2, Google Test) for verifiable unit tests.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Testing And Benchmarking\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 17 — Error Handling & Exceptions\n\n## What is this?\nC++ provides structured exception handling via `try`, `catch`, and `throw`. Standard exceptions derive from `std::exception`.\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `int safe_divide_throws(int a, int b)`:\n   - If `b == 0`, throws `std::invalid_argument(\"Division by zero\")`. Otherwise returns `a / b`.\n2. `bool try_divide(int a, int b, int& out_result)`:\n   - Calls `safe_divide_throws`. If successful, sets `out_result` and returns `true`. If exception caught, returns `false`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <stdexcept>\n\nint safe_divide_throws(int a, int b) {\n    if (b == 0) {\n        throw std::invalid_argument(\"Division by zero\");\n    }\n    return a / b;\n}\n\nbool try_divide(int a, int b, int& out_result) {\n    try {\n        out_result = safe_divide_throws(a, b);\n        return true;\n    } catch (const std::invalid_argument&) {\n        return false;\n    }\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n#include <cassert>\n\nint add(int a, int b) { return a + b; }\n\nint main() {\n    assert(add(2, 3) == 5);\n    std::cout << \"\u2714 Assertion passed!\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <stdexcept>\n\nint main() {\n    try {\n        throw std::runtime_error(\"Demo error\");\n    } catch (const std::exception& e) {\n        std::cout << \"Caught: \" << e.what() << \"\\n\";\n    }\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Write tests for a palindrome checking function.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <string>\n#include <cassert>\n\nbool is_palindrome(const std::string& s) {\n    int l = 0, r = s.size() - 1;\n    while (l < r) {\n        if (s[l++] != s[r--]) return false;\n    }\n    return true;\n}\n\nint main() {\n    assert(is_palindrome(\"racecar\"));\n    assert(!is_palindrome(\"trak\"));\n    std::cout << \"\u2714 Palindrome tests passed!\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "int safe_divide_throws(int a, int b) {\n    return 0;\n}\n\nbool try_divide(int a, int b, int& out_result) {\n    return false;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <stdexcept>\n#include \"exercise.cpp\"\n\nint main() {\n    int res = 0;\n    assert(try_divide(10, 2, res) == true);\n    assert(res == 5);\n\n    assert(try_divide(10, 0, res) == false);\n\n    bool threw = false;\n    try {\n        safe_divide_throws(5, 0);\n    } catch (const std::invalid_argument&) {\n        threw = true;\n    }\n    assert(threw);\n\n    std::cout << \"Module 17 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       },
       {
-        "name": "18-interview-questions-and-drills",
+        "name": "18-file-io-and-streams",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 \u2014 Interview Questions And Drills\n\n## \ud83c\udfaf What is it?\nInterview Questions And Drills is a core foundational concept in Modern C++ Systems & Performance Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Interview Questions And Drills, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Interview Questions And Drills executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Interview Questions And Drills\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 18 — File I/O & Streams\n\n## What is this?\n`<fstream>` provides RAII file stream classes (`std::ofstream`, `std::ifstream`).\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `bool write_text(const std::string& path, const std::string& content)`:\n   - Writes `content` to `path`. Returns `true` on success, `false` on failure.\n2. `std::string read_text(const std::string& path)`:\n   - Reads entire content of file at `path` into a string. Returns empty string if opening fails.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <string>\n#include <fstream>\n#include <sstream>\n\nbool write_text(const std::string& path, const std::string& content) {\n    std::ofstream ofs(path);\n    if (!ofs.is_open()) return false;\n    ofs << content;\n    return ofs.good();\n}\n\nstd::string read_text(const std::string& path) {\n    std::ifstream ifs(path);\n    if (!ifs.is_open()) return \"\";\n    std::ostringstream ss;\n    ss << ifs.rdbuf();\n    return ss.str();\n}\n```\n</details>\n"
           },
           {
             "name": "example.cpp",
             "type": "file",
-            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=== 18: Master Interview Drill ===\\n\";\n    std::cout << \"1. RAII & Rule of 5\\n\";\n    std::cout << \"2. Perfect forwarding & std::forward\\n\";\n    std::cout << \"3. Vtable pointer overhead\\n\";\n    std::cout << \"4. Lock-free atomic ordering\\n\";\n    std::cout << \"\ud83d\ude80 You have completed the comprehensive Modern C++ Mastery Track!\\n\";\n    return 0;\n}\n"
+            "content": "#include <iostream>\n#include <fstream>\n\nint main() {\n    std::ofstream out(\"demo.tmp\");\n    out << \"Testing\\n\";\n    return 0;\n}\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.cpp",
-                "type": "file",
-                "content": "// TODO: Master Drill: Implement a thread-safe ThreadPool queue.\n"
-              },
-              {
-                "name": "solution.cpp",
-                "type": "file",
-                "content": "#include <iostream>\n#include <queue>\n#include <mutex>\n#include <condition_variable>\n\ntemplate <typename T>\nclass ThreadSafeQueue {\n    std::queue<T> q;\n    mutable std::mutex mtx;\n    std::condition_variable cv;\npublic:\n    void push(T val) {\n        std::lock_guard<std::mutex> lock(mtx);\n        q.push(std::move(val));\n        cv.notify_one();\n    }\n    T pop() {\n        std::unique_lock<std::mutex> lock(mtx);\n        cv.wait(lock, [this] { return !q.empty(); });\n        T val = std::move(q.front());\n        q.pop();\n        return val;\n    }\n};\n\nint main() {\n    ThreadSafeQueue<int> q;\n    q.push(42);\n    std::cout << \"Popped value: \" << q.pop() << \"\\n\";\n    std::cout << \"\u2714 ThreadSafeQueue drill passed!\\n\";\n    return 0;\n}\n"
-              }
-            ]
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <string>\n\nbool write_text(const std::string& path, const std::string& content) {\n    return false;\n}\n\nstd::string read_text(const std::string& path) {\n    return \"\";\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <string>\n#include <cstdio>\n#include \"exercise.cpp\"\n\nint main() {\n    const std::string tmp = \"temp_test_cpp.txt\";\n    assert(write_text(tmp, \"Hello Stream!\") == true);\n    assert(read_text(tmp) == \"Hello Stream!\");\n    std::remove(tmp.c_str());\n\n    assert(read_text(\"non_existent_file_xyz.txt\") == \"\");\n\n    std::cout << \"Module 18 tests passed successfully.\\n\";\n    return 0;\n}\n"
+          }
+        ]
+      },
+      {
+        "name": "19-modern-cpp-utilities",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 — Modern C++ Utilities\n\n## What is this?\nModern C++ (C++17) introduces `std::optional<T>` for values that may or may not exist, replacing null pointers and sentinel values.\n\n## What to Practice\nImplement in `exercise.cpp`:\n1. `std::optional<int> safe_parse_positive(int val)`:\n   - If `val > 0`, returns `std::optional<int>(val)`. Otherwise returns `std::nullopt`.\n2. `int get_value_or_default(const std::optional<int>& opt, int default_val)`:\n   - Returns `opt.value()` if present, else `default_val`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```cpp\n#include <optional>\n\nstd::optional<int> safe_parse_positive(int val) {\n    if (val > 0) {\n        return val;\n    }\n    return std::nullopt;\n}\n\nint get_value_or_default(const std::optional<int>& opt, int default_val) {\n    return opt.value_or(default_val);\n}\n```\n</details>\n"
+          },
+          {
+            "name": "example.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <optional>\n\nint main() {\n    std::optional<int> o = 10;\n    std::cout << \"Has val: \" << o.has_value() << \"\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise.cpp",
+            "type": "file",
+            "content": "#include <optional>\n\nstd::optional<int> safe_parse_positive(int val) {\n    return std::nullopt;\n}\n\nint get_value_or_default(const std::optional<int>& opt, int default_val) {\n    return 0;\n}\n"
+          },
+          {
+            "name": "exercise_test.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cstdlib>\n\ninline void test_assert(bool condition, const char *expr, int line) {\n    if (!condition) {\n        std::cerr << \"Assertion failed: \" << expr << \" at line \" << line << \"\\n\";\n        std::exit(1);\n    }\n}\n#define assert(expr) test_assert(static_cast<bool>(expr), #expr, __LINE__)\n\n#include <optional>\n#include \"exercise.cpp\"\n\nint main() {\n    auto pos = safe_parse_positive(42);\n    assert(pos.has_value() && pos.value() == 42);\n\n    auto neg = safe_parse_positive(-5);\n    assert(!neg.has_value());\n\n    assert(get_value_or_default(pos, 0) == 42);\n    assert(get_value_or_default(neg, 99) == 99);\n\n    std::cout << \"Module 19 tests passed successfully.\\n\";\n    return 0;\n}\n"
           }
         ]
       }
