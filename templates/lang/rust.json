@@ -1,627 +1,456 @@
 {
   "id": "lang/rust",
+  "template": "lang/rust",
+  "template_version": "1.0.0",
+  "created_at": "2026-09-05T00:00:00Z",
+  "author": "Trak",
+  "source": "templates/lang/rust.json",
+  "version": "1.0.0",
+  "repository": "https://github.com/ndk123-web/trak-registry",
   "name": "Rust Systems Mastery Track",
-  "version": "1.2.0",
-  "description": "Complete high-depth Rust curriculum covering borrow checker, lifetimes, smart pointers, Tokio async, unsafe memory, and production concurrency",
+  "description": "A progressive Rust learning track from programming fundamentals through ownership, error handling, traits, concurrency, async Rust, HTTP services, databases, and production tooling.",
   "root": {
-    "name": "rust-workspace",
+    "name": "rust",
     "type": "directory",
     "children": [
       {
-        "name": "Cargo.toml",
-        "type": "file",
-        "content": "[package]\nname = \"rust-workspace\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n"
-      },
-      {
-        "name": "README.md",
-        "type": "file",
-        "content": "# \ud83e\udd80 Rust Comprehensive Mastery Track\n\nWelcome to the **Rust Systems Mastery Track** materialized by **Trak**.\n\nThis workspace is a complete, hands-on systems curriculum with runnable code examples, practical exercises with TODOs, and verified solutions across 19 deep modules.\n\n## \ud83d\udcda Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| **`00-setup-and-toolchain`** | Toolchain & Cargo | rustup, cargo, toolchain profiles, rustfmt, clippy |\n| **`01-basics-mutability-shadowing`** | Mutability & Variables | Immutable by default, mut, compile-time const, shadowing semantics |\n| **`02-data-types-and-memory-layout`** | Data Types & Memory | Stack vs Heap, scalar primitives, tuples, array contiguous layout |\n| **`03-strings-str-and-slices`** | Strings & Fat Pointers | String (heap buffer) vs &str (pointer + len), subslice borrowing |\n| **`04-control-flow-pattern-matching`** | Control Flow & Match | Exhaustive match, if let, let else, loop break expressions |\n| **`05-functions-and-closures`** | Functions & Closures | Fn, FnMut, FnOnce traits, move keyword, capture semantics |\n| **`06-ownership-borrowing-lifetimes`** | Ownership & Lifetimes | Move semantics, Copy vs Clone, aliasing XOR mutability, lifetime bounds 'a |\n| **`07-structs-enums-pattern-dispatch`** | Structs & Algebraic Types | Tuple structs, unit structs, enum data payloads, exhaustive destructuring |\n| **`08-traits-generics-and-dispatch`** | Traits & Generics | Static dispatch (impl Trait) vs Dynamic Vtable dispatch (dyn Trait), trait bounds |\n| **`09-collections-vectors-hashmaps`** | Collections & Iterators | Vec<T> capacity growth, HashMap hashing, iterator adapter pipelines (map, filter, fold) |\n| **`10-error-handling-result-option`** | Error Handling Architecture | Option<T>, Result<T, E>, ? carrier operator, custom Error enums with std::error::Error |\n| **`11-smart-pointers-box-rc-arc-refcell`** | Smart Pointers & Interior Mutability | Box<T>, Rc<T>, Arc<T>, RefCell<T>, Mutex<T>, runtime borrow checking |\n| **`12-concurrency-threads-and-channels`** | Multithreading & Concurrency | std::thread, mpsc message passing, shared state Arc<Mutex<T>>, Send and Sync |\n| **`13-async-rust-and-tokio-runtime`** | Async & Tokio Runtime | Future state machines, cooperative polling, tokio::spawn, async channels |\n| **`14-unsafe-rust-and-raw-pointers`** | Unsafe Rust & FFI | Raw pointers (*const T, *mut T), dereferencing, FFI foreign function calls |\n| **`15-testing-benchmarks-and-mocks`** | Testing & Quality Assurance | #[test], #[should_panic], unit tests vs integration tests |\n| **`16-modules-workspaces-visibility`** | Modules & Visibility | Rust 2018 module tree, pub(crate), pub(super), re-exporting pub use |\n| **`17-serde-json-and-serialization`** | Serialization with Serde | Derive macros, custom serializers, zero-copy deserialization |\n| **`18-interview-questions-and-drills`** | Interview Mastery Drills | Top 10 Rust gotchas, lifetime puzzles, safe concurrent worker pool drill |\n\n---\n\n## \ud83d\udee0\ufe0f How to Practice\nEach module contains:\n- README.md \u2014 Deep theoretical explanation and architecture notes.\n- example.rs \u2014 Fully runnable concept demonstration.\n- exercise/starter.rs \u2014 Hands-on problem with TODO markers.\n- exercise/solution.rs \u2014 Complete reference solution.\n"
-      },
-      {
-        "name": "00-setup-and-toolchain",
+        "name": "module-00",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 \u2014 Setup And Toolchain\n\n## \ud83c\udfaf What is it?\nSetup And Toolchain is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Setup And Toolchain, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Setup And Toolchain executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Rust Toolchain & Cargo Setup\n\n## \ud83c\udfaf Learning Objectives\n- Master the Rust compiler architecture (rustc, LLVM backend)\n- Understand rustup toolchain management (stable, beta, nightly)\n- Configure clippy (linter) and rustfmt (formatter)\n- Understand Cargo workspace manifest layout\n\n---\n\n## \u2699\ufe0f How Rust Compiles\nRust code is compiled ahead-of-time (AOT) to native machine code via LLVM:\n```text\n[ Rust Source .rs ] \u2500\u2500\u25b6 [ rustc Frontend (AST/HIR) ] \u2500\u2500\u25b6 [ MIR (Borrow Checker) ] \u2500\u2500\u25b6 [ LLVM IR ] \u2500\u2500\u25b6 [ Native Binary ]\n```\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Setup And Toolchain\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 00 — Rust Setup & Hello World\n\n## What you will learn\n\nThis module introduces the Rust toolchain and the basic structure of a Rust application. Before learning the language itself, you should understand how Rust projects are created, compiled, checked, and executed.\n\n## Rust Toolchain\n\nRust development is normally installed through `rustup`. Rustup manages Rust toolchains and allows you to install or switch between compiler versions.\n\nImportant commands:\n\n```bash\nrustc --version\ncargo --version\nrustup --version\n```\n\n`rustc` is the Rust compiler. `cargo` is Rust's build system and package manager. In normal application development, Cargo is the command you will use most often.\n\n## Creating a Project\n\nCreate a new binary application:\n\n```bash\ncargo new hello-rust\ncd hello-rust\n```\n\nCargo creates a structure similar to:\n\n```text\nhello-rust/\n├── Cargo.toml\n└── src/\n    └── main.rs\n```\n\n`Cargo.toml` contains project metadata and dependencies. `src/main.rs` is the default entry point for a binary application.\n\n## Running the Program\n\n```bash\ncargo run\n```\n\nCargo compiles the program and runs the resulting executable.\n\nYou can also check the code without producing a final executable:\n\n```bash\ncargo check\n```\n\nFor a production-style build:\n\n```bash\ncargo build --release\n```\n\n## Your First Program\n\n```rust\nfn main() {\n    println!(\"Hello, World!\");\n}\n```\n\n`fn main()` defines the entry point. `println!` is a Rust macro that prints text followed by a newline.\n\n## Important Mental Model\n\nThe basic development loop is:\n\n```text\nwrite code\n   ↓\ncargo check\n   ↓\nfix compiler errors\n   ↓\ncargo run\n   ↓\nexperiment\n```\n\n## Practice\n\n1. Create a Cargo project.\n2. Print your name.\n3. Print three separate lines.\n4. Run the project with `cargo run`.\n5. Run `cargo check`.\n6. Create a release build with `cargo build --release`.\n\n## Common Mistakes\n\n- Running `rustc` manually for every project instead of using Cargo.\n- Editing `Cargo.toml` incorrectly.\n- Forgetting that Rust code is compiled before it executes.\n- Ignoring compiler errors instead of reading them carefully."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "fn main() {\n    println!(\"=== 00: Rust Toolchain Verification ===\");\n    println!(\"Compiler: rustc (LLVM backend)\");\n    println!(\"Build System: cargo\");\n    println!(\"Edition: 2021\");\n    println!(\"\u2714 Toolchain verified successfully!\");\n}\n"
+            "content": "fn main() {\n    println!(\"Hello, World!\");\n    println!(\"Welcome to Rust.\");\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Write a program that prints your system's target pointer width (32-bit or 64-bit).\n// Hint: use std::mem::size_of::<usize>() * 8.\n\nfn main() {\n    // FILL HERE\n}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn main() {\n    let bits = std::mem::size_of::<usize>() * 8;\n    println!(\"Target Pointer Width: {bits}-bit\");\n    assert!(bits == 32 || bits == 64);\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Create your first Rust program.\n    // Print your name, your goal, and your favorite programming language.\n}"
           }
         ]
       },
       {
-        "name": "01-basics-mutability-shadowing",
+        "name": "module-01",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 \u2014 Basics Mutability Shadowing\n\n## \ud83c\udfaf What is it?\nBasics Mutability Shadowing is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Basics Mutability Shadowing, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Basics Mutability Shadowing executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Immutability, Mutability & Variable Shadowing\n\n## \ud83c\udfaf Key Concepts\n1. **Immutability by Default**: Variables declared with `let` cannot be reassigned.\n2. **Explicit `mut`**: Signals intended mutation to both compiler and future maintainers.\n3. **Variable Shadowing**: Declaring a new variable with the same name shadows the previous one in the same or nested scope, allowing type transformation.\n4. **`const` vs `static`**: Constants are inlined at compile-time; static variables have fixed memory addresses with `'static` lifetime.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Basics Mutability Shadowing\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 01 — Variables, Mutability & Shadowing\n\n## What you will learn\n\nRust variables are immutable by default. This module teaches how variables are declared, changed, typed, and shadowed.\n\n## Declaring Variables\n\n```rust\nlet name = \"Ndk\";\nlet age = 21;\n```\n\nThe `let` keyword creates a variable. Rust usually infers the type from the assigned value.\n\n## Immutability\n\nThis will not compile:\n\n```rust\nlet age = 21;\nage = 22;\n```\n\nRust prevents modification because variables are immutable by default.\n\nUse `mut` when mutation is intentional:\n\n```rust\nlet mut age = 21;\nage = 22;\n```\n\nThis default makes accidental state changes harder.\n\n## Type Annotations\n\nYou can explicitly specify a type:\n\n```rust\nlet age: u32 = 21;\nlet score: f64 = 9.5;\n```\n\nThe syntax is:\n\n```text\nvariable: Type\n```\n\n## Constants\n\nConstants use `const` and require an explicit type:\n\n```rust\nconst MAX_USERS: u32 = 1000;\n```\n\nConstants are not mutable.\n\n## Shadowing\n\nRust allows a variable to be declared again using `let`:\n\n```rust\nlet value = 10;\nlet value = value + 5;\nlet value = value * 2;\n```\n\nThis is called shadowing. It is different from mutation because a new binding is created.\n\nShadowing can also change the type:\n\n```rust\nlet value = \"42\";\nlet value: i32 = value.parse().unwrap();\n```\n\n## Practice\n\nCreate variables for a user's name, age, score, and active status. Make age mutable and change it. Then use shadowing to convert a string containing a number into an integer.\n\n## Common Mistakes\n\n- Trying to mutate an immutable variable.\n- Confusing shadowing with `mut`.\n- Using `const` like a normal local variable.\n- Adding unnecessary type annotations when inference is already clear."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "const MAX_PORTS: u32 = 65_535;\n\nfn main() {\n    println!(\"=== 01: Mutability & Shadowing ===\");\n\n    // Immutable\n    let x = 10;\n    println!(\"Immutable x: {x}\");\n\n    // Mutable\n    let mut counter = 0;\n    counter += 1;\n    println!(\"Mutable counter: {counter}\");\n\n    // Shadowing with type transformation\n    let raw_input = \"  42  \";\n    let raw_input: usize = raw_input.trim().parse().expect(\"Not a number\");\n    println!(\"Transformed raw_input to number: {raw_input}\");\n\n    println!(\"Max Ports: {MAX_PORTS}\");\n}\n"
+            "content": "const MAX_USERS: u32 = 1000;\n\nfn main() {\n    let name = \"Ndk\";\n    let mut age = 21;\n    age += 1;\n\n    let score: f64 = 9.5;\n    let input = \"42\";\n    let input: i32 = input.parse().unwrap();\n\n    println!(\"{} {} {} {}\", name, age, score, input);\n    println!(\"Max users: {}\", MAX_USERS);\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Fix the compilation errors without removing variable shadowing.\n// 1. Declare 'temp' as immutable f64.\n// 2. Shadow 'temp' to convert from Celsius (25.0) to Fahrenheit (C * 9/5 + 32).\n// 3. Shadow 'temp' again as a formatted String \"XX.X \u00b0F\".\n\nfn main() {\n    // FILL HERE\n}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn main() {\n    let temp = 25.0; // Celsius\n    let temp = temp * 9.0 / 5.0 + 32.0; // Fahrenheit\n    let temp = format!(\"{temp:.1} \u00b0F\"); // Formatted String\n    println!(\"Temperature: {temp}\");\n    assert_eq!(temp, \"77.0 \u00b0F\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Practice let, mut, constants, type annotations, and shadowing.\n}"
           }
         ]
       },
       {
-        "name": "02-data-types-and-memory-layout",
+        "name": "module-02",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 \u2014 Data Types And Memory Layout\n\n## \ud83c\udfaf What is it?\nData Types And Memory Layout is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Data Types And Memory Layout, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Data Types And Memory Layout executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Data Types & Memory Layout\n\n## \ud83c\udfaf Stack vs Heap in Rust\n- **Stack**: Fast, contiguous memory for fixed-size types whose size is known at compile time (`i32`, `bool`, tuples, arrays).\n- **Heap**: Dynamic memory allocation for data that can grow at runtime (`String`, `Vec<T>`, `Box<T>`).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Data Types And Memory Layout\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 02 — Data Types & Strings\n\n## What you will learn\n\nRust has a strong static type system. Every value has a type, and the compiler checks type correctness before the program runs.\n\n## Scalar Types\n\nRust provides integers such as `i32`, `u32`, `i64`, and `usize`.\n\n```rust\nlet age: u32 = 21;\nlet count: i64 = -10;\n```\n\nUnsigned integers cannot represent negative values.\n\nFloating point values commonly use `f32` or `f64`:\n\n```rust\nlet price: f64 = 99.99;\n```\n\nBoolean values:\n\n```rust\nlet active: bool = true;\n```\n\nCharacters use `char` and represent a Unicode scalar value:\n\n```rust\nlet letter: char = 'R';\n```\n\n## Compound Types\n\nTuples group values of different types:\n\n```rust\nlet user = (\"Ndk\", 21, true);\nprintln!(\"{}\", user.0);\n```\n\nArrays have a fixed length:\n\n```rust\nlet numbers: [i32; 4] = [1, 2, 3, 4];\n```\n\nThe type `[i32; 4]` means four `i32` values.\n\n## String vs &str\n\nThis distinction is important in Rust.\n\nA string literal is usually a string slice:\n\n```rust\nlet name: &str = \"Ndk\";\n```\n\n`String` is an owned, growable string:\n\n```rust\nlet mut name = String::from(\"Ndk\");\nname.push_str(\" Dev\");\n```\n\nThe basic idea is:\n\n```text\n&str    → borrowed string data\nString  → owned, growable string data\n```\n\n## Type Inference\n\nRust can often determine the type automatically:\n\n```rust\nlet count = 10;\n```\n\nBut explicit annotations are useful when multiple types could be valid or when you want the code to communicate intent.\n\n## Practice\n\nCreate a small user profile containing a name, age, height, active status, a tuple, and an array. Experiment with `String` and `&str`.\n\n## Common Mistakes\n\n- Confusing `String` and `&str`.\n- Using the wrong integer type.\n- Assuming arrays are dynamically sized.\n- Forgetting that `char` uses single quotes while strings use double quotes."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "fn main() {\n    println!(\"=== 02: Memory Layout & Primitives ===\");\n\n    // Fixed-size primitive array on STACK\n    let stack_array: [i32; 4] = [10, 20, 30, 40];\n    println!(\"Stack Array: len={}, bytes={}\", stack_array.len(), std::mem::size_of_val(&stack_array));\n\n    // Tuple\n    let tuple: (i32, f64, &str) = (100, 3.14, \"trak\");\n    let (id, score, name) = tuple;\n    println!(\"Tuple unpacked: id={id}, score={score}, name={name}\");\n}\n"
+            "content": "fn main() {\n    let age: u32 = 21;\n    let height: f64 = 1.78;\n    let active: bool = true;\n    let language: char = 'R';\n    let name: &str = \"Ndk\";\n\n    let profile = (name, age, active);\n    let numbers: [i32; 4] = [1, 2, 3, 4];\n\n    let mut owned_name = String::from(\"Ndk\");\n    owned_name.push_str(\" Dev\");\n\n    println!(\"{:?}\", profile);\n    println!(\"{:?}\", numbers);\n    println!(\"{}\", owned_name);\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement a function that calculates total bytes allocated on the stack\n// for an array of 100 'u64' integers.\nfn stack_footprint() -> usize {\n    // FILL HERE\n    0\n}\n\nfn main() {\n    println!(\"Footprint: {} bytes\", stack_footprint());\n}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn stack_footprint() -> usize {\n    std::mem::size_of::<[u64; 100]>()\n}\n\nfn main() {\n    assert_eq!(stack_footprint(), 800);\n    println!(\"Footprint: {} bytes\", stack_footprint());\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Build a small profile using Rust's scalar and compound types.\n}"
           }
         ]
       },
       {
-        "name": "03-strings-str-and-slices",
+        "name": "module-03",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 \u2014 Strings Str And Slices\n\n## \ud83c\udfaf What is it?\nStrings Str And Slices is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Strings Str And Slices, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Strings Str And Slices executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Strings, String Slices (&str) and Fat Pointers\n\n## \ud83c\udfaf The Distinction\n- **`String`**: An owned, growable, heap-allocated UTF-8 byte buffer (Pointer + Capacity + Length: 24 bytes on 64-bit stack).\n- **`&str`**: A borrowed view into a UTF-8 sequence (Fat Pointer = Pointer + Length: 16 bytes on stack).\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Strings Str And Slices\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 03 — Control Flow\n\n## What you will learn\n\nThis module covers how Rust makes decisions and repeats work.\n\n## if / else\n\n```rust\nlet age = 20;\n\nif age >= 18 {\n    println!(\"Adult\");\n} else {\n    println!(\"Minor\");\n}\n```\n\nRust conditions must evaluate to `bool`. Unlike some languages, Rust does not treat numbers as truthy or falsy values.\n\n## loop\n\n`loop` creates an infinite loop until `break` is reached:\n\n```rust\nlet mut count = 0;\n\nloop {\n    count += 1;\n    if count == 5 {\n        break;\n    }\n}\n```\n\nA loop can return a value:\n\n```rust\nlet result = loop {\n    break 42;\n};\n```\n\n## while\n\nUse `while` when a condition controls repetition.\n\n```rust\nwhile count < 5 {\n    count += 1;\n}\n```\n\n## for\n\n`for` is commonly used for collections and ranges:\n\n```rust\nfor number in 1..=5 {\n    println!(\"{}\", number);\n}\n```\n\n`1..5` excludes 5, while `1..=5` includes 5.\n\n## match\n\n`match` is Rust's powerful pattern-matching construct:\n\n```rust\nmatch number {\n    1 => println!(\"one\"),\n    2 => println!(\"two\"),\n    _ => println!(\"other\"),\n}\n```\n\nThe `_` pattern acts as a catch-all.\n\n## Practice\n\nWrite a number classifier using `if`, iterate over numbers with `for`, and create a `match` expression for different commands."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "fn main() {\n    println!(\"=== 03: Strings vs Slices ===\");\n\n    // Owned String (Heap)\n    let mut owned = String::from(\"Hello\");\n    owned.push_str(\", Rust!\");\n\n    // Slice (&str) - Borrowed view\n    let slice: &str = &owned[0..5];\n    println!(\"Slice view: {slice}\");\n\n    // Slices work on arrays too!\n    let numbers = [10, 20, 30, 40, 50];\n    let num_slice: &[i32] = &numbers[1..4];\n    println!(\"Array slice: {:?}\", num_slice);\n}\n"
+            "content": "fn main() {\n    for number in 1..=10 {\n        if number % 2 == 0 {\n            println!(\"{} is even\", number);\n        } else {\n            println!(\"{} is odd\", number);\n        }\n    }\n\n    let command = \"start\";\n\n    match command {\n        \"start\" => println!(\"Starting\"),\n        \"stop\" => println!(\"Stopping\"),\n        _ => println!(\"Unknown command\"),\n    }\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement a function 'first_word' that takes a string slice and returns\n// the slice of the first word (delimited by space). If no space, return entire slice.\nfn first_word(s: &str) -> &str {\n    // FILL HERE\n    \"\"\n}\n\nfn main() {\n    let text = \"Rust Systems Engineering\";\n    println!(\"First word: {}\", first_word(text));\n}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn first_word(s: &str) -> &str {\n    let bytes = s.as_bytes();\n    for (i, &byte) in bytes.iter().enumerate() {\n        if byte == b' ' {\n            return &s[0..i];\n        }\n    }\n    s\n}\n\nfn main() {\n    assert_eq!(first_word(\"Rust Systems Engineering\"), \"Rust\");\n    assert_eq!(first_word(\"SingleWord\"), \"SingleWord\");\n    println!(\"\u2714 first_word works correctly!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Practice if/else, loop, while, for, break, continue, and match.\n}"
           }
         ]
       },
       {
-        "name": "04-control-flow-pattern-matching",
+        "name": "module-04",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 \u2014 Control Flow Pattern Matching\n\n## \ud83c\udfaf What is it?\nControl Flow Pattern Matching is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Control Flow Pattern Matching, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Control Flow Pattern Matching executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Control Flow & Exhaustive Pattern Matching\n\n## \ud83c\udfaf Rust Patterns\n- **`match` Expressions**: Exhaustive matching. Compiler forces handling of every single variant.\n- **Guard Clauses**: `match val { x if x > 10 => ... }`\n- **`if let` & `let else`**: Idiomatic shorthand for unwrapping single variants without nested matches.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Control Flow Pattern Matching\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 04 — Functions\n\n## What you will learn\n\nFunctions allow a Rust program to separate logic into reusable units.\n\n## Basic Syntax\n\n```rust\nfn greet(name: &str) {\n    println!(\"Hello, {}\", name);\n}\n```\n\nParameters require types. A return type is written using `->`:\n\n```rust\nfn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n```\n\nThe final expression can become the return value when it has no semicolon.\n\n```rust\nfn square(value: i32) -> i32 {\n    value * value\n}\n```\n\nWith a semicolon it becomes a statement instead of the function's final expression.\n\n## Expressions vs Statements\n\nRust is expression-oriented. Blocks can produce values:\n\n```rust\nlet result = {\n    let a = 10;\n    let b = 20;\n    a + b\n};\n```\n\n## Practice\n\nCreate separate functions for arithmetic operations and a function that determines whether a number is even."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "enum Direction {\n    North,\n    South,\n    East,\n    West,\n}\n\nfn main() {\n    println!(\"=== 04: Control Flow & Match ===\");\n\n    let dir = Direction::East;\n    let delta = match dir {\n        Direction::North => (0, 1),\n        Direction::South => (0, -1),\n        Direction::East => (1, 0),\n        Direction::West => (-1, 0),\n    };\n    println!(\"Movement Delta: {:?}\", delta);\n\n    // if let syntax\n    let config: Option<&str> = Some(\"production.env\");\n    if let Some(path) = config {\n        println!(\"Loading config: {path}\");\n    }\n}\n"
+            "content": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\nfn is_even(value: i32) -> bool {\n    value % 2 == 0\n}\n\nfn main() {\n    println!(\"{}\", add(10, 20));\n    println!(\"{}\", is_even(42));\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement a parser using pattern matching that takes an HTTP status code (u16)\n// and returns a descriptive category: \"Success\", \"Client Error\", \"Server Error\", or \"Unknown\".\nfn classify_status(code: u16) -> &'static str {\n    // FILL HERE with match\n    \"\"\n}\n\nfn main() {\n    println!(\"200: {}\", classify_status(200));\n}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn classify_status(code: u16) -> &'static str {\n    match code {\n        200..=299 => \"Success\",\n        400..=499 => \"Client Error\",\n        500..=599 => \"Server Error\",\n        _ => \"Unknown\",\n    }\n}\n\nfn main() {\n    assert_eq!(classify_status(200), \"Success\");\n    assert_eq!(classify_status(404), \"Client Error\");\n    assert_eq!(classify_status(503), \"Server Error\");\n    assert_eq!(classify_status(999), \"Unknown\");\n    println!(\"\u2714 Status classifier passed!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Implement arithmetic and validation functions.\n}"
           }
         ]
       },
       {
-        "name": "05-functions-and-closures",
+        "name": "module-05",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 \u2014 Functions And Closures\n\n## \ud83c\udfaf What is it?\nFunctions And Closures is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Functions And Closures, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Functions And Closures executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Functions, Closures & Trait Bounds\n\n## \ud83c\udfaf The Three Closure Traits\n- **`Fn`**: Borrows values from environment immutably (`&T`). Callable multiple times concurrently.\n- **`FnMut`**: Borrows values mutably (`&mut T`). Can modify captured state.\n- **`FnOnce`**: Consumes (takes ownership of) captured values. Can only be called once.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Functions And Closures\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 05 — Collections\n\n## What you will learn\n\nReal applications rarely work only with fixed-size arrays. Rust provides collections such as vectors, strings, and hash maps.\n\n## Vec<T>\n\nA `Vec<T>` is a growable collection:\n\n```rust\nlet mut numbers = Vec::new();\nnumbers.push(10);\nnumbers.push(20);\n```\n\nYou can also use:\n\n```rust\nlet numbers = vec![1, 2, 3, 4];\n```\n\n## Accessing Values\n\nIndexing is straightforward:\n\n```rust\nlet numbers = vec![10, 20, 30];\nprintln!(\"{}\", numbers[0]);\n```\n\nFor safer access, use `get`:\n\n```rust\nlet value = numbers.get(10);\n```\n\nThis returns an `Option`, which avoids an invalid index silently producing undefined behavior.\n\n## HashMap\n\nA `HashMap<K, V>` stores key-value pairs:\n\n```rust\nuse std::collections::HashMap;\n\nlet mut users = HashMap::new();\nusers.insert(\"ndk\", 21);\n```\n\n## Iteration\n\n```rust\nfor number in &numbers {\n    println!(\"{}\", number);\n}\n```\n\nThe `&numbers` is important because the collection is borrowed rather than consumed.\n\n## Practice\n\nBuild a small in-memory user registry using a `HashMap` and a list of users using `Vec`."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "fn main() {\n    println!(\"=== 05: Closures and Capture Traits ===\");\n\n    let factor = 3;\n    let multiply = |n: i32| n * factor;\n    println!(\"3 * 4 = {}\", multiply(4));\n\n    let mut sum = 0;\n    let mut add_to_sum = |n: i32| sum += n;\n    add_to_sum(10);\n    add_to_sum(20);\n    println!(\"Sum after closures: {sum}\");\n}\n"
+            "content": "use std::collections::HashMap;\n\nfn main() {\n    let mut languages = vec![\"Go\", \"Rust\", \"Python\"];\n    languages.push(\"TypeScript\");\n\n    for language in &languages {\n        println!(\"{}\", language);\n    }\n\n    let mut versions = HashMap::new();\n    versions.insert(\"Rust\", \"2021\");\n    versions.insert(\"Go\", \"1.22\");\n\n    println!(\"{:?}\", versions.get(\"Rust\"));\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement a function 'apply_transformer' that takes a vector of integers\n// and a generic closure F: Fn(i32) -> i32, returning a new vector with transformed elements.\nfn apply_transformer<F>(nums: Vec<i32>, transform: F) -> Vec<i32>\nwhere\n    F: Fn(i32) -> i32,\n{\n    // FILL HERE\n    vec![]\n}\n\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn apply_transformer<F>(nums: Vec<i32>, transform: F) -> Vec<i32>\nwhere\n    F: Fn(i32) -> i32,\n{\n    nums.into_iter().map(transform).collect()\n}\n\nfn main() {\n    let numbers = vec![1, 2, 3, 4];\n    let squared = apply_transformer(numbers, |x| x * x);\n    assert_eq!(squared, vec![1, 4, 9, 16]);\n    println!(\"\u2714 Transformer closure works!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Build a small collection-based registry.\n}"
           }
         ]
       },
       {
-        "name": "06-ownership-borrowing-lifetimes",
+        "name": "module-06",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 \u2014 Ownership Borrowing Lifetimes\n\n## \ud83c\udfaf What is it?\nOwnership Borrowing Lifetimes is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Ownership Borrowing Lifetimes, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Ownership Borrowing Lifetimes executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Ownership, Borrowing & Lifetime Annotations\n\n## \ud83c\udfaf The Core Rust Invariant: Aliasing XOR Mutability\nAt any given moment, you can have **EITHER**:\n- Any number of immutable references (`&T`), **OR**\n- Exactly one mutable reference (`&mut T`).\n\n## \ud83e\udde0 Lifetimes ('a)\nLifetimes are compile-time proofs to the borrow checker that no reference outlives the data it points to.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Ownership Borrowing Lifetimes\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 06 — Ownership\n\n## Why Ownership Exists\n\nRust does not use a garbage collector. Instead, memory is managed through ownership rules enforced by the compiler.\n\nThe ownership system is one of the most important concepts in Rust.\n\n## The Three Basic Rules\n\n1. Each value has an owner.\n2. There can only be one owner of a value at a time.\n3. When the owner goes out of scope, the value is dropped.\n\n## Scope\n\n```rust\n{\n    let name = String::from(\"Ndk\");\n    println!(\"{}\", name);\n}\n```\n\nWhen the block ends, `name` goes out of scope and its owned `String` is dropped.\n\n## Move\n\nConsider:\n\n```rust\nlet first = String::from(\"hello\");\nlet second = first;\n```\n\nThe String's ownership moves from `first` to `second`. After the move, `first` can no longer be used.\n\nThis is different from primitive values such as integers that implement `Copy`.\n\n```rust\nlet a = 10;\nlet b = a;\nprintln!(\"{} {}\", a, b);\n```\n\nBoth remain usable because the integer value is copied.\n\n## Clone\n\nIf you explicitly need another owned copy:\n\n```rust\nlet first = String::from(\"hello\");\nlet second = first.clone();\n```\n\n`clone()` can allocate and copy data, so it should not be used blindly.\n\n## Function Ownership\n\nPassing an owned String to a function normally moves it:\n\n```rust\nfn consume(value: String) {\n    println!(\"{}\", value);\n}\n```\n\nAfter calling `consume(name)`, the caller no longer owns `name`.\n\nThis leads directly to borrowing, which is the next module.\n\n## Practice\n\nCreate examples that demonstrate:\n\n- Copy types\n- Moving a String\n- Cloning a String\n- Ownership transfer into functions\n- Values being dropped when scope ends\n\n## Common Mistakes\n\n- Thinking assignment always copies data.\n- Using `clone()` everywhere instead of understanding ownership.\n- Trying to use a value after moving it.\n- Treating Rust memory management like garbage-collected languages."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() {\n        x\n    } else {\n        y\n    }\n}\n\nfn main() {\n    println!(\"=== 06: Ownership & Lifetimes ===\");\n    let s1 = String::from(\"Rustacean\");\n    let s2 = \"Go\";\n    let result = longest(&s1, s2);\n    println!(\"Longest is: {result}\");\n}\n"
+            "content": "fn consume(value: String) {\n    println!(\"Consumed: {}\", value);\n}\n\nfn main() {\n    let name = String::from(\"Ndk\");\n    consume(name);\n\n    let a = 10;\n    let b = a;\n\n    println!(\"{} {}\", a, b);\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Fix the lifetime annotations in the struct 'Excerpt' so it compiles.\nstruct Excerpt<'a> {\n    part: &'a str,\n}\n\nfn main() {\n    let novel = String::from(\"Call me Ishmael. Some years ago...\");\n    let first_sentence = novel.split('.').next().unwrap();\n    let excerpt = Excerpt { part: first_sentence };\n    println!(\"Excerpt: {}\", excerpt.part);\n}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "struct Excerpt<'a> {\n    part: &'a str,\n}\n\nfn main() {\n    let novel = String::from(\"Call me Ishmael. Some years ago...\");\n    let first_sentence = novel.split('.').next().unwrap();\n    let excerpt = Excerpt { part: first_sentence };\n    assert_eq!(excerpt.part, \"Call me Ishmael\");\n    println!(\"\u2714 Excerpt with lifetime compiles and passes!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Experiment with move, copy, clone, and ownership transfer.\n}"
           }
         ]
       },
       {
-        "name": "07-structs-enums-pattern-dispatch",
+        "name": "module-07",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 \u2014 Structs Enums Pattern Dispatch\n\n## \ud83c\udfaf What is it?\nStructs Enums Pattern Dispatch is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Structs Enums Pattern Dispatch, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Structs Enums Pattern Dispatch executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Structs, Enums & Algebraic Data Types\n\n## \ud83c\udfaf Algebraic Data Types (ADT)\nRust enums can hold rich typed data within their variants, replacing polymorphic class hierarchies without pointer overhead.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Structs Enums Pattern Dispatch\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 07 — Borrowing & References\n\n## Why Borrowing Exists\n\nOwnership prevents multiple owners from incorrectly managing the same memory. But constantly transferring ownership would make programs inconvenient.\n\nBorrowing solves this problem.\n\nInstead of taking ownership, a function can temporarily access a value through a reference.\n\n## Immutable References\n\n```rust\nfn length(value: &String) -> usize {\n    value.len()\n}\n```\n\nThe caller keeps ownership.\n\n```rust\nlet name = String::from(\"Ndk\");\nlet length = length(&name);\nprintln!(\"{}\", name);\n```\n\nThe `&name` creates a reference.\n\n## Mutable References\n\nTo modify borrowed data:\n\n```rust\nfn add_text(value: &mut String) {\n    value.push_str(\" Rust\");\n}\n```\n\nThe caller must provide a mutable reference:\n\n```rust\nlet mut text = String::from(\"Hello\");\nadd_text(&mut text);\n```\n\n## Borrowing Rules\n\nRust enforces important restrictions:\n\n- You can have multiple immutable references.\n- You can have one mutable reference.\n- You cannot have mutable and immutable references to the same value at the same time.\n\nConceptually:\n\n```text\nmany readers\nOR\none writer\n```\n\nThis prevents data races and invalid references.\n\n## Dangling References\n\nRust prevents references from outliving the values they point to. A function cannot safely return a reference to a local value that will disappear when the function returns.\n\n## Practice\n\nWrite functions that read a String without taking ownership and another function that mutates it through `&mut`.\n\nThen intentionally create borrowing conflicts and read the compiler error."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "enum Command {\n    Quit,\n    Move { x: i32, y: i32 },\n    Write(String),\n}\n\nimpl Command {\n    fn process(&self) {\n        match self {\n            Command::Quit => println!(\"Shutting down...\"),\n            Command::Move { x, y } => println!(\"Moving to ({x}, {y})\"),\n            Command::Write(msg) => println!(\"Message: {msg}\"),\n        }\n    }\n}\n\nfn main() {\n    println!(\"=== 07: Algebraic Data Types ===\");\n    let cmd = Command::Move { x: 10, y: 25 };\n    cmd.process();\n}\n"
+            "content": "fn length(value: &String) -> usize {\n    value.len()\n}\n\nfn add_text(value: &mut String) {\n    value.push_str(\" Rust\");\n}\n\nfn main() {\n    let mut text = String::from(\"Hello\");\n\n    add_text(&mut text);\n    println!(\"{}\", text);\n    println!(\"Length: {}\", length(&text));\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement an enum 'Shape' with variants:\n// - Circle(f64) -> radius\n// - Rectangle(f64, f64) -> width, height\n// Implement method 'area(&self) -> f64' using pattern matching.\n\nenum Shape {\n    Circle(f64),\n    Rectangle(f64, f64),\n}\n\nimpl Shape {\n    fn area(&self) -> f64 {\n        0.0\n    }\n}\n\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "enum Shape {\n    Circle(f64),\n    Rectangle(f64, f64),\n}\n\nimpl Shape {\n    fn area(&self) -> f64 {\n        match self {\n            Shape::Circle(r) => std::f64::consts::PI * r * r,\n            Shape::Rectangle(w, h) => w * h,\n        }\n    }\n}\n\nfn main() {\n    let c = Shape::Circle(2.0);\n    let r = Shape::Rectangle(3.0, 4.0);\n    assert!((c.area() - 12.56637).abs() < 0.001);\n    assert_eq!(r.area(), 12.0);\n    println!(\"\u2714 Shape area calculated correctly!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Write functions using immutable and mutable references.\n    // Experiment with the borrowing rules.\n}"
           }
         ]
       },
       {
-        "name": "08-traits-generics-and-dispatch",
+        "name": "module-08",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 \u2014 Traits Generics And Dispatch\n\n## \ud83c\udfaf What is it?\nTraits Generics And Dispatch is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Traits Generics And Dispatch, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Traits Generics And Dispatch executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Traits, Generics, Static & Dynamic Dispatch\n\n## \ud83c\udfaf Static vs Dynamic Dispatch\n- **Static Dispatch (`impl Trait` / Generics)**: Monomorphized at compile-time. Zero runtime cost, inlined by LLVM.\n- **Dynamic Dispatch (`dyn Trait`)**: Fat pointer (pointer to data + pointer to vtable). Allows heterogeneous collections.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Traits Generics And Dispatch\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 08 — Structs, Enums & Pattern Matching\n\n## Structs\n\nStructs allow related values to be grouped into a meaningful type.\n\n```rust\nstruct User {\n    name: String,\n    age: u32,\n}\n```\n\nCreate a value:\n\n```rust\nlet user = User {\n    name: String::from(\"Ndk\"),\n    age: 21,\n};\n```\n\n## Methods\n\nMethods are defined using `impl`:\n\n```rust\nimpl User {\n    fn introduce(&self) {\n        println!(\"I am {}\", self.name);\n    }\n}\n```\n\n`&self` means the method borrows the instance.\n\n## Associated Functions\n\nFunctions inside an `impl` block do not need `self`:\n\n```rust\nimpl User {\n    fn new(name: String, age: u32) -> Self {\n        Self { name, age }\n    }\n}\n```\n\nThey are called with `User::new(...)`.\n\n## Enums\n\nEnums represent one of several possible variants:\n\n```rust\nenum Status {\n    Active,\n    Disabled,\n}\n```\n\nVariants can contain data:\n\n```rust\nenum Message {\n    Text(String),\n    Number(i32),\n}\n```\n\n## Pattern Matching\n\n`match` can inspect enum variants and extract their values.\n\nThis becomes especially important with `Option` and `Result`.\n\n## Practice\n\nCreate a `User` struct and an enum representing account state. Write methods and use `match` to display the state."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "trait Summarizable {\n    fn summary(&self) -> String;\n}\n\nstruct Article {\n    title: String,\n    author: String,\n}\n\nimpl Summarizable for Article {\n    fn summary(&self) -> String {\n        format!(\"'{}' by {}\", self.title, self.author)\n    }\n}\n\nfn print_static(item: &impl Summarizable) {\n    println!(\"Static: {}\", item.summary());\n}\n\nfn main() {\n    let article = Article {\n        title: \"Rust Deep Internals\".into(),\n        author: \"Navnath\".into(),\n    };\n    print_static(&article);\n}\n"
+            "content": "enum Status {\n    Active,\n    Disabled,\n}\n\nstruct User {\n    name: String,\n    status: Status,\n}\n\nimpl User {\n    fn new(name: String) -> Self {\n        Self {\n            name,\n            status: Status::Active,\n        }\n    }\n\n    fn print_status(&self) {\n        match &self.status {\n            Status::Active => println!(\"Active\"),\n            Status::Disabled => println!(\"Disabled\"),\n        }\n    }\n}\n\nfn main() {\n    let user = User::new(String::from(\"Ndk\"));\n    println!(\"{}\", user.name);\n    user.print_status();\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Define a trait 'Encoder' with method 'encode(&self) -> Vec<u8>'.\n// Implement 'Encoder' for 'String' and 'i64'.\n\ntrait Encoder {\n    fn encode(&self) -> Vec<u8>;\n}\n\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "trait Encoder {\n    fn encode(&self) -> Vec<u8>;\n}\n\nimpl Encoder for String {\n    fn encode(&self) -> Vec<u8> {\n        self.as_bytes().to_vec()\n    }\n}\n\nimpl Encoder for i64 {\n    fn encode(&self) -> Vec<u8> {\n        self.to_be_bytes().to_vec()\n    }\n}\n\nfn serialize_all(items: Vec<&dyn Encoder>) -> Vec<Vec<u8>> {\n    items.into_iter().map(|item| item.encode()).collect()\n}\n\nfn main() {\n    let s = String::from(\"trak\");\n    let num: i64 = 42;\n    let list: Vec<&dyn Encoder> = vec![&s, &num];\n    let encoded = serialize_all(list);\n    assert_eq!(encoded.len(), 2);\n    println!(\"\u2714 Dynamic encoder dispatch works!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Model a real-world entity using structs and enums.\n}"
           }
         ]
       },
       {
-        "name": "09-collections-vectors-hashmaps",
+        "name": "module-09",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 \u2014 Collections Vectors Hashmaps\n\n## \ud83c\udfaf What is it?\nCollections Vectors Hashmaps is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Collections Vectors Hashmaps, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Collections Vectors Hashmaps executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Collections & Lazy Iterator Pipelines\n\n## \ud83c\udfaf Collections Internals\n- **`Vec<T>`**: 3 words on stack (ptr, cap, len). Doubling allocation strategy.\n- **`HashMap<K, V>`**: SwissTable / HashBrown algorithm (SIMD-accelerated linear probing).\n- **Lazy Iterators**: Iterators do zero work until consumed by a terminal adapter.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Collections Vectors Hashmaps\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 09 — Option & Result\n\n## Option<T>\n\nRust does not use null in the same way as many mainstream languages. Optional values are represented with `Option<T>`.\n\n```rust\nenum Option<T> {\n    Some(T),\n    None,\n}\n```\n\nFor example:\n\n```rust\nfn find_user(id: u32) -> Option<String> {\n    if id == 1 {\n        Some(String::from(\"Ndk\"))\n    } else {\n        None\n    }\n}\n```\n\nHandle it using `match`:\n\n```rust\nmatch find_user(1) {\n    Some(name) => println!(\"{}\", name),\n    None => println!(\"User not found\"),\n}\n```\n\n## Result<T, E>\n\nOperations that can succeed or fail commonly return `Result`:\n\n```rust\nenum Result<T, E> {\n    Ok(T),\n    Err(E),\n}\n```\n\nExample:\n\n```rust\nfn divide(a: i32, b: i32) -> Result<i32, String> {\n    if b == 0 {\n        Err(String::from(\"cannot divide by zero\"))\n    } else {\n        Ok(a / b)\n    }\n}\n```\n\n## The ? Operator\n\nThe `?` operator propagates an error instead of requiring a large `match` at every level.\n\n```rust\nfn read_value() -> Result<String, std::io::Error> {\n    let value = std::fs::read_to_string(\"data.txt\")?;\n    Ok(value)\n}\n```\n\nIf reading fails, the error is returned immediately.\n\n## unwrap\n\n`unwrap()` extracts a successful value but panics when the value is an error.\n\nIt is useful in controlled examples, but production code should normally handle failures deliberately.\n\n## Practice\n\nWrite functions that return both `Option` and `Result`. Handle `Some`/`None` and `Ok`/`Err` explicitly."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "use std::collections::HashMap;\n\nfn main() {\n    let words = vec![\"apple\", \"banana\", \"apple\", \"cherry\", \"banana\", \"apple\"];\n    let mut frequency = HashMap::new();\n    for word in words {\n        *frequency.entry(word).or_insert(0) += 1;\n    }\n    println!(\"Word Frequencies: {:?}\", frequency);\n}\n"
+            "content": "fn divide(a: i32, b: i32) -> Result<i32, String> {\n    if b == 0 {\n        return Err(String::from(\"cannot divide by zero\"));\n    }\n\n    Ok(a / b)\n}\n\nfn find_user(id: u32) -> Option<&'static str> {\n    if id == 1 {\n        Some(\"Ndk\")\n    } else {\n        None\n    }\n}\n\nfn main() {\n    match divide(10, 2) {\n        Ok(value) => println!(\"Result: {}\", value),\n        Err(error) => println!(\"Error: {}\", error),\n    }\n\n    match find_user(1) {\n        Some(name) => println!(\"User: {}\", name),\n        None => println!(\"Not found\"),\n    }\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement group_by_length function.\nuse std::collections::HashMap;\n\nfn group_by_length<'a>(words: &[&'a str]) -> HashMap<usize, Vec<&'a str>> {\n    HashMap::new()\n}\n\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "use std::collections::HashMap;\n\nfn group_by_length<'a>(words: &[&'a str]) -> HashMap<usize, Vec<&'a str>> {\n    let mut map = HashMap::new();\n    for &word in words {\n        map.entry(word.len()).or_insert_with(Vec::new).push(word);\n    }\n    map\n}\n\nfn main() {\n    let words = [\"go\", \"rust\", \"c\", \"c++\", \"zig\"];\n    let grouped = group_by_length(&words);\n    assert_eq!(grouped.get(&2).unwrap(), &vec![\"go\"]);\n    assert_eq!(grouped.get(&4).unwrap(), &vec![\"rust\"]);\n    println!(\"\u2714 Group by length passed!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Practice Option, Result, match, and error propagation.\n}"
           }
         ]
       },
       {
-        "name": "10-error-handling-result-option",
+        "name": "module-10",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 \u2014 Error Handling Result Option\n\n## \ud83c\udfaf What is it?\nError Handling Result Option is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Error Handling Result Option, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Error Handling Result Option executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Production Error Handling with Result & ?\n\n## \ud83c\udfaf Zero-Cost Error Handling\nRust has no exceptions. Errors are typed values (`Result<T, E>`).\nThe `?` operator performs early return and automatic error conversion via `From<SourceError>`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Error Handling Result Option\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 10 — Modules, Crates & Cargo\n\n## What you will learn\n\nAs projects grow, keeping everything in `main.rs` becomes difficult. Rust provides modules and crates for organizing code.\n\n## Modules\n\nA module can group related functionality:\n\n```rust\nmod math {\n    pub fn add(a: i32, b: i32) -> i32 {\n        a + b\n    }\n}\n```\n\nThe `pub` keyword makes an item accessible outside its private module boundary.\n\n## use\n\nInstead of repeatedly writing a long path, import an item:\n\n```rust\nuse math::add;\n```\n\nThen:\n\n```rust\nadd(2, 3);\n```\n\n## Crates\n\nA crate is a compilation unit. A project can contain a binary crate, a library crate, or both.\n\nCargo manages the project and dependencies.\n\n## Cargo.toml\n\nA dependency is normally declared in `Cargo.toml`:\n\n```toml\n[dependencies]\nserde = \"1\"\n```\n\nCargo resolves dependencies and stores the exact dependency resolution in `Cargo.lock` for applications.\n\n## Useful Commands\n\n```bash\ncargo new project\ncargo add serde\ncargo check\ncargo build\ncargo test\ncargo fmt\ncargo clippy\n```\n\n## Practice\n\nCreate a project with separate modules for users, configuration, and utility functions. Make only the intended public functions accessible."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "use std::fs::File;\nuse std::io::{self, Read};\n\nfn read_file_contents(path: &str) -> Result<String, io::Error> {\n    let mut file = File::open(path)?;\n    let mut contents = String::new();\n    file.read_to_string(&mut contents)?;\n    Ok(contents)\n}\n\nfn main() {\n    match read_file_contents(\"nonexistent.txt\") {\n        Ok(data) => println!(\"Read {} bytes\", data.len()),\n        Err(e) => println!(\"Handled Expected Error: {e}\"),\n    }\n}\n"
+            "content": "mod math {\n    pub fn add(a: i32, b: i32) -> i32 {\n        a + b\n    }\n}\n\nuse math::add;\n\nfn main() {\n    println!(\"{}\", add(2, 3));\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement custom AppError using ? operator.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "use std::num::ParseIntError;\n\n#[derive(Debug)]\nenum AppError {\n    Parse(ParseIntError),\n}\n\nimpl From<ParseIntError> for AppError {\n    fn from(err: ParseIntError) -> Self {\n        AppError::Parse(err)\n    }\n}\n\nfn parse_number_from_string(input: &str) -> Result<i32, AppError> {\n    let num = input.trim().parse::<i32>()?;\n    Ok(num)\n}\n\nfn main() {\n    assert_eq!(parse_number_from_string(\"42\").unwrap(), 42);\n    assert!(parse_number_from_string(\"invalid\").is_err());\n    println!(\"\u2714 Custom AppError early return works!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Split an application into multiple modules.\n}"
           }
         ]
       },
       {
-        "name": "11-smart-pointers-box-rc-arc-refcell",
+        "name": "module-11",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 \u2014 Smart Pointers Box Rc Arc Refcell\n\n## \ud83c\udfaf What is it?\nSmart Pointers Box Rc Arc Refcell is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Smart Pointers Box Rc Arc Refcell, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Smart Pointers Box Rc Arc Refcell executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Smart Pointers & Interior Mutability\n\n## \ud83c\udfaf Smart Pointer Catalog\n- **`Box<T>`**: Unique heap allocation.\n- **`Rc<T>`**: Reference Counting for single-threaded shared ownership.\n- **`Arc<T>`**: Atomic Reference Counting for multithreaded shared ownership.\n- **`RefCell<T>`**: Interior mutability with runtime borrow checking.\n- **`Mutex<T>`**: Thread-safe interior mutability with blocking synchronization.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Smart Pointers Box Rc Arc Refcell\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 11 — Traits & Generics\n\n## Why Generics?\n\nGenerics allow code to work with multiple types without duplicating the implementation.\n\n```rust\nfn identity<T>(value: T) -> T {\n    value\n}\n```\n\n`T` represents a type chosen by the caller.\n\n## Traits\n\nTraits define behavior that a type can implement.\n\n```rust\ntrait Summary {\n    fn summary(&self) -> String;\n}\n```\n\nA type implements it using:\n\n```rust\nimpl Summary for User {\n    fn summary(&self) -> String {\n        format!(\"User: {}\", self.name)\n    }\n}\n```\n\n## Trait Bounds\n\nA generic function can require that a type implements a trait:\n\n```rust\nfn print_summary<T: Summary>(item: &T) {\n    println!(\"{}\", item.summary());\n}\n```\n\nThis tells the compiler that `T` must provide the `Summary` behavior.\n\n## where\n\nComplex bounds can be made more readable:\n\n```rust\nfn print<T>(value: T)\nwhere\n    T: Summary,\n{\n    println!(\"{}\", value.summary());\n}\n```\n\n## Associated Types\n\nTraits can define associated types when the implementation determines a related type.\n\n## Practice\n\nCreate a trait for objects that can be displayed as a summary. Implement it for at least two different structs and write a generic function that accepts anything implementing the trait."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "use std::cell::RefCell;\nuse std::rc::Rc;\n\nstruct Node {\n    value: i32,\n    children: RefCell<Vec<Rc<Node>>>,\n}\n\nfn main() {\n    let root = Rc::new(Node {\n        value: 1,\n        children: RefCell::new(vec![]),\n    });\n    let child = Rc::new(Node {\n        value: 2,\n        children: RefCell::new(vec![]),\n    });\n    root.children.borrow_mut().push(Rc::clone(&child));\n    println!(\"Root children count: {}\", root.children.borrow().len());\n}\n"
+            "content": "trait Summary {\n    fn summary(&self) -> String;\n}\n\nstruct User {\n    name: String,\n}\n\nimpl Summary for User {\n    fn summary(&self) -> String {\n        format!(\"User: {}\", self.name)\n    }\n}\n\nfn print_summary<T: Summary>(item: &T) {\n    println!(\"{}\", item.summary());\n}\n\nfn main() {\n    let user = User {\n        name: String::from(\"Ndk\"),\n    };\n\n    print_summary(&user);\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement recursive binary search tree with Box<TreeNode>.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "struct TreeNode {\n    val: i32,\n    left: Option<Box<TreeNode>>,\n    right: Option<Box<TreeNode>>,\n}\n\nimpl TreeNode {\n    fn new(val: i32) -> Self {\n        TreeNode { val, left: None, right: None }\n    }\n    fn insert(&mut self, new_val: i32) {\n        if new_val < self.val {\n            match self.left {\n                Some(ref mut node) => node.insert(new_val),\n                None => self.left = Some(Box::new(TreeNode::new(new_val))),\n            }\n        } else {\n            match self.right {\n                Some(ref mut node) => node.insert(new_val),\n                None => self.right = Some(Box::new(TreeNode::new(new_val))),\n            }\n        }\n    }\n}\n\nfn main() {\n    let mut tree = TreeNode::new(10);\n    tree.insert(5);\n    tree.insert(15);\n    assert_eq!(tree.left.unwrap().val, 5);\n    assert_eq!(tree.right.unwrap().val, 15);\n    println!(\"\u2714 Recursive Boxed TreeNode works!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Create a trait and implement it for multiple types.\n}"
           }
         ]
       },
       {
-        "name": "12-concurrency-threads-and-channels",
+        "name": "module-12",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 \u2014 Concurrency Threads And Channels\n\n## \ud83c\udfaf What is it?\nConcurrency Threads And Channels is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Concurrency Threads And Channels, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Concurrency Threads And Channels executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Fearless Concurrency & Message Passing\n\n## \ud83c\udfaf Send and Sync Traits\n- **`Send`**: Safe to transfer ownership across thread boundaries.\n- **`Sync`**: Safe to share references (`&T`) across multiple threads simultaneously.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Concurrency Threads And Channels\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 12 — Closures & Iterators\n\n## Closures\n\nClosures are anonymous functions that can capture values from their surrounding environment.\n\n```rust\nlet square = |x| x * x;\nprintln!(\"{}\", square(5));\n```\n\nClosures can capture variables:\n\n```rust\nlet multiplier = 2;\nlet multiply = |x| x * multiplier;\n```\n\n## Iterators\n\nRust collections can be processed using iterators.\n\n```rust\nlet numbers = vec![1, 2, 3, 4, 5];\n\nlet doubled: Vec<i32> = numbers\n    .iter()\n    .map(|n| n * 2)\n    .collect();\n```\n\n`map` transforms each item. `filter` keeps matching items.\n\n```rust\nlet even: Vec<i32> = numbers\n    .iter()\n    .filter(|n| *n % 2 == 0)\n    .copied()\n    .collect();\n```\n\n## Lazy Evaluation\n\nIterator adapters such as `map` and `filter` are generally lazy. The iterator chain does not execute until consumed by something such as `collect`, `count`, `sum`, or a `for` loop.\n\n## Ownership and Iteration\n\nThe choice between `iter()`, `iter_mut()`, and `into_iter()` determines whether values are borrowed, mutably borrowed, or consumed.\n\n## Practice\n\nTake a vector of numbers and create pipelines that filter, transform, and collect values. Then repeat the same task using explicit loops to compare the two approaches."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let counter = Arc::new(Mutex::new(0));\n    let mut handles = vec![];\n\n    for _ in 0..10 {\n        let counter_clone = Arc::clone(&counter);\n        let handle = thread::spawn(move || {\n            let mut num = counter_clone.lock().unwrap();\n            *num += 1;\n        });\n        handles.push(handle);\n    }\n\n    for h in handles {\n        h.join().unwrap();\n    }\n\n    println!(\"Final Atomic Counter: {}\", *counter.lock().unwrap());\n}\n"
+            "content": "fn main() {\n    let numbers = vec![1, 2, 3, 4, 5];\n\n    let result: Vec<i32> = numbers\n        .iter()\n        .map(|n| n * 2)\n        .filter(|n| n > &5)\n        .copied()\n        .collect();\n\n    println!(\"{:?}\", result);\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement multi-producer mpsc channel sum.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    let (tx, rx) = mpsc::channel();\n    let tx1 = tx.clone();\n    thread::spawn(move || {\n        for i in 1..=10 { tx1.send(i).unwrap(); }\n    });\n    thread::spawn(move || {\n        for i in 11..=20 { tx.send(i).unwrap(); }\n    });\n    let mut sum = 0;\n    for _ in 1..=20 { sum += rx.recv().unwrap(); }\n    assert_eq!(sum, 210);\n    println!(\"\u2714 Multi-producer channel verified (Sum = {sum})!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Practice closures, iterators, map, filter, fold, and collect.\n}"
           }
         ]
       },
       {
-        "name": "13-async-rust-and-tokio-runtime",
+        "name": "module-13",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 \u2014 Async Rust And Tokio Runtime\n\n## \ud83c\udfaf What is it?\nAsync Rust And Tokio Runtime is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Async Rust And Tokio Runtime, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Async Rust And Tokio Runtime executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Async Rust & Tokio Runtime\n\n## \ud83c\udfaf How Async Rust Works\nIn Rust, async is pull-based (cooperative polling):\n- Futures do zero work unless polled via `.await` or driven by an executor like Tokio.\n- No implicit runtime or green-thread overhead.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Async Rust And Tokio Runtime\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 13 — Lifetimes\n\n## Why Lifetimes?\n\nA reference must never outlive the data it refers to. Rust's borrow checker verifies this relationship at compile time.\n\nMost of the time Rust can infer lifetimes. Explicit lifetime annotations become necessary when the relationship between references is not obvious from the function signature.\n\n## Lifetime Annotation Syntax\n\nA lifetime parameter is written using an apostrophe:\n\n```rust\n'a\n```\n\nExample:\n\n```rust\nfn longest<'a>(a: &'a str, b: &'a str) -> &'a str {\n    if a.len() > b.len() {\n        a\n    } else {\n        b\n    }\n}\n```\n\nThe annotation does not extend the lifetime of either value. It describes the relationship between the references.\n\nIn this example, the returned reference is guaranteed to be valid for the lifetime represented by `'a`.\n\n## Lifetime Elision\n\nRust has rules that allow many lifetime annotations to be omitted. For example, this is normally valid:\n\n```rust\nfn length(value: &str) -> usize {\n    value.len()\n}\n```\n\nYou should understand explicit lifetimes conceptually rather than adding annotations everywhere.\n\n## References in Structs\n\nA struct containing a reference may need a lifetime parameter:\n\n```rust\nstruct User<'a> {\n    name: &'a str,\n}\n```\n\nThe lifetime tells Rust that the `User` cannot contain a reference that becomes invalid while the struct still exists.\n\n## Practice\n\nImplement functions that return references. Then create a struct containing a borrowed string and observe how the compiler enforces its lifetime."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "trait SimpleFuture {\n    type Output;\n    fn poll(&mut self) -> Result<Self::Output, ()>;\n}\n\nstruct DelayFuture {\n    ticks_remaining: usize,\n}\n\nimpl SimpleFuture for DelayFuture {\n    type Output = &'static str;\n    fn poll(&mut self) -> Result<Self::Output, ()> {\n        if self.ticks_remaining == 0 {\n            Ok(\"Task Completed!\")\n        } else {\n            self.ticks_remaining -= 1;\n            Err(())\n        }\n    }\n}\n\nfn main() {\n    let mut fut = DelayFuture { ticks_remaining: 3 };\n    while let Err(()) = fut.poll() {\n        println!(\"Polling future... Status: Pending\");\n    }\n    println!(\"Future Resolved: {}\", fut.poll().unwrap());\n}\n"
+            "content": "fn longest<'a>(a: &'a str, b: &'a str) -> &'a str {\n    if a.len() > b.len() {\n        a\n    } else {\n        b\n    }\n}\n\nstruct User<'a> {\n    name: &'a str,\n}\n\nfn main() {\n    let first = \"Rust\";\n    let second = \"Programming\";\n\n    println!(\"{}\", longest(first, second));\n\n    let user = User { name: first };\n    println!(\"{}\", user.name);\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement async worker pipeline simulation.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn main() {\n    let tasks = vec![101, 102, 103];\n    let mut completed = vec![];\n    for task in tasks {\n        println!(\"Processing task {task}...\");\n        completed.push(task * 2);\n    }\n    assert_eq!(completed, vec![202, 204, 206]);\n    println!(\"\u2714 Async pipeline simulation verified!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Practice lifetime annotations and borrowed data.\n}"
           }
         ]
       },
       {
-        "name": "14-unsafe-rust-and-raw-pointers",
+        "name": "module-14",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 \u2014 Unsafe Rust And Raw Pointers\n\n## \ud83c\udfaf What is it?\nUnsafe Rust And Raw Pointers is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Unsafe Rust And Raw Pointers, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Unsafe Rust And Raw Pointers executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Unsafe Rust & The 5 Superpowers\n\n## \ud83c\udfaf What Unsafe Allows\n1. Dereference raw pointers (`*const T`, `*mut T`)\n2. Call an unsafe function or method\n3. Implement an unsafe trait\n4. Mutate mutable static variables\n5. Access fields of a `union`\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Unsafe Rust And Raw Pointers\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 14 — Smart Pointers & Shared Ownership\n\n## What you will learn\n\nRust provides smart pointers for situations where simple ownership and borrowing are not enough.\n\n## Box<T>\n\n`Box<T>` stores a value on the heap while ownership remains unique.\n\n```rust\nlet value = Box::new(42);\n```\n\n## Rc<T>\n\n`Rc<T>` provides reference-counted shared ownership for single-threaded programs.\n\n```rust\nuse std::rc::Rc;\n\nlet first = Rc::new(String::from(\"Rust\"));\nlet second = Rc::clone(&first);\n```\n\nBoth variables share ownership of the same allocation.\n\n## Arc<T>\n\n`Arc<T>` is the thread-safe reference-counted equivalent and is commonly used when data must be shared between threads.\n\n```rust\nuse std::sync::Arc;\n```\n\n## Mutex<T>\n\nA `Mutex<T>` provides controlled mutable access to shared data. In concurrent programs it is often combined with `Arc`.\n\n```text\nArc<Mutex<T>>\n```\n\n## RefCell<T>\n\n`RefCell<T>` allows borrowing rules to be checked at runtime instead of compile time. It is primarily useful in single-threaded designs.\n\n## Choosing the Tool\n\nThink in terms of ownership requirements:\n\n```text\nsingle owner       → normal value / Box\nshared single thread → Rc\nshared threads     → Arc\nruntime borrowing  → RefCell\nshared mutable state → Mutex\n```\n\nThese combinations should be used because the design requires them, not simply because they are available."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "fn main() {\n    let mut val: i32 = 42;\n    let r1: *const i32 = &val;\n    let r2: *mut i32 = &mut val;\n    unsafe {\n        *r2 += 8;\n        println!(\"Raw pointer read: {}\", *r1);\n    }\n    assert_eq!(val, 50);\n}\n"
+            "content": "use std::rc::Rc;\n\nfn main() {\n    let first = Rc::new(String::from(\"Rust\"));\n    let second = Rc::clone(&first);\n\n    println!(\"{}\", first);\n    println!(\"{}\", second);\n    println!(\"Owners: {}\", Rc::strong_count(&first));\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement safe_swap using raw pointers.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn safe_swap<T>(a: &mut T, b: &mut T) {\n    unsafe {\n        let mut temp = std::mem::MaybeUninit::<T>::uninit();\n        std::ptr::copy_nonoverlapping(a, temp.as_mut_ptr(), 1);\n        std::ptr::copy_nonoverlapping(b, a, 1);\n        std::ptr::copy_nonoverlapping(temp.as_ptr(), b, 1);\n    }\n}\n\nfn main() {\n    let mut x = 100;\n    let mut y = 200;\n    safe_swap(&mut x, &mut y);\n    assert_eq!(x, 200);\n    assert_eq!(y, 100);\n    println!(\"\u2714 Safe swap using raw pointer copy passed!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Experiment with Box, Rc, Arc, RefCell, and Mutex.\n}"
           }
         ]
       },
       {
-        "name": "15-testing-benchmarks-and-mocks",
+        "name": "module-15",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 \u2014 Testing Benchmarks And Mocks\n\n## \ud83c\udfaf What is it?\nTesting Benchmarks And Mocks is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Testing Benchmarks And Mocks, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Testing Benchmarks And Mocks executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Unit Testing, Integration Tests & Clippy\n\n## \ud83c\udfaf Test Architecture\n- Unit tests go inside `#[cfg(test)] mod tests { ... }` in the same file.\n- Integration tests go under the top-level `tests/` directory.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Testing Benchmarks And Mocks\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 15 — Threads & Concurrency\n\n## Why Concurrency?\n\nConcurrent programs perform multiple tasks during overlapping periods. Rust's ownership system is especially valuable here because many common data-race patterns are rejected by the compiler.\n\n## Creating a Thread\n\n```rust\nuse std::thread;\n\nlet handle = thread::spawn(|| {\n    println!(\"Worker running\");\n});\n\nhandle.join().unwrap();\n```\n\n`thread::spawn` starts a new operating-system thread and returns a `JoinHandle`.\n\n## move Closures\n\nWhen a spawned thread needs owned data from the parent scope, use `move`:\n\n```rust\nlet name = String::from(\"Ndk\");\n\nthread::spawn(move || {\n    println!(\"{}\", name);\n});\n```\n\nThe `move` closure takes ownership of captured values.\n\n## Shared State\n\nA common pattern is:\n\n```text\nArc<Mutex<T>>\n```\n\n`Arc` allows multiple threads to own a reference to the same allocation. `Mutex` ensures only one thread mutably accesses the protected value at a time.\n\n## Send and Sync\n\n`Send` describes whether a value can be transferred between threads. `Sync` describes whether references to a type can safely be shared between threads.\n\nYou normally do not implement these traits manually. Rust's type system uses them to determine whether concurrent operations are safe.\n\n## Practice\n\nCreate multiple worker threads that process values and safely update shared state. Observe what happens when you remove the synchronization mechanism."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\nfn main() {\n    println!(\"2 + 3 = {}\", add(2, 3));\n}\n"
+            "content": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let counter = Arc::new(Mutex::new(0));\n    let mut handles = Vec::new();\n\n    for _ in 0..4 {\n        let counter = Arc::clone(&counter);\n\n        let handle = thread::spawn(move || {\n            let mut value = counter.lock().unwrap();\n            *value += 1;\n        });\n\n        handles.push(handle);\n    }\n\n    for handle in handles {\n        handle.join().unwrap();\n    }\n\n    println!(\"Counter: {}\", *counter.lock().unwrap());\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement prime checker and tests.\nfn is_prime(n: u64) -> bool { false }\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "fn is_prime(n: u64) -> bool {\n    if n < 2 { return false; }\n    for i in 2..=((n as f64).sqrt() as u64) {\n        if n % i == 0 { return false; }\n    }\n    true\n}\n\nfn main() {\n    assert!(!is_prime(0));\n    assert!(!is_prime(1));\n    assert!(is_prime(2));\n    assert!(is_prime(3));\n    assert!(!is_prime(4));\n    assert!(is_prime(17));\n    println!(\"\u2714 Prime checker tests passed!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Create worker threads and safely share state between them.\n}"
           }
         ]
       },
       {
-        "name": "16-modules-workspaces-visibility",
+        "name": "module-16",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 \u2014 Modules Workspaces Visibility\n\n## \ud83c\udfaf What is it?\nModules Workspaces Visibility is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Modules Workspaces Visibility, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Modules Workspaces Visibility executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Modern Modules & Workspace Structure\n\n## \ud83c\udfaf Visibility Modifiers\n- `pub`: Visible everywhere\n- `pub(crate)`: Visible across current crate\n- `pub(super)`: Visible to immediate parent module\n- `pub(in crate::path)`: Visible to specific ancestor module\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Modules Workspaces Visibility\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 16 — Async Rust & Tokio\n\n## Why Async Rust?\n\nThreads are useful, but creating an operating-system thread for every network operation can be expensive. Async programming allows many I/O-bound tasks to make progress using a smaller number of threads.\n\n## async Functions\n\nAn async function returns a future representing work that can complete later.\n\n```rust\nasync fn fetch_data() {\n    println!(\"Fetching...\");\n}\n```\n\nCalling an async function does not immediately execute all of its work. The future must be awaited or spawned on an async runtime.\n\n## await\n\n```rust\nfetch_data().await;\n```\n\n`.await` waits for the future to make progress while allowing the runtime to execute other tasks.\n\n## Tokio\n\nTokio provides an asynchronous runtime and primitives commonly used for network servers and services.\n\nA common application entry point is:\n\n```rust\n#[tokio::main]\nasync fn main() {\n    // async application\n}\n```\n\n## Spawning Tasks\n\n```rust\ntokio::spawn(async {\n    // background task\n});\n```\n\nTokio tasks are lightweight compared with operating-system threads.\n\n## Channels\n\nAsync channels allow tasks to communicate by sending messages instead of directly sharing mutable state.\n\nThis is useful for worker systems, event processing, queues, and background jobs.\n\n## Practice\n\nCreate multiple async tasks that perform independent work. Then use a Tokio channel to send results back to the main task.\n\n## Common Mistakes\n\n- Blocking inside async code.\n- Assuming `async` automatically creates a new thread.\n- Spawning tasks without understanding ownership of captured values.\n- Mixing synchronous blocking operations into latency-sensitive async paths."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "mod network {\n    pub mod transport {\n        pub fn connect() {\n            println!(\"TCP connection established.\");\n        }\n    }\n}\n\npub use network::transport::connect;\n\nfn main() {\n    connect();\n}\n"
+            "content": "async fn work(id: u32) {\n    println!(\"Task {} running\", id);\n}\n\n#[tokio::main]\nasync fn main() {\n    let first = tokio::spawn(work(1));\n    let second = tokio::spawn(work(2));\n\n    first.await.unwrap();\n    second.await.unwrap();\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement module auth with verify_token.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "mod auth {\n    pub(crate) fn verify_token(token: &str) -> bool {\n        token == \"secret_bearer_token\"\n    }\n}\n\nfn main() {\n    assert!(auth::verify_token(\"secret_bearer_token\"));\n    assert!(!auth::verify_token(\"invalid\"));\n    println!(\"\u2714 Module visibility test passed!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "async fn worker(id: u32) {\n    // Implement async work here.\n}\n\n#[tokio::main]\nasync fn main() {\n    // Spawn multiple workers and coordinate their results.\n}"
           }
         ]
       },
       {
-        "name": "17-serde-json-and-serialization",
+        "name": "module-17",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 \u2014 Serde Json And Serialization\n\n## \ud83c\udfaf What is it?\nSerde Json And Serialization is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Serde Json And Serialization, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Serde Json And Serialization executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Serialization with Serde Architecture\n\n## \ud83c\udfaf Serde Data Model\nSerde defines 29 fundamental data types connecting data formats (JSON, YAML, Bincode) with Rust data structures with zero intermediate AST allocation.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Serde Json And Serialization\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 17 — File I/O, Paths & JSON\n\n## File I/O\n\nRust's standard library provides filesystem operations through `std::fs`.\n\nRead a complete file:\n\n```rust\nlet content = std::fs::read_to_string(\"config.txt\")?;\n```\n\nWrite a file:\n\n```rust\nstd::fs::write(\"output.txt\", \"hello\")?;\n```\n\nFilesystem operations return `Result`, because operations such as reading a file can fail.\n\n## Paths\n\nUse `std::path::Path` and `PathBuf` instead of manually concatenating filesystem strings.\n\n```rust\nuse std::path::Path;\n\nlet path = Path::new(\"data/config.json\");\n```\n\n## JSON with Serde\n\nSerde provides serialization and deserialization support.\n\n```rust\nuse serde::{Deserialize, Serialize};\n\n#[derive(Serialize, Deserialize)]\nstruct User {\n    name: String,\n    age: u32,\n}\n```\n\nSerialize:\n\n```rust\nlet json = serde_json::to_string(&user)?;\n```\n\nDeserialize:\n\n```rust\nlet user: User = serde_json::from_str(&json)?;\n```\n\nThis pattern is fundamental for configuration files, APIs, caches, and registry data.\n\n## Practice\n\nCreate a configuration struct, serialize it to JSON, save it to disk, read it back, and deserialize it."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "struct User {\n    id: u64,\n    username: String,\n    active: bool,\n}\n\nimpl User {\n    fn to_json(&self) -> String {\n        format!(\"{{\\\"id\\\":{},\\\"username\\\":\\\"{}\\\",\\\"active\\\":{}}}\", self.id, self.username, self.active)\n    }\n}\n\nfn main() {\n    let u = User { id: 101, username: \"ndk123-web\".into(), active: true };\n    println!(\"Serialized JSON: {}\", u.to_json());\n}\n"
+            "content": "use serde::{Deserialize, Serialize};\n\n#[derive(Serialize, Deserialize, Debug)]\nstruct User {\n    name: String,\n    age: u32,\n}\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    let user = User {\n        name: String::from(\"Ndk\"),\n        age: 21,\n    };\n\n    let json = serde_json::to_string_pretty(&user)?;\n    std::fs::write(\"user.json\", &json)?;\n\n    let content = std::fs::read_to_string(\"user.json\")?;\n    let restored: User = serde_json::from_str(&content)?;\n\n    println!(\"{:?}\", restored);\n    Ok(())\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement ServerConfig to_json method.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "struct ServerConfig {\n    host: String,\n    port: u16,\n    tls: bool,\n}\n\nimpl ServerConfig {\n    fn to_json(&self) -> String {\n        format!(\"{{\\\"host\\\":\\\"{}\\\",\\\"port\\\":{},\\\"tls\\\":{}}}\", self.host, self.port, self.tls)\n    }\n}\n\nfn main() {\n    let cfg = ServerConfig { host: \"127.0.0.1\".into(), port: 8080, tls: true };\n    assert_eq!(cfg.to_json(), \"{\\\"host\\\":\\\"127.0.0.1\\\",\\\"port\\\":8080,\\\"tls\\\":true}\");\n    println!(\"\u2714 ServerConfig serialized correctly!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Create, save, read, serialize, and deserialize a JSON configuration.\n}"
           }
         ]
       },
       {
-        "name": "18-interview-questions-and-drills",
+        "name": "module-18",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 \u2014 Interview Questions And Drills\n\n## \ud83c\udfaf What is it?\nInterview Questions And Drills is a core foundational concept in Rust Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Interview Questions And Drills, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Interview Questions And Drills executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Interview Questions And Drills\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# Module 18 — HTTP, REST & Axum\n\n## What you will learn\n\nThis module moves from the Rust language into backend development. You will build an HTTP service using Tokio and Axum.\n\n## HTTP Basics\n\nAn HTTP request contains information such as:\n\n- Method\n- URL/path\n- Headers\n- Optional body\n\nA response contains a status code, headers, and usually a body.\n\nCommon methods include `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`.\n\n## reqwest\n\n`reqwest` is commonly used when a Rust program needs to make HTTP requests to another service.\n\nTypical use:\n\n```rust\nlet response = reqwest::get(\"https://example.com\").await?;\n```\n\n## Axum\n\nAxum is a Rust web framework built around Tokio and Tower.\n\nA basic route looks like:\n\n```rust\nlet app = Router::new()\n    .route(\"/\", get(handler));\n```\n\nA handler can be an async function:\n\n```rust\nasync fn handler() -> &'static str {\n    \"Hello\"\n}\n```\n\n## Starting the Server\n\n```rust\nlet listener = tokio::net::TcpListener::bind(\"0.0.0.0:3000\").await?;\naxum::serve(listener, app).await?;\n```\n\n## JSON APIs\n\nWith Serde and Axum, request and response bodies can be represented using Rust structs.\n\n## Routing\n\nReal APIs usually contain multiple routes:\n\n```text\nGET    /users\nGET    /users/:id\nPOST   /users\nDELETE /users/:id\n```\n\n## Middleware\n\nMiddleware can be used for concerns such as logging, authentication, tracing, and request processing.\n\n## Practice\n\nBuild a small REST API for users. Implement listing users, retrieving a user by ID, and creating a user."
           },
           {
             "name": "example.rs",
             "type": "file",
-            "content": "fn main() {\n    println!(\"=== 18: Master Interview Drill ===\");\n    println!(\"1. Aliasing XOR Mutability\");\n    println!(\"2. Monomorphization vs Vtables\");\n    println!(\"3. Send/Sync bounds in Concurrency\");\n    println!(\"4. RAII Drop semantics\");\n    println!(\"\ud83d\ude80 You have completed the comprehensive Rust Mastery Track!\");\n}\n"
+            "content": "use axum::{routing::get, Router};\n\nasync fn hello() -> &'static str {\n    \"Hello from Rust\"\n}\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let app = Router::new().route(\"/\", get(hello));\n\n    let listener = tokio::net::TcpListener::bind(\"0.0.0.0:3000\").await?;\n    axum::serve(listener, app).await?;\n\n    Ok(())\n}"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.rs",
-                "type": "file",
-                "content": "// TODO: Implement thread-safe ThreadPool queue.\nfn main() {}\n"
-              },
-              {
-                "name": "solution.rs",
-                "type": "file",
-                "content": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let queue = Arc::new(Mutex::new(vec![1, 2, 3, 4, 5, 6]));\n    let results = Arc::new(Mutex::new(vec![]));\n    let mut handles = vec![];\n\n    for _ in 0..3 {\n        let q = Arc::clone(&queue);\n        let res = Arc::clone(&results);\n        let h = thread::spawn(move || {\n            loop {\n                let task = {\n                    let mut lock = q.lock().unwrap();\n                    lock.pop()\n                };\n                match task {\n                    Some(val) => {\n                        res.lock().unwrap().push(val * 10);\n                    }\n                    None => break,\n                }\n            }\n        });\n        handles.push(h);\n    }\n\n    for h in handles {\n        h.join().unwrap();\n    }\n\n    let mut final_results = results.lock().unwrap().clone();\n    final_results.sort();\n    assert_eq!(final_results, vec![10, 20, 30, 40, 50, 60]);\n    println!(\"\u2714 ThreadPool worker queue drill passed successfully!\");\n}\n"
-              }
-            ]
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Build a small REST API using Axum.\n    // Add GET and POST endpoints and JSON responses.\n}"
+          }
+        ]
+      },
+      {
+        "name": "module-19",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# Module 19 — PostgreSQL & SQLx\n\n## Why Databases?\n\nIn-memory data disappears when a process stops. Production applications need persistent storage.\n\n## PostgreSQL\n\nPostgreSQL is a relational database. Data is stored in tables containing rows and columns.\n\nExample:\n\n```sql\nCREATE TABLE users (\n    id SERIAL PRIMARY KEY,\n    name TEXT NOT NULL,\n    age INTEGER NOT NULL\n);\n```\n\n## SQLx\n\n`sqlx` allows Rust applications to communicate with SQL databases asynchronously.\n\nCreate a connection pool:\n\n```rust\nlet pool = PgPool::connect(&database_url).await?;\n```\n\n## Queries\n\nA query can fetch rows:\n\n```rust\nlet users = sqlx::query!(\n    \"SELECT id, name, age FROM users\"\n)\n.fetch_all(&pool)\n.await?;\n```\n\n## Connection Pooling\n\nA connection pool keeps reusable database connections available instead of opening a new connection for every request.\n\n## Transactions\n\nTransactions allow multiple database operations to succeed or fail as one unit.\n\nConceptually:\n\n```text\nBEGIN\n  operation A\n  operation B\nCOMMIT\n```\n\nIf something fails:\n\n```text\nROLLBACK\n```\n\n## Migrations\n\nSchema changes should be tracked using migrations instead of manually changing production databases.\n\n## Practice\n\nBuild a Rust service backed by PostgreSQL. Add a users table, create users, query users, and update a user inside a transaction."
+          },
+          {
+            "name": "example.rs",
+            "type": "file",
+            "content": "use sqlx::PgPool;\n\nasync fn load_users(pool: &PgPool) -> Result<(), sqlx::Error> {\n    let rows = sqlx::query!(\"SELECT id, name FROM users\")\n        .fetch_all(pool)\n        .await?;\n\n    for row in rows {\n        println!(\"{} {}\", row.id, row.name);\n    }\n\n    Ok(())\n}\n\nfn main() {\n    println!(\"Database example\");\n}"
+          },
+          {
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Connect to PostgreSQL using sqlx.\n    // Implement basic CRUD operations.\n}"
+          }
+        ]
+      },
+      {
+        "name": "module-20",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# Module 20 — Testing, Tooling & Production Rust\n\n## Testing\n\nRust includes a built-in testing framework.\n\n```rust\n#[test]\nfn adds_numbers() {\n    assert_eq!(2 + 3, 5);\n}\n```\n\nRun tests with:\n\n```bash\ncargo test\n```\n\n## Unit Tests\n\nUnit tests can be placed inside a module using `#[cfg(test)]`.\n\n```rust\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_add() {\n        assert_eq!(add(2, 3), 5);\n    }\n}\n```\n\n## Integration Tests\n\nIntegration tests normally live under the `tests/` directory and interact with the public API of the crate.\n\n## Formatting\n\nRust provides `rustfmt` through:\n\n```bash\ncargo fmt\n```\n\nFormatting should be automated rather than manually maintained.\n\n## Clippy\n\nClippy provides additional lints and suggestions:\n\n```bash\ncargo clippy\n```\n\nIt catches many patterns that compile correctly but may be unnecessarily complex or non-idiomatic.\n\n## Release Builds\n\nUse:\n\n```bash\ncargo build --release\n```\n\nfor an optimized production build.\n\n## Logging and Configuration\n\nProduction services commonly need structured logging, environment-based configuration, and graceful shutdown.\n\nConfiguration should generally come from environment variables or configuration files rather than hardcoding secrets.\n\n## Production Checklist\n\nBefore considering a Rust service production-ready, check:\n\n- Tests pass\n- Formatting is clean\n- Clippy is clean\n- Errors are handled\n- Configuration is externalized\n- Secrets are not committed\n- Logs are available\n- Shutdown is handled correctly\n- Release build works\n\n## Final Project\n\nTake the REST API from the previous modules and turn it into a small production-style service backed by PostgreSQL. Add tests, structured errors, configuration, logging, and a release build.\n\nThe goal is not merely to know Rust syntax. The goal is to be able to build and maintain a real Rust application."
+          },
+          {
+            "name": "example.rs",
+            "type": "file",
+            "content": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn adds_numbers() {\n        assert_eq!(add(2, 3), 5);\n    }\n}\n\nfn main() {\n    println!(\"Production Rust\");\n}"
+          },
+          {
+            "name": "exercise.rs",
+            "type": "file",
+            "content": "fn main() {\n    // Add tests, formatting, Clippy, configuration, logging,\n    // and production build practices to a previous Rust project.\n}"
           }
         ]
       }
