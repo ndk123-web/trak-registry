@@ -41,6 +41,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_greet() {\n    assert_eq!(exercise::greet(\"Ndk\"), \"Hello, Ndk!\");\n    assert_eq!(exercise::greet(\"Rust\"), \"Hello, Rust!\");\n}\n\n#[test]\nfn test_rust_version_label() {\n    assert_eq!(exercise::rust_version_label(\"1.85.0\"), \"Rust 1.85.0\");\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_00_rust_setup_and_first_program\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -67,6 +72,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_increment() {\n    assert_eq!(exercise::increment(0), 1);\n    assert_eq!(exercise::increment(41), 42);\n}\n\n#[test]\nfn test_constant() {\n    assert_eq!(exercise::MAX_RETRIES, 3);\n}\n\n#[test]\nfn test_parse_score() {\n    assert_eq!(exercise::parse_score(\"42\"), 42);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_01_variables_constants_and_mutability\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -93,6 +103,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_profile_summary() {\n    assert_eq!(exercise::profile_summary(\"Ndk\", 21, true), \"Ndk:21:true\");\n}\n\n#[test]\nfn test_character_count() {\n    assert_eq!(exercise::character_count(\"Hello\"), 5);\n    assert_eq!(exercise::character_count(\"नमस्ते\"), 6);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_02_data_types_and_strings\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -119,6 +134,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_classify() {\n    assert_eq!(exercise::classify(-2), \"negative\");\n    assert_eq!(exercise::classify(0), \"zero\");\n    assert_eq!(exercise::classify(4), \"positive-even\");\n    assert_eq!(exercise::classify(7), \"positive-odd\");\n}\n\n#[test]\nfn test_sum_range() {\n    assert_eq!(exercise::sum_range(5), 15);\n    assert_eq!(exercise::sum_range(1), 1);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_03_control_flow_and_pattern_matching\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -145,6 +165,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_add() {\n    assert_eq!(exercise::add(20, 22), 42);\n}\n\n#[test]\nfn test_min_max() {\n    assert_eq!(exercise::min_max(10, 4), (4, 10));\n    assert_eq!(exercise::min_max(-2, -8), (-8, -2));\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_04_functions_and_expressions\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -171,6 +196,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_max_value() {\n    assert_eq!(exercise::max_value(&[3, 9, 2]), Some(9));\n    assert_eq!(exercise::max_value(&[]), None);\n}\n\n#[test]\nfn test_word_count() {\n    let counts = exercise::word_count(&[\"rust\", \"go\", \"rust\"]);\n    assert_eq!(counts.get(\"rust\"), Some(&2));\n    assert_eq!(counts.get(\"go\"), Some(&1));\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_05_collections_vectors_and_hashmaps\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -197,6 +227,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_consume() {\n    assert_eq!(exercise::consume(String::from(\"Rust\")), 4);\n}\n\n#[test]\nfn test_duplicate() {\n    let (a, b) = exercise::duplicate(\"hello\");\n    assert_eq!(a, \"hello\");\n    assert_eq!(b, \"hello\");\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_06_ownership_and_moves\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -223,6 +258,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_length() {\n    assert_eq!(exercise::length(\"Rust\"), 4);\n}\n\n#[test]\nfn test_append_rust() {\n    let mut text = String::from(\"Hello\");\n    exercise::append_rust(&mut text);\n    assert_eq!(text, \"Hello Rust\");\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_07_borrowing_and_references\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -249,6 +289,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_user() {\n    let user = exercise::User::new(\"Ndk\".to_string(), 21);\n    assert_eq!(user.name, \"Ndk\");\n    assert!(user.is_adult());\n}\n\n#[test]\nfn test_status() {\n    assert_eq!(exercise::Status::Active, exercise::Status::Active);\n    assert_ne!(exercise::Status::Active, exercise::Status::Disabled);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_08_structs_enums_and_methods\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -275,6 +320,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_divide() {\n    assert_eq!(exercise::divide(10, 2), Ok(5));\n    assert!(exercise::divide(10, 0).is_err());\n}\n\n#[test]\nfn test_find_user() {\n    assert_eq!(exercise::find_user(1), Some(\"Ndk\"));\n    assert_eq!(exercise::find_user(99), None);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_09_option_result_and_error_handling\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -301,6 +351,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_module_api() {\n    assert_eq!(exercise::math::add(2, 3), 5);\n    assert_eq!(exercise::public_add(10, 32), 42);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_10_modules_crates_and_cargo\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -327,6 +382,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_trait_implementation() {\n    let user = exercise::User { name: \"Ndk\".into() };\n    assert_eq!(exercise::render(&user), \"User: Ndk\");\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_11_traits_generics_and_bounds\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -353,6 +413,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_doubled_even() {\n    assert_eq!(exercise::doubled_even(&[1, 2, 3, 4]), vec![4, 8]);\n}\n\n#[test]\nfn test_apply_multiplier() {\n    assert_eq!(exercise::apply_multiplier(&[2, 3, 4], 3), vec![6, 9, 12]);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_12_closures_and_iterators\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -379,6 +444,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_longest() {\n    assert_eq!(exercise::longest(\"Rust\", \"Programming\"), \"Programming\");\n    assert_eq!(exercise::longest(\"Rustacean\", \"Go\"), \"Rustacean\");\n}\n\n#[test]\nfn test_borrowed_user() {\n    let name = String::from(\"Ndk\");\n    let user = exercise::User { name: &name };\n    assert_eq!(user.name, \"Ndk\");\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_13_lifetimes\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -405,6 +475,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\nuse std::sync::{Arc, Mutex};\n\n#[test]\nfn test_boxed_value() {\n    let value = exercise::boxed_value(42);\n    assert_eq!(*value, 42);\n}\n\n#[test]\nfn test_shared_counter() {\n    let counter = Arc::new(Mutex::new(0));\n    exercise::increment_shared(&counter);\n    exercise::increment_shared(&counter);\n    assert_eq!(*counter.lock().unwrap(), 2);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_14_smart_pointers_and_shared_ownership\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -431,6 +506,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_parallel_sum() {\n    assert_eq!(exercise::parallel_sum(&[1, 2, 3, 4, 5]), 15);\n    assert_eq!(exercise::parallel_sum(&[]), 0);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_15_threads_and_concurrency\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -457,6 +537,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_double_async_value() {\n    assert_eq!(exercise::double_async_value(21), 42);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_16_async_rust_and_tokio\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -483,6 +568,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\nuse std::fs;\nuse std::path::PathBuf;\n\n#[test]\nfn test_config_json() {\n    assert_eq!(exercise::config_json(\"trak\", 3000), r#\"{\"name\":\"trak\",\"port\":3000}\"#);\n}\n\n#[test]\nfn test_read_text() {\n    let path = PathBuf::from(\"trak_test_input.txt\");\n    fs::write(&path, \"hello\").unwrap();\n    assert_eq!(exercise::read_text(&path).unwrap(), \"hello\");\n    fs::remove_file(path).unwrap();\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_17_file_io_paths_and_json\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -509,6 +599,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_route_label() {\n    assert_eq!(exercise::route_label(\"GET\", \"/users\"), \"GET /users\");\n    assert_eq!(exercise::route_label(\"POST\", \"/users\"), \"POST /users\");\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_18_http_rest_and_axum\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -535,6 +630,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_parameterized_sql() {\n    assert_eq!(\n        exercise::user_insert_sql(),\n        \"INSERT INTO users (name, age) VALUES ($1, $2)\"\n    );\n    assert!(!exercise::user_insert_sql().contains(\"VALUES ('\"));\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_19_postgresql_and_sqlx\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       },
@@ -561,6 +661,11 @@
             "name": "exercise_test.rs",
             "type": "file",
             "content": "#[path = \"exercise.rs\"]\nmod exercise;\n\n#[test]\nfn test_clamp() {\n    assert_eq!(exercise::clamp(-5, 0, 10), 0);\n    assert_eq!(exercise::clamp(5, 0, 10), 5);\n    assert_eq!(exercise::clamp(15, 0, 10), 10);\n    assert_eq!(exercise::clamp(0, 0, 10), 0);\n    assert_eq!(exercise::clamp(10, 0, 10), 10);\n}\n"
+          },
+          {
+            "name": "Cargo.toml",
+            "type": "file",
+            "content": "[package]\nname = \"rust_20_testing_tooling_and_production_rust\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[lib]\npath = \"exercise.rs\"\n\n[[test]]\nname = \"exercise_test\"\npath = \"exercise_test.rs\"\n"
           }
         ]
       }
