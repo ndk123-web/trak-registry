@@ -1,627 +1,524 @@
 {
   "id": "lang/python",
   "name": "Python Architecture & Systems Mastery Track",
-  "version": "1.2.0",
-  "description": "Complete high-depth Python curriculum covering CPython internals, GIL, descriptors, metaclasses, asyncio event loop, generators, and production concurrency",
+  "version": "1.3.0",
+  "description": "Comprehensive Python engineering curriculum from primitives and functional patterns to object-oriented programming, context managers, and standard library internals.",
   "root": {
     "name": "python-workspace",
     "type": "directory",
     "children": [
       {
-        "name": "pyproject.toml",
-        "type": "file",
-        "content": "[project]\nname = \"python-workspace\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11\"\n"
-      },
-      {
-        "name": "README.md",
-        "type": "file",
-        "content": "# \ud83d\udc0d Python Architecture & Systems Mastery Track\n\nWelcome to the **Python Architecture & Systems Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering language mechanics, CPython internals, GIL workarounds, memory management, and asynchronous I/O.\n\n## \ud83d\udcda Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-virtual-environments` | Virtual Envs & Toolchain | `venv`, `pip`, interpreter binaries, bytecode caching (`__pycache__`) |\n| `01-basics-dynamic-typing-scope` | Dynamic Typing & LEGB | Names vs objects, reference assignment, LEGB scope rule, `global` vs `nonlocal` |\n| `02-data-structures-lists-dicts-sets` | Built-in Collections | List dynamic array growth, Dict hash table collisions, set operations |\n| `03-strings-encoding-and-regex` | Strings & Regex | Unicode strings vs `bytes`, UTF-8 encoding, `re` regex engine |\n| `04-functions-args-kwargs-scopes` | Functions & Arguments | `*args`, `**kwargs`, keyword-only parameters, first-class functions |\n| `05-decorators-and-function-wrappers` | Decorators & Closures | Parameterized decorators, `@functools.wraps`, preserving metadata |\n| `06-generators-iterators-itertools` | Generators & Streams | `__iter__` / `__next__` protocol, `yield` generator pipelines, `itertools` |\n| `07-oop-dunder-methods-operator-overloading` | OOP & Dunder Methods | `__repr__`, `__eq__`, `__hash__`, `__getitem__`, operator overloading |\n| `08-properties-descriptors-and-dataclasses` | Properties & Descriptors | `@property`, Descriptor protocol (`__get__`, `__set__`), `@dataclass` |\n| `09-metaclasses-and-type-creation` | Metaclasses & Dynamic Types | `type` as metaclass, `__new__` vs `__init__`, registry metaclass patterns |\n| `10-context-managers-with-statement` | Context Managers | `__enter__`, `__exit__`, `@contextlib.contextmanager`, exception suppression |\n| `11-error-handling-custom-exceptions` | Error Handling Architecture | Exception hierarchies, `raise ... from ...` chaining, `BaseException` |\n| `12-concurrency-threading-vs-multiprocessing` | Concurrency & The GIL | CPython Global Interpreter Lock, `threading` (I/O) vs `multiprocessing` (CPU) |\n| `13-asyncio-event-loop-coroutines` | AsyncIO & Event Loop | Coroutines, `asyncio.gather()`, task scheduling, non-blocking I/O |\n| `14-cpython-internals-and-memory` | CPython Memory & GC | Reference counting, cyclic GC generations (0, 1, 2), `sys.getrefcount` |\n| `15-testing-pytest-and-mocking` | Testing & Quality Assurance | `pytest`, fixtures, parametrization, `unittest.mock` |\n| `16-modules-packages-and-imports` | Packages & Import System | `__init__.py`, `sys.path`, relative vs absolute imports, circular imports |\n| `17-serialization-json-pickle` | Serialization Architecture | JSON streaming, `pickle` security vulnerabilities, schema validation |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Python gotchas (mutable defaults, late binding), async worker pool drill |\n\n---\n\n## \ud83d\udee0\ufe0f How to Practice\nEach module contains:\n- `README.md` \u2014 Deep theoretical explanation and architecture notes.\n- `example.py` \u2014 Fully runnable concept demonstration.\n- `exercise/starter.py` \u2014 Hands-on problem with `TODO` markers.\n- `exercise/solution.py` \u2014 Complete reference solution.\n"
-      },
-      {
-        "name": "00-setup-and-virtual-environments",
+        "name": "00-setup-toolchain-and-first-program",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 \u2014 Setup And Virtual Environments\n\n## \ud83c\udfaf What is it?\nSetup And Virtual Environments is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Setup And Virtual Environments, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Setup And Virtual Environments executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Python Virtual Environments & Toolchain\n\n## \ud83c\udfaf Learning Objectives\n- Understand how Python resolves the interpreter binary and `sys.path`\n- Create isolated virtual environments (`python -m venv .venv`)\n- Understand `.pyc` bytecode compilation and `__pycache__` optimization\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Setup And Virtual Environments\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 00 — Setup, Toolchain & First Program\n\n## What is this?\nWelcome to Python! Python is a high-level, interpreted, dynamically-typed programming language renowned for its readability and expressive syntax. You do not need to solve complex algorithmic puzzles or write functions in this introductory module. You will verify your Python runtime, learn how Python executes code, and run your very first Python program.\n\n## Why does Python have it?\n- Python code is executed by an interpreter (most commonly CPython). Instead of requiring a separate manual compilation and linking step like C or C++, Python compiles your source code into bytecode (`.pyc`) in memory and executes it on the Python Virtual Machine (PVM).\n- Everything in Python is an object: numbers, strings, functions, and modules are all first-class objects in memory.\n\n## The Minimal Anatomy of a Python Program\nTake a look at `main.py` in this directory:\n\n```python\nprint(\"Hello, World!\")\n```\n\nLet us break down each part:\n1. `print`: A built-in Python function that outputs strings or formatted objects to standard output (`stdout`), followed by a newline character.\n2. `\"Hello, World!\"`: A string literal. In Python, strings can be enclosed in either single quotes (`'...'`) or double quotes (`\"...\"`).\n3. No semicolons: Python uses newlines to delimit statements instead of semicolons `;`.\n\n## How to Run Your First Program\nOpen your terminal in this directory and execute:\n\n### 1. Run the script directly with Python\n```bash\npython main.py\n```\nYou will see:\n```text\nHello, World!\n```\n\n### 2. Check your installed Python version\n```bash\npython --version\n```\n\n### 3. Open the interactive Python REPL\n```bash\npython\n```\nYou can type any Python expression directly (e.g. `2 + 2` or `print(\"Hi\")`). Type `exit()` or press `Ctrl + Z` (Windows) / `Ctrl + D` (Unix) to exit.\n\n## Common Mistakes\n1. Indentation errors: Python uses indentation (4 spaces) rather than curly braces `{}` to define code blocks. Mixing tabs and spaces causes an `IndentationError`.\n2. Missing quotes: Writing `print(Hello)` triggers a `NameError: name 'Hello' is not defined` because Python treats unquoted words as variable identifiers.\n3. Case sensitivity: Writing `Print(\"Hello\")` throws a `NameError` because Python is strictly case-sensitive.\n\n## What to Practice\n1. Open `main.py`.\n2. Run `python main.py` in your terminal to see `\"Hello, World!\"`.\n3. Change the message to `\"Hello, Trak!\"` or your name, save, and run `python main.py` again.\n4. Run `trak verify 00` or `trak done 00` to mark this setup complete and proceed to Module 01!\n"
           },
           {
-            "name": "example.py",
+            "name": "main.py",
             "type": "file",
-            "content": "import sys\nimport platform\n\ndef main():\n    print(\"=== 00: Python Toolchain Verification ===\")\n    print(f\"Python Version: {platform.python_version()}\")\n    print(f\"Implementation: {platform.python_implementation()} (CPython)\")\n    print(f\"Executable: {sys.executable}\")\n    print(\"\u2714 Toolchain verified successfully!\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "print(\"Hello, World!\")\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Write a function that prints all directories in sys.path\nimport sys\n\ndef print_sys_paths():\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    print_sys_paths()\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import sys\n\ndef print_sys_paths():\n    for idx, path in enumerate(sys.path):\n        print(f\"{idx}: {path}\")\n\nif __name__ == '__main__':\n    print_sys_paths()\n"
-              }
-            ]
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nimport sys\n\nclass TestPythonToolchain(unittest.TestCase):\n    def test_python_runtime(self):\n        self.assertGreaterEqual(sys.version_info[0], 3, \"Python 3 is required\")\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "01-basics-dynamic-typing-scope",
+        "name": "01-variables-data-types-and-operators",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 \u2014 Basics Dynamic Typing Scope\n\n## \ud83c\udfaf What is it?\nBasics Dynamic Typing Scope is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Basics Dynamic Typing Scope, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Basics Dynamic Typing Scope executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Dynamic Typing, References & LEGB Scope Rule\n\n## \ud83c\udfaf Names are Pointers to Objects\nIn Python, variables do not hold values directly; they hold **references** (pointers) to heap objects (`PyObject`).\n\n## \ud83e\udde0 LEGB Scope Resolution\n1. **L**ocal: Defined inside current function\n2. **E**nclosing: Defined in outer nested function\n3. **G**lobal: Module-level variables\n4. **B**uilt-in: Python predefined names (`len`, `range`)\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Basics Dynamic Typing Scope\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 01 — Variables, Data Types & Operators\n\n## What is this?\nVariables in Python are symbolic names that reference objects in memory. Python is dynamically typed: variables do not require explicit type declarations, and their types are resolved at runtime based on the assigned object. Python provides built-in primitive types: `int`, `float`, `bool`, `str`, and `NoneType`.\n\n## Why does Python have it?\n- Dynamic typing enables rapid, concise code writing.\n- Python 3 integers have arbitrary precision (no integer overflow or underflow limits like in 32-bit/64-bit C).\n\n## Basic Syntax\n```python\nusername: str = \"Elena\"  # Type hints are optional annotations\nage = 25                 # int\ntemperature = 98.6       # float\nis_active = True         # bool (True / False capitalized!)\nresult = None            # Represents the absence of a value\n```\n\n## How it Behaves\n1. Reference Assignment: When you write `a = 10`, `a` is a pointer to an `int` object with value `10`. Assigning `b = a` points `b` to the same object.\n2. Division Operators:\n   - True division (`/`): Always returns a `float` (`7 / 2 == 3.5`).\n   - Floor division (`//`): Truncates towards negative infinity, returning an `int` (`7 // 2 == 3`).\n   - Modulo (`%`): Computes the remainder (`7 % 2 == 1`).\n   - Exponentiation (`**`): Computes powers (`2 ** 3 == 8`).\n\n## Common Mistakes\n1. Capitalization of Booleans: Writing `true` or `false` throws a `NameError`. Python requires `True` and `False`.\n2. Assuming `None` is `0` or `False`: `None` is a unique singleton of type `NoneType`. Always check with `val is None` or `val is not None`.\n3. Concatenating strings with numbers: `\"Age: \" + 25` raises a `TypeError: can only concatenate str (not \"int\") to str`. Use f-strings: `f\"Age: {25}\"`.\n\n## Small Practical Example\n```python\ndef calculate_box_volume(length: float, width: float, height: float) -> float:\n    if length <= 0 or width <= 0 or height <= 0:\n        return 0.0\n    return length * width * height\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `calculate_bill(subtotal: float, tax_rate: float = 0.08, tip_percentage: float = 0.15) -> float`:\n   - Returns the total bill: `subtotal + (subtotal * tax_rate) + (subtotal * tip_percentage)`.\n   - Round to 2 decimal places using `round(val, 2)`.\n   - If `subtotal < 0`, return `0.0`.\n2. `is_even(n: int) -> bool`: Returns `True` if `n` is even, otherwise `False`.\n3. `safe_divide(a: float, b: float) -> float | None`:\n   - If `b == 0`, returns `None`.\n   - Otherwise returns `a / b`.\n\n## Progressive Hints\n- Hint 1: In `calculate_bill`, check `if subtotal < 0: return 0.0` at the start.\n- Hint 2: In `is_even`, use `n % 2 == 0`.\n- Hint 3: In `safe_divide`, check `if b == 0: return None`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef calculate_bill(subtotal: float, tax_rate: float = 0.08, tip_percentage: float = 0.15) -> float:\n    if subtotal < 0:\n        return 0.0\n    total = subtotal + (subtotal * tax_rate) + (subtotal * tip_percentage)\n    return round(total, 2)\n\ndef is_even(n: int) -> bool:\n    return n % 2 == 0\n\ndef safe_divide(a: float, b: float) -> float | None:\n    if b == 0:\n        return None\n    return a / b\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "def outer():\n    count = 10\n    def inner():\n        nonlocal count\n        count += 5\n        return count\n    return inner\n\ndef main():\n    print(\"=== 01: Dynamic References & Nonlocal Scope ===\")\n    counter = outer()\n    print(f\"Count: {counter()}\")\n    print(f\"Count: {counter()}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 01: Variables & Operators Example\n\nname = \"Alice\"\nbase_salary = 50000\nbonus = 7500.50\n\ntotal_compensation = base_salary + bonus\nprint(f\"Employee: {name}\")\nprint(f\"Total: ${total_compensation:.2f}\")\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a counter factory using 'nonlocal' scope that returns (increment, get_count).\ndef make_counter(start=0):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "def make_counter(start=0):\n    count = start\n    def increment(by=1):\n        nonlocal count\n        count += by\n        return count\n    def get_count():\n        return count\n    return increment, get_count\n\nif __name__ == '__main__':\n    inc, get = make_counter(10)\n    inc(5)\n    inc(3)\n    assert get() == 18\n    print(\"\u2714 Nonlocal counter verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 01: Variables, Data Types & Operators\n\ndef calculate_bill(subtotal: float, tax_rate: float = 0.08, tip_percentage: float = 0.15) -> float:\n    # TODO: Calculate total bill rounded to 2 decimal places. Return 0.0 if subtotal < 0\n    return 0.0\n\ndef is_even(n: int) -> bool:\n    # TODO: Return True if n is even, else False\n    return False\n\ndef safe_divide(a: float, b: float) -> float | None:\n    # TODO: Return a / b or None if b == 0\n    return 0.0\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import calculate_bill, is_even, safe_divide\n\nclass TestVariablesAndOperators(unittest.TestCase):\n    def test_calculate_bill(self):\n        self.assertEqual(calculate_bill(100.0, 0.10, 0.15), 125.0)\n        self.assertEqual(calculate_bill(50.0), 61.5)\n        self.assertEqual(calculate_bill(-20.0), 0.0)\n\n    def test_is_even(self):\n        self.assertTrue(is_even(4))\n        self.assertTrue(is_even(0))\n        self.assertTrue(is_even(-2))\n        self.assertFalse(is_even(7))\n        self.assertFalse(is_even(-5))\n\n    def test_safe_divide(self):\n        self.assertEqual(safe_divide(10, 2), 5.0)\n        self.assertIsNone(safe_divide(10, 0))\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "02-data-structures-lists-dicts-sets",
+        "name": "02-strings-formatting-and-methods",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 \u2014 Data Structures Lists Dicts Sets\n\n## \ud83c\udfaf What is it?\nData Structures Lists Dicts Sets is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Data Structures Lists Dicts Sets, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Data Structures Lists Dicts Sets executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Data Structures: Dynamic Arrays & Hash Tables\n\n## \ud83c\udfaf Internals\n- **`list`**: Dynamic array of `PyObject*` pointers with over-allocation growth strategy (`0, 4, 8, 16, 24, 32...`).\n- **`dict`**: Compact hash table (since Python 3.6/3.7) with separate indices array and contiguous entries array, preserving insertion order.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Data Structures Lists Dicts Sets\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 02 — Strings, Formatting & Methods\n\n## What is this?\nStrings in Python are immutable sequences of Unicode characters. Python provides formatted string literals (**f-strings**), slicing notation `[start:stop:step]`, and built-in methods on the `str` class for search, replacement, and transformation.\n\n## Why does Python have it?\n- Text manipulation is central to backend systems, data pipelines, and CLI tooling.\n- F-strings (`f\"Hello, {name}\"`) introduced in Python 3.6 evaluate expressions at runtime with exceptional speed and readability.\n\n## Basic Syntax\n```python\nmessage = \"  Python Systems  \"\n\n# String methods\ntrimmed = message.strip()             # \"Python Systems\"\nupper_text = trimmed.upper()          # \"PYTHON SYSTEMS\"\nwords = trimmed.split()               # [\"Python\", \"Systems\"]\nrejoined = \"-\".join(words)            # \"Python-Systems\"\n\n# Slicing: [start:stop:step]\ngreeting = \"Hello\"\nreversed_greeting = greeting[::-1]    # \"olleH\"\n```\n\n## How it Behaves\n1. Immutability: Strings cannot be modified in place. Operations like `.replace()` or `.upper()` return a brand new string.\n2. Negative Indexing: `-1` refers to the last character, `-2` the second to last.\n3. Slicing Omits Stop: `s[0:3]` includes indices 0, 1, and 2 (index 3 is excluded).\n\n## Common Mistakes\n1. Trying to mutate characters: `s[0] = \"H\"` raises a `TypeError: 'str' object does not support item assignment`.\n2. Using `.split(\",\")` on an empty string: `\"\".split(\",\")` returns `[\"\"]`, not `[]`.\n3. Forgetting that string methods do not change the original variable:\n   ```python\n   name = \"alex\"\n   name.upper()\n   print(name)  # Still \"alex\"! Must write: name = name.upper()\n   ```\n\n## Small Practical Example\n```python\ndef sanitize_slug(text: str) -> str:\n    return \"-\".join(text.strip().lower().split())\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `format_user_badge(username: str, role: str = \"member\") -> str`:\n   - Returns string: `f\"[{role.upper()}] {username.strip().title()}\"`.\n2. `reverse_words(sentence: str) -> str`:\n   - Reverses the order of words in `sentence` while preserving individual word spelling (e.g. `\"hello world\"` becomes `\"world hello\"`). Words are separated by single spaces.\n3. `is_palindrome(text: str) -> bool`:\n   - Returns `True` if `text` is a palindrome (ignoring case and whitespace), else `False`.\n\n## Progressive Hints\n- Hint 1: In `format_user_badge`, use `username.strip().title()` and `role.upper()`.\n- Hint 2: In `reverse_words`, use `\" \".join(sentence.split()[::-1])`.\n- Hint 3: In `is_palindrome`, clean text with `clean = \"\".join(text.lower().split())` and compare `clean == clean[::-1]`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef format_user_badge(username: str, role: str = \"member\") -> str:\n    return f\"[{role.upper()}] {username.strip().title()}\"\n\ndef reverse_words(sentence: str) -> str:\n    words = sentence.split()\n    return \" \".join(words[::-1])\n\ndef is_palindrome(text: str) -> bool:\n    clean = \"\".join(text.lower().split())\n    return clean == clean[::-1]\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "def main():\n    print(\"=== 02: List & Dict Comprehensions ===\")\n    numbers = [1, 2, 3, 4, 5, 6]\n    even_squares = [x**2 for x in numbers if x % 2 == 0]\n    print(f\"Even squares: {even_squares}\")\n\n    # Word frequency dict comprehension\n    words = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']\n    freq = {w: words.count(w) for w in set(words)}\n    print(f\"Frequencies: {freq}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 02: Strings Example\n\nquery = \"SELECT * FROM users WHERE active = 1\"\nprint(\"Starts with SELECT:\", query.startswith(\"SELECT\"))\n\npath_parts = [\"var\", \"log\", \"app.log\"]\nprint(\"Joined path:\", \"/\".join(path_parts))\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a function that merges two dictionaries. If a key exists in both,\n# sum their integer values.\ndef merge_frequency_dicts(d1, d2):\n    # FILL HERE\n    return {}\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "def merge_frequency_dicts(d1, d2):\n    result = dict(d1)\n    for k, v in d2.items():\n        result[k] = result.get(k, 0) + v\n    return result\n\nif __name__ == '__main__':\n    a = {'x': 2, 'y': 3}\n    b = {'y': 5, 'z': 1}\n    merged = merge_frequency_dicts(a, b)\n    assert merged == {'x': 2, 'y': 8, 'z': 1}\n    print(\"\u2714 Dict merge passed!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 02: Strings, Formatting & Methods\n\ndef format_user_badge(username: str, role: str = \"member\") -> str:\n    # TODO: Return f\"[{role.upper()}] {username.strip().title()}\"\n    return \"\"\n\ndef reverse_words(sentence: str) -> str:\n    # TODO: Reverse the order of words in sentence\n    return \"\"\n\ndef is_palindrome(text: str) -> bool:\n    # TODO: Return True if text reads same forward and backward (ignore case and whitespace)\n    return False\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import format_user_badge, reverse_words, is_palindrome\n\nclass TestStrings(unittest.TestCase):\n    def test_format_user_badge(self):\n        self.assertEqual(format_user_badge('alex', 'admin'), '[ADMIN] Alex')\n        self.assertEqual(format_user_badge('  sarah connor  '), '[MEMBER] Sarah Connor')\n\n    def test_reverse_words(self):\n        self.assertEqual(reverse_words('the quick brown fox'), 'fox brown quick the')\n        self.assertEqual(reverse_words('single'), 'single')\n        self.assertEqual(reverse_words(''), '')\n\n    def test_is_palindrome(self):\n        self.assertTrue(is_palindrome('Racecar'))\n        self.assertTrue(is_palindrome('A man a plan a canal Panama'))\n        self.assertFalse(is_palindrome('hello'))\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "03-strings-encoding-and-regex",
+        "name": "03-control-flow-and-conditionals",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 \u2014 Strings Encoding And Regex\n\n## \ud83c\udfaf What is it?\nStrings Encoding And Regex is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Strings Encoding And Regex, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Strings Encoding And Regex executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Strings, Bytes & Regular Expressions\n\n## \ud83c\udfaf Strings vs Bytes\n- **`str`**: Immutable sequence of Unicode code points.\n- **`bytes`**: Immutable sequence of raw 8-bit integers (`0..255`).\n- Conversion requires explicit `.encode('utf-8')` and `.decode('utf-8')`.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Strings Encoding And Regex\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 03 — Control Flow & Conditionals\n\n## What is this?\nControl flow determines the execution path of a Python program based on boolean evaluations using `if`, `elif`, and `else`. Python also supports the conditional ternary expression (`val_if_true if condition else val_if_false`).\n\n## Why does Python have it?\n- Decision logic allows programs to respond dynamically to input validation, state transitions, and business rules.\n- Python evaluates conditions based on **truthiness**: every object has an inherent boolean value.\n\n## Basic Syntax\n```python\nscore = 85\n\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelif score >= 70:\n    grade = \"C\"\nelse:\n    grade = \"F\"\n\n# Ternary Expression\nstatus = \"Adult\" if age >= 18 else \"Minor\"\n```\n\n## How it Behaves\n1. Truthy & Falsy Values:\n   - Falsy: `False`, `None`, `0`, `0.0`, `\"\"`, `[]`, `{}`, `set()`, `()`.\n   - Truthy: Any non-zero number, non-empty string, list, dict, or object.\n2. Short-Circuit Evaluation:\n   - `A and B`: If `A` is falsy, returns `A` immediately without evaluating `B`.\n   - `A or B`: If `A` is truthy, returns `A` immediately without evaluating `B`.\n3. Chained Comparisons: Python allows chaining comparisons naturally: `18 <= age < 65`.\n\n## Common Mistakes\n1. Using `==` instead of `is` for singletons: Always check `if val is None:` instead of `if val == None:`.\n2. Checking empty collections with `len(coll) == 0`: Idiomatic Python checks `if not coll:` directly.\n3. Forgetting colons `:` at the end of `if`, `elif`, and `else` lines.\n\n## Small Practical Example\n```python\ndef get_service_url(env: str | None) -> str:\n    env_clean = (env or \"development\").strip().lower()\n    if env_clean == \"production\":\n        return \"https://api.example.com\"\n    elif env_clean == \"staging\":\n        return \"https://staging.api.example.com\"\n    return \"http://localhost:8080\"\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `classify_number(n: int) -> str`:\n   - Returns `\"positive\"`, `\"negative\"`, or `\"zero\"`.\n2. `get_discount_rate(customer_type: str, total_orders: int) -> float`:\n   - If `customer_type.lower() == \"vip\"`: return `0.20`\n   - If `customer_type.lower() == \"loyal\"` and `total_orders >= 10`: return `0.15`\n   - If `customer_type.lower() == \"loyal\"` and `total_orders < 10`: return `0.10`\n   - Otherwise, return `0.0`\n3. `is_valid_triangle(a: float, b: float, c: float) -> bool`:\n   - All sides must be `> 0`.\n   - The sum of any two sides must be strictly greater than the third side: `a + b > c and a + c > b and b + c > a`.\n\n## Progressive Hints\n- Hint 1: In `classify_number`, check `n > 0`, `n < 0`, else `\"zero\"`.\n- Hint 2: In `get_discount_rate`, normalize with `customer_type.strip().lower()`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef classify_number(n: int) -> str:\n    if n > 0:\n        return \"positive\"\n    elif n < 0:\n        return \"negative\"\n    return \"zero\"\n\ndef get_discount_rate(customer_type: str, total_orders: int) -> float:\n    c_type = customer_type.strip().lower()\n    if c_type == \"vip\":\n        return 0.20\n    elif c_type == \"loyal\":\n        return 0.15 if total_orders >= 10 else 0.10\n    return 0.0\n\ndef is_valid_triangle(a: float, b: float, c: float) -> bool:\n    if a <= 0 or b <= 0 or c <= 0:\n        return False\n    return (a + b > c) and (a + c > b) and (b + c > a)\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "import re\n\ndef main():\n    print(\"=== 03: Strings, Bytes & Regex ===\")\n    raw_text = \"Contact: admin@trak.dev or support@google.com\"\n    pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}'\n    emails = re.findall(pattern, raw_text)\n    print(f\"Found Emails: {emails}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 03: Control Flow Example\n\ndef verify_access(role: str, is_authenticated: bool) -> bool:\n    if not is_authenticated:\n        return False\n    return role in (\"admin\", \"moderator\")\n\nprint(\"Admin access:\", verify_access(\"admin\", True)) # True\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Write a function that validates if a string is a valid semantic version (X.Y.Z).\nimport re\n\ndef is_semver(s):\n    # FILL HERE\n    return False\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import re\n\ndef is_semver(s):\n    pattern = r'^\\d+\\.\\d+\\.\\d+$'\n    return bool(re.match(pattern, s))\n\nif __name__ == '__main__':\n    assert is_semver('1.2.0')\n    assert is_semver('0.1.5')\n    assert not is_semver('1.2')\n    assert not is_semver('v1.2.0')\n    print(\"\u2714 SemVer validator passed!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 03: Control Flow & Conditionals\n\ndef classify_number(n: int) -> str:\n    # TODO: Return \"positive\", \"negative\", or \"zero\"\n    return \"\"\n\ndef get_discount_rate(customer_type: str, total_orders: int) -> float:\n    # TODO: Return discount rate: \"vip\" -> 0.20, \"loyal\" (>=10 orders) -> 0.15, \"loyal\" (<10) -> 0.10, else 0.0\n    return 0.0\n\ndef is_valid_triangle(a: float, b: float, c: float) -> bool:\n    # TODO: Return True if sides form valid triangle, all sides > 0\n    return False\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import classify_number, get_discount_rate, is_valid_triangle\n\nclass TestControlFlow(unittest.TestCase):\n    def test_classify_number(self):\n        self.assertEqual(classify_number(42), 'positive')\n        self.assertEqual(classify_number(-7), 'negative')\n        self.assertEqual(classify_number(0), 'zero')\n\n    def test_get_discount_rate(self):\n        self.assertEqual(get_discount_rate('vip', 2), 0.20)\n        self.assertEqual(get_discount_rate('loyal', 15), 0.15)\n        self.assertEqual(get_discount_rate('loyal', 5), 0.10)\n        self.assertEqual(get_discount_rate('standard', 20), 0.0)\n\n    def test_is_valid_triangle(self):\n        self.assertTrue(is_valid_triangle(3, 4, 5))\n        self.assertFalse(is_valid_triangle(1, 2, 10))\n        self.assertFalse(is_valid_triangle(-3, 4, 5))\n        self.assertFalse(is_valid_triangle(0, 4, 5))\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "04-functions-args-kwargs-scopes",
+        "name": "04-loops-and-iteration",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 \u2014 Functions Args Kwargs Scopes\n\n## \ud83c\udfaf What is it?\nFunctions Args Kwargs Scopes is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Functions Args Kwargs Scopes, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Functions Args Kwargs Scopes executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Functions, *args, **kwargs & Keyword-Only Arguments\n\n## \ud83c\udfaf Parameter Types\n- Positional-only: `def f(a, b, /, c):`\n- Variable Positional: `*args` (tuple)\n- Keyword-only: `def f(a, *, key=None):`\n- Variable Keyword: `**kwargs` (dict)\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Functions Args Kwargs Scopes\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 04 — Loops & Iteration\n\n## What is this?\nPython provides two primary looping constructs: `for` loops (which iterate over iterable objects like lists, tuples, and ranges) and `while` loops (which repeat while a condition remains true). Python also features built-in iteration helpers: `range()`, `enumerate()`, `zip()`, and loop `else` clauses.\n\n## Why does Python have it?\n- Unlike languages with C-style index loops (`for (int i = 0; i < n; i++)`), Python's `for` loop is an iterator loop. It directly requests items from an iterable, avoiding manual index bounds bugs.\n\n## Basic Syntax\n```python\n# Iterating with index\nfor idx, item in enumerate([\"a\", \"b\", \"c\"]):\n    print(idx, item)\n\n# Parallel iteration\nnames = [\"Alice\", \"Bob\"]\nages = [25, 30]\nfor name, age in zip(names, ages):\n    print(name, age)\n\n# While loop\ncount = 0\nwhile count < 3:\n    count += 1\n```\n\n## How it Behaves\n1. `break`: Exits the loop immediately.\n2. `continue`: Skips the rest of the current iteration.\n3. `for ... else`: The `else` block executes **only if the loop completed normally** without encountering a `break`.\n\n## Common Mistakes\n1. Modifying a collection while iterating over it: Removing elements from a list while looping over it skips elements. Iterate over a copy instead: `for item in items[:]:`.\n2. Confusing `range(n)`: `range(5)` generates numbers `0, 1, 2, 3, 4` (stops before 5).\n\n## Small Practical Example\n```python\ndef find_first_negative(numbers: list[int]) -> int | None:\n    for n in numbers:\n        if n < 0:\n            return n\n    return None\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `sum_evens(numbers: list[int]) -> int`:\n   - Returns the sum of all even numbers in `numbers`. Returns `0` if none.\n2. `index_of(items: list[str], target: str) -> int`:\n   - Uses `enumerate` to find the 0-based index of the first occurrence of `target`.\n   - Returns `-1` if not found.\n3. `merge_profiles(keys: list[str], values: list[str]) -> dict[str, str]`:\n   - Uses `zip` to pair keys and values into a dictionary.\n\n## Progressive Hints\n- Hint 1: In `sum_evens`, write `return sum(n for n in numbers if n % 2 == 0)`.\n- Hint 2: In `index_of`, loop `for idx, item in enumerate(items): if item == target: return idx`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef sum_evens(numbers: list[int]) -> int:\n    total = 0\n    for n in numbers:\n        if n % 2 == 0:\n            total += n\n    return total\n\ndef index_of(items: list[str], target: str) -> int:\n    for idx, item in enumerate(items):\n        if item == target:\n            return idx\n    return -1\n\ndef merge_profiles(keys: list[str], values: list[str]) -> dict[str, str]:\n    result = {}\n    for k, v in zip(keys, values):\n        result[k] = v\n    return result\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "def execute_pipeline(name, *steps, debug=False, **config):\n    print(f\"Pipeline: {name} (Debug={debug})\")\n    for idx, step in enumerate(steps, 1):\n        print(f\"  Step {idx}: {step}\")\n    print(f\"Config: {config}\")\n\ndef main():\n    print(\"=== 04: Advanced Function Parameters ===\")\n    execute_pipeline(\"ETL_Core\", \"Extract\", \"Transform\", \"Load\", debug=True, timeout=30, retries=3)\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 04: Loops Example\n\ncolors = [\"red\", \"green\", \"blue\"]\nfor i, color in enumerate(colors, start=1):\n    print(f\"Color #{i}: {color}\")\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a function 'compose(*functions)' that returns a function\n# applying functions right-to-left: compose(f, g)(x) == f(g(x)).\ndef compose(*funcs):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "def compose(*funcs):\n    def composed(x):\n        result = x\n        for f in reversed(funcs):\n            result = f(result)\n        return result\n    return composed\n\nif __name__ == '__main__':\n    double = lambda x: x * 2\n    add_three = lambda x: x + 3\n    pipeline = compose(double, add_three)\n    assert pipeline(5) == 16\n    print(\"\u2714 Function compose verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 04: Loops & Iteration\n\ndef sum_evens(numbers: list[int]) -> int:\n    # TODO: Return sum of even numbers, or 0 if none\n    return 0\n\ndef index_of(items: list[str], target: str) -> int:\n    # TODO: Return index of target or -1 using enumerate\n    return -1\n\ndef merge_profiles(keys: list[str], values: list[str]) -> dict[str, str]:\n    # TODO: Return dict pairing keys and values using zip\n    return {}\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import sum_evens, index_of, merge_profiles\n\nclass TestLoops(unittest.TestCase):\n    def test_sum_evens(self):\n        self.assertEqual(sum_evens([1, 2, 3, 4, 5, 6]), 12)\n        self.assertEqual(sum_evens([1, 3, 5]), 0)\n        self.assertEqual(sum_evens([]), 0)\n\n    def test_index_of(self):\n        self.assertEqual(index_of(['apple', 'banana', 'cherry'], 'banana'), 1)\n        self.assertEqual(index_of(['apple', 'banana', 'cherry'], 'grape'), -1)\n\n    def test_merge_profiles(self):\n        keys = ['name', 'role', 'team']\n        values = ['Elena', 'Lead', 'Infra']\n        self.assertEqual(merge_profiles(keys, values), {\n            'name': 'Elena',\n            'role': 'Lead',\n            'team': 'Infra'\n        })\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "05-decorators-and-function-wrappers",
+        "name": "05-lists-and-tuples",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 \u2014 Decorators And Function Wrappers\n\n## \ud83c\udfaf What is it?\nDecorators And Function Wrappers is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Decorators And Function Wrappers, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Decorators And Function Wrappers executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Decorators, Closures & functools.wraps\n\n## \ud83c\udfaf What is a Decorator?\nA decorator is a callable that takes a function as argument and returns a replacement callable.\nAlways use `@functools.wraps(fn)` to preserve function `__name__`, `__doc__`, and signature.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Decorators And Function Wrappers\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 05 — Lists & Tuples\n\n## What is this?\nLists (`[...]`) are ordered, mutable sequences that support dynamic resizing, element replacement, and in-place sorting. Tuples (`(...)`) are ordered, **immutable** sequences commonly used for fixed records, multi-value returns, and dictionary keys.\n\n## Why does Python have it?\n- Lists represent dynamic collections that grow and shrink during application runtime.\n- Tuples provide memory efficiency and immutability guarantees. Because tuples are immutable, they are hashable and can serve as dictionary keys (unlike lists).\n\n## Basic Syntax\n```python\n# Mutable list\ntasks = [\"setup\", \"test\", \"deploy\"]\ntasks.append(\"monitor\")\ntasks.pop(0)  # removes \"setup\"\n\n# Immutable tuple\npoint = (10, 20)\nx, y = point  # Tuple unpacking\n```\n\n## How it Behaves\n1. In-place Mutating Methods vs Built-in Functions:\n   - `list.sort()`: Sorts the list in place and returns `None`.\n   - `sorted(iterable)`: Leaves the original intact and returns a brand new sorted list.\n2. Slicing Copy: `items[:]` or `items.copy()` produces a shallow copy of the list.\n\n## Common Mistakes\n1. Calling `res = my_list.sort()`: `my_list.sort()` mutates the list and returns `None`. `res` will be `None`!\n2. Creating a 1-element tuple without a comma: `(42)` is just the integer `42`. To make a single-element tuple, write `(42,)`.\n\n## Small Practical Example\n```python\ndef swap_pair(pair: tuple[int, int]) -> tuple[int, int]:\n    a, b = pair\n    return (b, a)\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `remove_duplicates(items: list[int]) -> list[int]`:\n   - Returns a new list containing unique elements in the order they first appeared.\n2. `top_k_elements(numbers: list[int], k: int) -> list[int]`:\n   - Returns the `k` largest numbers in descending order. If `k >= len(numbers)`, returns all numbers sorted descending.\n3. `rotate_left(items: list[int], steps: int) -> list[int]`:\n   - Rotates the list to the left by `steps` positions (e.g. `rotate_left([1, 2, 3, 4, 5], 2)` becomes `[3, 4, 5, 1, 2]`). If list is empty, returns `[]`.\n\n## Progressive Hints\n- Hint 1: In `remove_duplicates`, maintain a `seen = set()` and append to `result` if not in `seen`.\n- Hint 2: In `top_k_elements`, use `sorted(numbers, reverse=True)[:k]`.\n- Hint 3: In `rotate_left`, handle wraps with `shift = steps % len(items); return items[shift:] + items[:shift]`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef remove_duplicates(items: list[int]) -> list[int]:\n    seen = set()\n    result = []\n    for item in items:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n\ndef top_k_elements(numbers: list[int], k: int) -> list[int]:\n    return sorted(numbers, reverse=True)[:k]\n\ndef rotate_left(items: list[int], steps: int) -> list[int]:\n    if not items:\n        return []\n    shift = steps % len(items)\n    return items[shift:] + items[:shift]\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "import functools\nimport time\n\ndef timing_decorator(fn):\n    @functools.wraps(fn)\n    def wrapper(*args, **kwargs):\n        start = time.perf_counter()\n        result = fn(*args, **kwargs)\n        elapsed = time.perf_counter() - start\n        print(f\"[PERF] {fn.__name__} executed in {elapsed*1000:.3f}ms\")\n        return result\n    return wrapper\n\n@timing_decorator\ndef compute_sum(n):\n    return sum(range(n))\n\ndef main():\n    print(\"=== 05: Function Decorators ===\")\n    ans = compute_sum(1_000_000)\n    print(f\"Result: {ans}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 05: Lists & Tuples Example\n\nrecords = [(1, \"Alpha\"), (2, \"Beta\"), (3, \"Gamma\")]\nfor record_id, label in records:\n    print(f\"ID {record_id} -> {label}\")\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a decorator '@retry(times=3)' that retries a failing function\n# up to 'times' times before re-raising the exception.\nimport functools\n\ndef retry(times=3):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import functools\n\ndef retry(times=3):\n    def decorator(fn):\n        @functools.wraps(fn)\n        def wrapper(*args, **kwargs):\n            last_err = None\n            for attempt in range(1, times + 1):\n                try:\n                    return fn(*args, **kwargs)\n                except Exception as e:\n                    last_err = e\n            raise last_err\n        return wrapper\n    return decorator\n\nif __name__ == '__main__':\n    attempts = 0\n    @retry(times=3)\n    def flaky():\n        nonlocal attempts\n        attempts += 1\n        if attempts < 3:\n            raise ValueError(\"Temporary failure\")\n        return \"Success\"\n\n    assert flaky() == \"Success\"\n    assert attempts == 3\n    print(\"\u2714 Retry decorator verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 05: Lists & Tuples\n\ndef remove_duplicates(items: list[int]) -> list[int]:\n    # TODO: Return unique items in order of first appearance\n    return []\n\ndef top_k_elements(numbers: list[int], k: int) -> list[int]:\n    # TODO: Return k largest elements in descending order\n    return []\n\ndef rotate_left(items: list[int], steps: int) -> list[int]:\n    # TODO: Rotate items left by steps\n    return []\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import remove_duplicates, top_k_elements, rotate_left\n\nclass TestListsAndTuples(unittest.TestCase):\n    def test_remove_duplicates(self):\n        self.assertEqual(remove_duplicates([1, 2, 2, 3, 1, 4]), [1, 2, 3, 4])\n        self.assertEqual(remove_duplicates([]), [])\n\n    def test_top_k_elements(self):\n        self.assertEqual(top_k_elements([5, 1, 9, 3, 7], 3), [9, 7, 5])\n        self.assertEqual(top_k_elements([10, 20], 5), [20, 10])\n\n    def test_rotate_left(self):\n        self.assertEqual(rotate_left([1, 2, 3, 4, 5], 2), [3, 4, 5, 1, 2])\n        self.assertEqual(rotate_left([10, 20, 30], 0), [10, 20, 30])\n        self.assertEqual(rotate_left([], 3), [])\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "06-generators-iterators-itertools",
+        "name": "06-dictionaries-and-sets",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 \u2014 Generators Iterators Itertools\n\n## \ud83c\udfaf What is it?\nGenerators Iterators Itertools is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Generators Iterators Itertools, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Generators Iterators Itertools executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Generators, Iteration Protocol & Memory Efficiency\n\n## \ud83c\udfaf Iteration Protocol\n- **`__iter__()`**: Returns the iterator object.\n- **`__next__()`**: Returns the next value or raises `StopIteration`.\n- **`yield`**: Pauses function execution, saves stack frame, and streams values on demand with O(1) memory.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Generators Iterators Itertools\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 06 — Dictionaries & Sets\n\n## What is this?\nDictionaries (`{key: value}`) are ordered mappings of hashable keys to arbitrary values. Sets (`{elem1, elem2}`) are unordered collections of unique elements. Both are implemented using hash tables, offering $O(1)$ average time complexity for lookup, insertion, and deletion.\n\n## Why does Python have it?\n- Mappings and set operations (membership testing, deduplication, union, intersection) are foundational building blocks of backend databases, caches, and algorithms.\n\n## Basic Syntax\n```python\n# Dictionary\nuser = {\"id\": 101, \"name\": \"Maya\", \"role\": \"admin\"}\nemail = user.get(\"email\", \"not provided\")  # Safe lookup with default\n\n# Set\nroles = {\"admin\", \"editor\", \"author\"}\nis_admin = \"admin\" in roles  # O(1) membership check\n\n# Set Operations\na = {1, 2, 3}\nb = {2, 3, 4}\nunion = a | b          # {1, 2, 3, 4}\nintersection = a & b   # {2, 3}\ndifference = a - b     # {1}\n```\n\n## How it Behaves\n1. Key Requirements: Keys in dictionaries and elements in sets must be **hashable** (immutable types like `str`, `int`, `tuple`). Lists and dicts cannot be keys.\n2. Dictionary Ordering: Since Python 3.7, dictionaries preserve insertion order.\n3. Dictionary Merging: Python 3.9+ supports the merge operator `merged = dict_a | dict_b`.\n\n## Common Mistakes\n1. Using `user[\"missing\"]` directly: Raises a `KeyError`. Use `user.get(\"missing\", default)` to provide a fallback.\n2. Creating an empty set with `{}`: `{}` creates an empty dictionary. To create an empty set, use `set()`.\n\n## Small Practical Example\n```python\ndef count_frequencies(words: list[str]) -> dict[str, int]:\n    counts = {}\n    for word in words:\n        counts[word] = counts.get(word, 0) + 1\n    return counts\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `count_character_frequency(text: str) -> dict[str, int]`:\n   - Returns a dictionary mapping each character to the number of times it appears in `text`.\n2. `find_common_elements(list_a: list[int], list_b: list[int]) -> list[int]`:\n   - Returns a sorted list of elements that appear in both `list_a` and `list_b`.\n3. `merge_dicts(base: dict[str, int], overrides: dict[str, int]) -> dict[str, int]`:\n   - Returns a new dictionary merging `base` and `overrides` (overrides take precedence for matching keys).\n\n## Progressive Hints\n- Hint 1: In `count_character_frequency`, loop `for ch in text: counts[ch] = counts.get(ch, 0) + 1`.\n- Hint 2: In `find_common_elements`, use `sorted(list(set(list_a) & set(list_b)))`.\n- Hint 3: In `merge_dicts`, return `{**base, **overrides}` or `base | overrides`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef count_character_frequency(text: str) -> dict[str, int]:\n    counts = {}\n    for ch in text:\n        counts[ch] = counts.get(ch, 0) + 1\n    return counts\n\ndef find_common_elements(list_a: list[int], list_b: list[int]) -> list[int]:\n    return sorted(list(set(list_a) & set(list_b)))\n\ndef merge_dicts(base: dict[str, int], overrides: dict[str, int]) -> dict[str, int]:\n    return {**base, **overrides}\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "def fibonacci_stream(limit):\n    a, b = 0, 1\n    count = 0\n    while count < limit:\n        yield a\n        a, b = b, a + b\n        count += 1\n\ndef main():\n    print(\"=== 06: Generators & Memory Streams ===\")\n    fibs = list(fibonacci_stream(10))\n    print(f\"First 10 Fibonacci numbers: {fibs}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 06: Dictionaries & Sets Example\n\nscores = {\"Alice\": 95, \"Bob\": 88}\nprint(\"Alice score:\", scores.get(\"Alice\", 0))\n\ntags = {\"python\", \"cli\"}\ntags.add(\"tool\")\nprint(\"Tags:\", tags)\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a chunk generator 'chunked(iterable, size)' that yields\n# lists of elements of max length 'size'.\ndef chunked(iterable, size):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "def chunked(iterable, size):\n    chunk = []\n    for item in iterable:\n        chunk.append(item)\n        if len(chunk) == size:\n            yield chunk\n            chunk = []\n    if chunk:\n        yield chunk\n\nif __name__ == '__main__':\n    data = [1, 2, 3, 4, 5, 6, 7]\n    chunks = list(chunked(data, 3))\n    assert chunks == [[1, 2, 3], [4, 5, 6], [7]]\n    print(\"\u2714 Chunked generator verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 06: Dictionaries & Sets\n\ndef count_character_frequency(text: str) -> dict[str, int]:\n    # TODO: Return dict of character counts\n    return {}\n\ndef find_common_elements(list_a: list[int], list_b: list[int]) -> list[int]:\n    # TODO: Return sorted list of elements in both lists\n    return []\n\ndef merge_dicts(base: dict[str, int], overrides: dict[str, int]) -> dict[str, int]:\n    # TODO: Return merged dict with overrides taking precedence\n    return {}\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import count_character_frequency, find_common_elements, merge_dicts\n\nclass TestDictsAndSets(unittest.TestCase):\n    def test_count_character_frequency(self):\n        self.assertEqual(count_character_frequency('banana'), {'b': 1, 'a': 3, 'n': 2})\n        self.assertEqual(count_character_frequency(''), {})\n\n    def test_find_common_elements(self):\n        self.assertEqual(find_common_elements([1, 2, 3, 4], [3, 4, 5, 6]), [3, 4])\n        self.assertEqual(find_common_elements([1, 2], [3, 4]), [])\n\n    def test_merge_dicts(self):\n        base = {'a': 1, 'b': 2}\n        overrides = {'b': 99, 'c': 3}\n        self.assertEqual(merge_dicts(base, overrides), {'a': 1, 'b': 99, 'c': 3})\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "07-oop-dunder-methods-operator-overloading",
+        "name": "07-list-and-dict-comprehensions",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 \u2014 Oop Dunder Methods Operator Overloading\n\n## \ud83c\udfaf What is it?\nOop Dunder Methods Operator Overloading is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Oop Dunder Methods Operator Overloading, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Oop Dunder Methods Operator Overloading executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 OOP, Dunder Methods & Operator Overloading\n\n## \ud83c\udfaf Essential Dunder Methods\n- `__repr__`: Unambiguous developer representation (used in debugger/repl)\n- `__str__`: Readable user-facing representation\n- `__eq__` & `__hash__`: Value equality and dict/set hashability\n- `__add__`, `__sub__`, `__mul__`: Operator overloading\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Oop Dunder Methods Operator Overloading\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 07 — List & Dict Comprehensions\n\n## What is this?\nComprehensions provide a concise, readable, and highly optimized syntax for creating new collections (lists, dictionaries, sets) from existing iterables: `[expr for item in iterable if condition]`.\n\n## Why does Python have it?\n- Replaces boilerplate initialization and manual `.append()` loops with a single declarative expression that executes faster in CPython bytecode.\n\n## Basic Syntax\n```python\n# List comprehension\nsquares = [x ** 2 for x in range(5)] # [0, 1, 4, 9, 16]\n\n# With filtering\nevens = [x for x in range(10) if x % 2 == 0]\n\n# Dict comprehension\nsquare_map = {x: x ** 2 for x in range(4)} # {0: 0, 1: 1, 2: 4, 3: 9}\n\n# Set comprehension\nvowels = {ch.lower() for ch in \"Hello World\" if ch.lower() in \"aeiou\"}\n```\n\n## How it Behaves\n1. Scope Isolation: In Python 3, variables defined inside a comprehension do not leak into the enclosing scope.\n2. Order of Clauses: The iteration clause comes first (`for item in iterable`), followed by the optional filter clause (`if condition`).\n\n## Common Mistakes\n1. Writing overly complex nested comprehensions: If a comprehension spans more than two lines or has multiple nested loops, a traditional `for` loop is often more readable.\n\n## Small Practical Example\n```python\ndef extract_active_usernames(users: list[dict]) -> list[str]:\n    return [u[\"username\"] for u in users if u.get(\"is_active\")]\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `square_odds(numbers: list[int]) -> list[int]`:\n   - Uses a list comprehension to square only odd numbers from `numbers`.\n2. `filter_words_by_length(words: list[str], min_length: int) -> list[str]`:\n   - Uses a list comprehension to return all words with `len(word) >= min_length`.\n3. `invert_dictionary(data: dict[str, int]) -> dict[int, str]`:\n   - Uses a dict comprehension to invert keys and values: `{val: key for key, val in data.items()}`.\n\n## Progressive Hints\n- Hint 1: `[n ** 2 for n in numbers if n % 2 != 0]`\n- Hint 2: `[w for w in words if len(w) >= min_length]`\n- Hint 3: `{v: k for k, v in data.items()}`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef square_odds(numbers: list[int]) -> list[int]:\n    return [n ** 2 for n in numbers if n % 2 != 0]\n\ndef filter_words_by_length(words: list[str], min_length: int) -> list[str]:\n    return [w for w in words if len(w) >= min_length]\n\ndef invert_dictionary(data: dict[str, int]) -> dict[int, str]:\n    return {val: key for key, val in data.items()}\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "class Vector2D:\n    def __init__(self, x: float, y: float):\n        self.x = x\n        self.y = y\n\n    def __repr__(self):\n        return f\"Vector2D(x={self.x}, y={self.y})\"\n\n    def __add__(self, other):\n        if not isinstance(other, Vector2D):\n            return NotImplemented\n        return Vector2D(self.x + other.x, self.y + other.y)\n\n    def __eq__(self, other):\n        return isinstance(other, Vector2D) and self.x == other.x and self.y == other.y\n\ndef main():\n    print(\"=== 07: Vector Dunder Methods ===\")\n    v1 = Vector2D(2, 3)\n    v2 = Vector2D(4, 5)\n    v3 = v1 + v2\n    print(f\"v1 + v2 = {v3}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 07: Comprehensions Example\n\nnames = [\"alex\", \"bob\", \"charlie\"]\ncapitalized = [name.upper() for name in names]\nprint(\"Capitalized:\", capitalized)\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a 'Money' class with 'amount' and 'currency'.\n# Implement __add__ (panics if currencies differ), __repr__, and __eq__.\nclass Money:\n    pass\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "class Money:\n    def __init__(self, amount: float, currency: str):\n        self.amount = amount\n        self.currency = currency.upper()\n\n    def __add__(self, other):\n        if not isinstance(other, Money) or self.currency != other.currency:\n            raise ValueError(f\"Cannot add {self.currency} and {getattr(other, 'currency', 'Unknown')}\")\n        return Money(self.amount + other.amount, self.currency)\n\n    def __repr__(self):\n        return f\"Money({self.amount:.2f}, '{self.currency}')\"\n\n    def __eq__(self, other):\n        return isinstance(other, Money) and self.amount == other.amount and self.currency == other.currency\n\nif __name__ == '__main__':\n    m1 = Money(100.0, 'USD')\n    m2 = Money(50.0, 'USD')\n    assert (m1 + m2) == Money(150.0, 'USD')\n    print(\"\u2714 Money class dunders verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 07: List & Dict Comprehensions\n\ndef square_odds(numbers: list[int]) -> list[int]:\n    # TODO: Return squares of odd numbers using list comprehension\n    return []\n\ndef filter_words_by_length(words: list[str], min_length: int) -> list[str]:\n    # TODO: Return words with len >= min_length\n    return []\n\ndef invert_dictionary(data: dict[str, int]) -> dict[int, str]:\n    # TODO: Return dict with inverted key and values\n    return {}\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import square_odds, filter_words_by_length, invert_dictionary\n\nclass TestComprehensions(unittest.TestCase):\n    def test_square_odds(self):\n        self.assertEqual(square_odds([1, 2, 3, 4, 5]), [1, 9, 25])\n        self.assertEqual(square_odds([2, 4, 6]), [])\n\n    def test_filter_words_by_length(self):\n        self.assertEqual(filter_words_by_length(['a', 'cat', 'tree', 'elephant'], 4), ['tree', 'elephant'])\n        self.assertEqual(filter_words_by_length([], 2), [])\n\n    def test_invert_dictionary(self):\n        self.assertEqual(invert_dictionary({'a': 1, 'b': 2}), {1: 'a', 2: 'b'})\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "08-properties-descriptors-and-dataclasses",
+        "name": "08-functions-args-and-kwargs",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 \u2014 Properties Descriptors And Dataclasses\n\n## \ud83c\udfaf What is it?\nProperties Descriptors And Dataclasses is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Properties Descriptors And Dataclasses, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Properties Descriptors And Dataclasses executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Properties, Descriptors & Dataclasses\n\n## \ud83c\udfaf The Descriptor Protocol\nA descriptor is an object attribute with binding behavior, defined by `__get__`, `__set__`, or `__delete__`.\n`@property` and `@classmethod` are implemented using the descriptor protocol!\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Properties Descriptors And Dataclasses\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 08 — Functions, Args & Kwargs\n\n## What is this?\nFunctions in Python are defined with `def`. Python provides flexible argument passing: positional arguments, keyword arguments, default parameters, variable positional arguments (`*args`), and variable keyword arguments (`**kwargs`).\n\n## Why does Python have it?\n- Allows writing extensible APIs, decorator wrappers, and utility functions that can accept arbitrary numbers of arguments and forward them to other components.\n\n## Basic Syntax\n```python\ndef configure(host: str, port: int = 8080, *tags, **options):\n    print(\"Host/Port:\", host, port)\n    print(\"Tags (tuple):\", tags)\n    print(\"Options (dict):\", options)\n\n# Keyword-only arguments (must follow '*')\ndef connect(endpoint: str, *, timeout: int = 30): ...\n```\n\n## How it Behaves\n1. `*args`: Gathers excess positional arguments into a `tuple`.\n2. `**kwargs`: Gathers excess keyword arguments into a `dict`.\n3. Unpacking: Calling `func(*my_list)` unpacks list elements into positional arguments; calling `func(**my_dict)` unpacks dictionary pairs into keyword arguments.\n\n## Common Mistakes\n1. Mutable default arguments (The Classic Python Trap!):\n   ```python\n   # BUG: The default list is created ONCE when the function is defined!\n   def add_item(item, items=[]):\n       items.append(item)\n       return items\n   # FIX:\n   def add_item(item, items=None):\n       if items is None:\n           items = []\n       items.append(item)\n       return items\n   ```\n\n## Small Practical Example\n```python\ndef log_event(event_name: str, *tags, **metadata):\n    return {\n        \"event\": event_name,\n        \"tags\": list(tags),\n        \"metadata\": metadata\n    }\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `multiply_all(*numbers: float) -> float`:\n   - Returns the product of all arguments. If no arguments are passed, return `1.0`.\n2. `build_query_string(base_url: str, **params) -> str`:\n   - Takes `base_url` and keyword arguments. If `params` is empty, returns `base_url`.\n   - Otherwise, formats parameters sorted alphabetically by key into `\"?key1=val1&key2=val2\"`.\n3. `append_to_list(value: int, target_list: list[int] | None = None) -> list[int]`:\n   - Safely appends `value` to `target_list` without the mutable default argument trap.\n\n## Progressive Hints\n- Hint 1: In `multiply_all`, start with `total = 1.0` and loop `for n in numbers: total *= n`.\n- Hint 2: In `build_query_string`, sort keys with `sorted(params.keys())` and join `f\"{k}={params[k]}\"`.\n- Hint 3: In `append_to_list`, write `if target_list is None: target_list = []`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef multiply_all(*numbers: float) -> float:\n    if not numbers:\n        return 1.0\n    total = 1.0\n    for n in numbers:\n        total *= n\n    return float(total)\n\ndef build_query_string(base_url: str, **params) -> str:\n    if not params:\n        return base_url\n    query_parts = [f\"{k}={params[k]}\" for k in sorted(params.keys())]\n    return f\"{base_url}?{'&'.join(query_parts)}\"\n\ndef append_to_list(value: int, target_list: list[int] | None = None) -> list[int]:\n    if target_list is None:\n        target_list = []\n    target_list.append(value)\n    return target_list\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "from dataclasses import dataclass\n\nclass BoundedNumber:\n    def __init__(self, min_val, max_val):\n        self.min_val = min_val\n        self.max_val = max_val\n        self._name = None\n\n    def __set_name__(self, owner, name):\n        self._name = f\"_{name}\"\n\n    def __get__(self, instance, owner):\n        if instance is None: return self\n        return getattr(instance, self._name, self.min_val)\n\n    def __set__(self, instance, value):\n        if not (self.min_val <= value <= self.max_val):\n            raise ValueError(f\"{value} out of bounds [{self.min_val}, {self.max_val}]\")\n        setattr(instance, self._name, value)\n\nclass PortConfig:\n    port = BoundedNumber(1, 65535)\n\ndef main():\n    print(\"=== 08: Descriptors & Dataclasses ===\")\n    cfg = PortConfig()\n    cfg.port = 8080\n    print(f\"Configured port: {cfg.port}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 08: Functions Example\n\ndef greet(name, *titles, greeting=\"Hello\"):\n    title_str = f\" ({', '.join(titles)})\" if titles else \"\"\n    return f\"{greeting}, {name}{title_str}!\"\n\nprint(greet(\"Elena\", \"Lead\", \"Architect\"))\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a dataclass 'User' with fields: id (int), username (str), email (str),\n# and active (bool, default True).\nfrom dataclasses import dataclass\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass User:\n    id: int\n    username: str\n    email: str\n    active: bool = True\n\nif __name__ == '__main__':\n    u = User(id=1, username='ndk', email='ndk@trak.dev')\n    assert u.active is True\n    print(\"\u2714 Dataclass verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 08: Functions, Args & Kwargs\n\ndef multiply_all(*numbers: float) -> float:\n    # TODO: Return product of all arguments, 1.0 if empty\n    return 0.0\n\ndef build_query_string(base_url: str, **params) -> str:\n    # TODO: Return base_url with query params sorted by key\n    return \"\"\n\ndef append_to_list(value: int, target_list: list[int] | None = None) -> list[int]:\n    # TODO: Safely append value to target_list avoiding mutable default\n    return []\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import multiply_all, build_query_string, append_to_list\n\nclass TestFunctions(unittest.TestCase):\n    def test_multiply_all(self):\n        self.assertEqual(multiply_all(2, 3, 4), 24.0)\n        self.assertEqual(multiply_all(5), 5.0)\n        self.assertEqual(multiply_all(), 1.0)\n\n    def test_build_query_string(self):\n        self.assertEqual(build_query_string('https://api.test'), 'https://api.test')\n        self.assertEqual(\n            build_query_string('https://api.test', page=1, sort='desc'),\n            'https://api.test?page=1&sort=desc'\n        )\n\n    def test_append_to_list(self):\n        l1 = append_to_list(10)\n        self.assertEqual(l1, [10])\n        l2 = append_to_list(20)\n        self.assertEqual(l2, [20]) # Must not share state with l1!\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "09-metaclasses-and-type-creation",
+        "name": "09-lambda-functions-and-builtin-helpers",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 \u2014 Metaclasses And Type Creation\n\n## \ud83c\udfaf What is it?\nMetaclasses And Type Creation is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Metaclasses And Type Creation, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Metaclasses And Type Creation executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Metaclasses & Dynamic Class Creation\n\n## \ud83c\udfaf What is a Metaclass?\nIn Python, **classes are instances of metaclasses**. The default metaclass is `type`.\nMetaclasses allow intercepting class creation (`__new__`) to automatically register classes or enforce API contracts.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Metaclasses And Type Creation\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 09 — Lambda Functions & Built-in Helpers\n\n## What is this?\nA `lambda` expression defines a small, anonymous function inline using the syntax `lambda args: expression`. Python also provides built-in functional utilities: `sorted(iterable, key=...)`, `map()`, `filter()`, `any()`, and `all()`.\n\n## Why does Python have it?\n- Ideal for one-off custom sorting keys and inline data predicates without needing to declare a full `def` function.\n\n## Basic Syntax\n```python\n# Lambda function\ndouble = lambda x: x * 2\n\n# Custom sorting key\nusers = [{\"name\": \"Bob\", \"age\": 30}, {\"name\": \"Alice\", \"age\": 25}]\nby_age = sorted(users, key=lambda u: u[\"age\"])\n\n# Any / All checks\nhas_adult = any(u[\"age\"] >= 18 for u in users)\nall_adults = all(u[\"age\"] >= 18 for u in users)\n```\n\n## How it Behaves\n1. Single Expression Only: Python lambdas cannot contain multi-line statements, loops, or assignments. They implicitly return the evaluated expression.\n2. First-Class Functions: Lambdas can be passed into functions or returned like any regular Python function object.\n\n## Common Mistakes\n1. Assigning lambdas to variables when `def` is clearer: PEP 8 advises using `def func():` instead of `func = lambda:`. Use lambdas primarily as inline arguments.\n\n## Small Practical Example\n```python\ndef sort_by_length(words: list[str]) -> list[str]:\n    return sorted(words, key=lambda w: (len(w), w))\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `sort_by_absolute_value(numbers: list[int]) -> list[int]`:\n   - Returns numbers sorted by their absolute value ascending using `sorted(..., key=...)`.\n2. `sort_users_by_score(users: list[dict]) -> list[dict]`:\n   - Each user is `{ \"name\": str, \"score\": int }`. Returns users sorted in **descending** order of `score`.\n3. `are_all_positive(numbers: list[int]) -> bool`:\n   - Uses `all()` to return `True` if every number in `numbers` is `> 0`. Returns `True` if list is empty.\n\n## Progressive Hints\n- Hint 1: `sorted(numbers, key=lambda x: abs(x))`\n- Hint 2: `sorted(users, key=lambda u: u[\"score\"], reverse=True)`\n- Hint 3: `all(n > 0 for n in numbers)`\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef sort_by_absolute_value(numbers: list[int]) -> list[int]:\n    return sorted(numbers, key=lambda x: abs(x))\n\ndef sort_users_by_score(users: list[dict]) -> list[dict]:\n    return sorted(users, key=lambda u: u[\"score\"], reverse=True)\n\ndef are_all_positive(numbers: list[int]) -> bool:\n    return all(n > 0 for n in numbers)\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "class RegistryMeta(type):\n    registry = {}\n    def __new__(mcs, name, bases, attrs):\n        cls = super().__new__(mcs, name, bases, attrs)\n        if name != 'BasePlugin':\n            mcs.registry[name.lower()] = cls\n        return cls\n\nclass BasePlugin(metaclass=RegistryMeta):\n    pass\n\nclass AuthPlugin(BasePlugin):\n    pass\n\nclass LogPlugin(BasePlugin):\n    pass\n\ndef main():\n    print(\"=== 09: Metaclass Auto-Registration ===\")\n    print(f\"Registered Plugins: {RegistryMeta.registry}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 09: Lambda Example\n\npairs = [(1, \"one\"), (3, \"three\"), (2, \"two\")]\nsorted_pairs = sorted(pairs, key=lambda p: p[1])\nprint(\"Sorted by name:\", sorted_pairs)\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a metaclass 'StrictAttributes' that rejects class creation\n# if any method name does not start with lowercase.\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "class StrictAttributes(type):\n    def __new__(mcs, name, bases, attrs):\n        for attr, val in attrs.items():\n            if callable(val) and not attr.startswith('__') and not attr[0].islower():\n                raise TypeError(f\"Method '{attr}' must start with lowercase!\")\n        return super().__new__(mcs, name, bases, attrs)\n\nif __name__ == '__main__':\n    class Valid(metaclass=StrictAttributes):\n        def valid_method(self): pass\n    print(\"\u2714 Strict metaclass passed!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 09: Lambda Functions & Built-in Helpers\n\ndef sort_by_absolute_value(numbers: list[int]) -> list[int]:\n    # TODO: Return sorted by absolute value ascending\n    return []\n\ndef sort_users_by_score(users: list[dict]) -> list[dict]:\n    # TODO: Return sorted by score descending\n    return []\n\ndef are_all_positive(numbers: list[int]) -> bool:\n    # TODO: Return True if all numbers > 0 using all()\n    return False\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import sort_by_absolute_value, sort_users_by_score, are_all_positive\n\nclass TestLambdas(unittest.TestCase):\n    def test_sort_by_absolute_value(self):\n        self.assertEqual(sort_by_absolute_value([-5, 2, -1, 4]), [-1, 2, 4, -5])\n\n    def test_sort_users_by_score(self):\n        users = [\n            {'name': 'Alice', 'score': 85},\n            {'name': 'Bob', 'score': 95},\n            {'name': 'Charlie', 'score': 90}\n        ]\n        sorted_users = sort_users_by_score(users)\n        self.assertEqual([u['name'] for u in sorted_users], ['Bob', 'Charlie', 'Alice'])\n\n    def test_are_all_positive(self):\n        self.assertTrue(are_all_positive([1, 2, 3]))\n        self.assertFalse(are_all_positive([1, -2, 3]))\n        self.assertTrue(are_all_positive([]))\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "10-context-managers-with-statement",
+        "name": "10-scope-and-closures",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 \u2014 Context Managers With Statement\n\n## \ud83c\udfaf What is it?\nContext Managers With Statement is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Context Managers With Statement, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Context Managers With Statement executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Context Managers & with Statements\n\n## \ud83c\udfaf Context Manager Protocol\n- `__enter__()`: Sets up resource, returns target for `as` variable.\n- `__exit__(exc_type, exc_val, exc_tb)`: Tears down resource, handles cleanup. Returning `True` suppresses exceptions.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Context Managers With Statement\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 10 — Scope, Closures & Nonlocal\n\n## What is this?\nPython resolves variable names using the **LEGB** rule: **L**ocal, **E**nclosing, **G**lobal, **B**uilt-in. A **closure** is an inner function that remembers and retains access to variables in its enclosing scope even after the outer function has completed. The `nonlocal` keyword allows reassigning variables in an enclosing (non-global) scope.\n\n## Why does Python have it?\n- Closures provide lightweight state encapsulation, function factories, and are the foundational engine behind Python decorators.\n\n## Basic Syntax\n```python\ndef make_multiplier(factor: int):\n    # 'factor' is enclosed\n    def multiply(x: int) -> int:\n        return x * factor\n    return multiply\n\ndouble = make_multiplier(2)\nprint(double(5)) # 10\n\ndef make_counter():\n    count = 0\n    def step():\n        nonlocal count\n        count += 1\n        return count\n    return step\n```\n\n## How it Behaves\n1. Rebinding Enclosing Variables: Without `nonlocal`, writing `count += 1` inside an inner function treats `count` as a new local variable, causing an `UnboundLocalError`. `nonlocal count` explicitly targets the outer variable.\n2. `global` vs `nonlocal`: `global` targets module-level variables; `nonlocal` targets the nearest enclosing function scope.\n\n## Common Mistakes\n1. Forgetting `nonlocal` when modifying a counter in a closure, resulting in `UnboundLocalError: local variable referenced before assignment`.\n\n## Small Practical Example\n```python\ndef make_accumulator(initial: int = 0):\n    total = initial\n    def add(amount: int) -> int:\n        nonlocal total\n        total += amount\n        return total\n    return add\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `make_prefixer(prefix: str)`:\n   - Returns a function `prefix_string(s: str) -> str` that prepends `prefix` to `s`: `f\"{prefix}{s}\"`.\n2. `create_counter(start: int = 0, step: int = 1)`:\n   - Returns a function that, each time called, returns the current value and increments by `step` using `nonlocal`.\n3. `make_averager()`:\n   - Returns a function `add_value(new_val: float) -> float` that remembers all passed numbers and returns the running average.\n\n## Progressive Hints\n- Hint 1: In `make_prefixer`, return `lambda s: f\"{prefix}{s}\"`.\n- Hint 2: In `create_counter`, maintain `current = start` and use `nonlocal current`.\n- Hint 3: In `make_averager`, store `numbers = []` and return `sum(numbers) / len(numbers)`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef make_prefixer(prefix: str):\n    def prefixer(s: str) -> str:\n        return f\"{prefix}{s}\"\n    return prefixer\n\ndef create_counter(start: int = 0, step: int = 1):\n    current = start\n    def increment():\n        nonlocal current\n        val = current\n        current += step\n        return val\n    return increment\n\ndef make_averager():\n    history = []\n    def record(val: float) -> float:\n        history.append(val)\n        return sum(history) / len(history)\n    return record\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "from contextlib import contextmanager\nimport time\n\n@contextmanager\ndef timer_block(label):\n    start = time.perf_counter()\n    try:\n        yield\n    finally:\n        elapsed = time.perf_counter() - start\n        print(f\"[{label}] Elapsed: {elapsed*1000:.3f}ms\")\n\ndef main():\n    print(\"=== 10: Context Managers ===\")\n    with timer_block(\"List comprehension\"):\n        _ = [x**2 for x in range(100_000)]\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 10: Closures Example\n\ndef make_power(exponent):\n    return lambda base: base ** exponent\n\ncube = make_power(3)\nprint(\"Cube of 4:\", cube(4)) # 64\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a context manager class 'TemporaryEnv' that temporarily sets\n# an environment variable and restores original state on exit.\nimport os\n\nclass TemporaryEnv:\n    pass\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import os\n\nclass TemporaryEnv:\n    def __init__(self, key, value):\n        self.key = key\n        self.value = value\n        self.old_val = None\n\n    def __enter__(self):\n        self.old_val = os.environ.get(self.key)\n        os.environ[self.key] = self.value\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if self.old_val is None:\n            os.environ.pop(self.key, None)\n        else:\n            os.environ[self.key] = self.old_val\n\nif __name__ == '__main__':\n    with TemporaryEnv('TRAK_TEST', '123'):\n        assert os.environ['TRAK_TEST'] == '123'\n    assert 'TRAK_TEST' not in os.environ\n    print(\"\u2714 TemporaryEnv context manager passed!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 10: Scope, Closures & Nonlocal\n\ndef make_prefixer(prefix: str):\n    # TODO: Return function that prepends prefix to input string\n    return lambda s: \"\"\n\ndef create_counter(start: int = 0, step: int = 1):\n    # TODO: Return function that returns current and advances by step\n    return lambda: 0\n\ndef make_averager():\n    # TODO: Return function that tracks values and returns running average\n    return lambda x: 0.0\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import make_prefixer, create_counter, make_averager\n\nclass TestClosures(unittest.TestCase):\n    def test_make_prefixer(self):\n        log_info = make_prefixer('[INFO] ')\n        self.assertEqual(log_info('Server up'), '[INFO] Server up')\n\n    def test_create_counter(self):\n        c = create_counter(10, 5)\n        self.assertEqual(c(), 10)\n        self.assertEqual(c(), 15)\n        self.assertEqual(c(), 20)\n\n    def test_make_averager(self):\n        avg = make_averager()\n        self.assertEqual(avg(10), 10.0)\n        self.assertEqual(avg(20), 15.0)\n        self.assertEqual(avg(30), 20.0)\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "11-error-handling-custom-exceptions",
+        "name": "11-error-handling-and-custom-exceptions",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 \u2014 Error Handling Custom Exceptions\n\n## \ud83c\udfaf What is it?\nError Handling Custom Exceptions is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Error Handling Custom Exceptions, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Error Handling Custom Exceptions executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Custom Exceptions & Exception Chaining\n\n## \ud83c\udfaf Exception Chaining with `raise ... from ...`\nExplicitly preserves the root cause traceback when wrapping low-level exceptions inside high-level application errors.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Error Handling Custom Exceptions\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 11 — Error Handling & Custom Exceptions\n\n## What is this?\nException handling in Python is managed using `try`, `except`, `else`, `finally`, and `raise`. Custom exceptions are created by subclassing the built-in `Exception` class.\n\n## Why does Python have it?\n- Python encourages an EAFP coding style: **\"Easier to Ask for Forgiveness than Permission\"**. Rather than guarding every operation with dozens of checks, code runs inside a `try` block and catches specific anticipated exceptions.\n\n## Basic Syntax\n```python\nclass InsufficientFundsError(Exception):\n    def __init__(self, balance: float, amount: float):\n        super().__init__(f\"Cannot withdraw ${amount:.2f} with balance ${balance:.2f}\")\n        self.balance = balance\n        self.amount = amount\n\ntry:\n    val = int(\"123\")\nexcept ValueError as e:\n    print(\"Failed to parse:\", e)\nelse:\n    print(\"Success, no exceptions!\")\nfinally:\n    print(\"Always executes for cleanup\")\n```\n\n## How it Behaves\n1. Specific Catching: Always catch specific exception types (`ValueError`, `KeyError`) rather than a bare `except:`.\n2. `else` clause: Executes only if **no exceptions were raised** in the `try` block.\n3. `finally` clause: Guarantees execution regardless of exceptions or early returns.\n\n## Common Mistakes\n1. Catching `BaseException`: Catching `BaseException` or bare `except:` accidentally swallows system exit signals (`KeyboardInterrupt`, `SystemExit`). Always inherit and catch from `Exception`.\n\n## Small Practical Example\n```python\ndef parse_int_safely(raw: str, default: int = 0) -> int:\n    try:\n        return int(raw)\n    except (ValueError, TypeError):\n        return default\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. Define custom exception `ValidationError(Exception)`.\n2. `validate_user_age(age: int) -> bool`:\n   - If `not isinstance(age, int)` or `age < 0` or `age > 150`: raises `ValidationError(\"Invalid age\")`.\n   - Returns `True` if valid.\n3. `safe_lookup(data: dict, key: str, fallback=None)`:\n   - Uses `try...except KeyError` to return `data[key]`. Returns `fallback` if `KeyError` occurs.\n\n## Progressive Hints\n- Hint 1: `class ValidationError(Exception): pass`\n- Hint 2: In `validate_user_age`, `if not isinstance(age, int) or age < 0 or age > 150: raise ValidationError(\"Invalid age\")`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nclass ValidationError(Exception):\n    pass\n\ndef validate_user_age(age: int) -> bool:\n    if not isinstance(age, int) or age < 0 or age > 150:\n        raise ValidationError(\"Invalid age\")\n    return True\n\ndef safe_lookup(data: dict, key: str, fallback=None):\n    try:\n        return data[key]\n    except KeyError:\n        return fallback\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "class DatabaseError(Exception):\n    pass\n\nclass RecordNotFoundError(DatabaseError):\n    pass\n\ndef fetch_record(record_id):\n    try:\n        raise KeyError(f\"ID {record_id} not in table\")\n    except KeyError as err:\n        raise RecordNotFoundError(f\"Record {record_id} does not exist\") from err\n\ndef main():\n    print(\"=== 11: Exception Chaining ===\")\n    try:\n        fetch_record(999)\n    except RecordNotFoundError as e:\n        print(f\"Caught: {e}\")\n        print(f\"Root cause: {e.__cause__}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 11: Exceptions Example\n\ndef safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n\nprint(safe_divide(10, 0)) # None\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement an exception hierarchy: AppError -> ValidationError -> EmailInvalidError.\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "class AppError(Exception): pass\nclass ValidationError(AppError): pass\nclass EmailInvalidError(ValidationError): pass\n\ndef validate_email(email):\n    if '@' not in email:\n        raise EmailInvalidError(f\"Invalid email address: {email}\")\n    return True\n\nif __name__ == '__main__':\n    try:\n        validate_email('invalid')\n    except AppError as e:\n        print(f\"Caught via base class: {e}\")\n    print(\"\u2714 Exception hierarchy verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 11: Error Handling & Custom Exceptions\n\nclass ValidationError(Exception):\n    pass\n\ndef validate_user_age(age: int) -> bool:\n    # TODO: Validate age, raise ValidationError if invalid\n    return False\n\ndef safe_lookup(data: dict, key: str, fallback=None):\n    # TODO: Use try/except KeyError to safely look up key\n    return None\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import ValidationError, validate_user_age, safe_lookup\n\nclass TestExceptions(unittest.TestCase):\n    def test_validate_user_age(self):\n        self.assertTrue(validate_user_age(25))\n        with self.assertRaises(ValidationError):\n            validate_user_age(-5)\n        with self.assertRaises(ValidationError):\n            validate_user_age(200)\n\n    def test_safe_lookup(self):\n        d = {'name': 'Alice'}\n        self.assertEqual(safe_lookup(d, 'name'), 'Alice')\n        self.assertEqual(safe_lookup(d, 'missing', 'default'), 'default')\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "12-concurrency-threading-vs-multiprocessing",
+        "name": "12-classes-and-oop",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 \u2014 Concurrency Threading Vs Multiprocessing\n\n## \ud83c\udfaf What is it?\nConcurrency Threading Vs Multiprocessing is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Concurrency Threading Vs Multiprocessing, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Concurrency Threading Vs Multiprocessing executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 CPython GIL, Threading & Multiprocessing\n\n## \ud83c\udfaf The Global Interpreter Lock (GIL)\nCPython uses a mutex (the GIL) to prevent race conditions on internal `PyObject` reference counters.\n- **Threading (`threading`)**: Perfect for **I/O-bound** workloads (HTTP calls, DB queries). GIL is released during I/O.\n- **Multiprocessing (`multiprocessing`)**: Spawns separate OS processes with separate GILs for **CPU-bound** workloads.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Concurrency Threading Vs Multiprocessing\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 12 — Classes & OOP\n\n## What is this?\nClasses in Python are defined with the `class` keyword. They bundle data state and behavior into reusable objects. The initializer method `__init__(self, ...)` sets up instance attributes. Python also supports `@classmethod` (operating on the class) and `@staticmethod` (utility methods with no implicit first argument).\n\n## Why does Python have it?\n- Encapsulates domain logic into cohesive objects, modeling real-world entities like database records, HTTP clients, and user accounts.\n\n## Basic Syntax\n```python\nclass BankAccount:\n    interest_rate = 0.03 # Class attribute\n\n    def __init__(self, owner: str, balance: float = 0.0):\n        self.owner = owner     # Instance attribute\n        self.balance = balance\n\n    def deposit(self, amount: float) -> float:\n        if amount > 0:\n            self.balance += amount\n        return self.balance\n\n    @classmethod\n    def set_interest_rate(cls, new_rate: float):\n        cls.interest_rate = new_rate\n\n    @staticmethod\n    def is_valid_currency(code: str) -> bool:\n        return len(code) == 3 and code.isupper()\n```\n\n## How it Behaves\n1. The `self` Parameter: Python passes the instance object explicitly as the first argument to instance methods.\n2. Class vs Instance Attributes: Class attributes are shared across all instances; instance attributes belong to a specific instance (`self.prop`).\n\n## Common Mistakes\n1. Forgetting `self` as the first parameter in method signatures: Calling `account.deposit(50)` passes `account` as the first argument; omitting `self` in `def deposit(amount)` causes a `TypeError`.\n\n## Small Practical Example\n```python\nclass Task:\n    def __init__(self, title: str):\n        self.title = title\n        self.is_done = False\n\n    def complete(self):\n        self.is_done = True\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `class Rectangle`:\n   - `__init__(self, width: float, height: float)`: stores `self.width` and `self.height`.\n   - `area(self) -> float`: returns `self.width * self.height`.\n   - `perimeter(self) -> float`: returns `2 * (self.width + self.height)`.\n   - `is_square(self) -> bool`: returns `self.width == self.height`.\n   - `@classmethod create_square(cls, side: float)`: returns `cls(side, side)`.\n\n## Progressive Hints\n- Hint 1: In `__init__`, set `self.width = width` and `self.height = height`.\n- Hint 2: In `create_square`, return `cls(side, side)`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n    def is_square(self) -> bool:\n        return self.width == self.height\n\n    @classmethod\n    def create_square(cls, side: float):\n        return cls(side, side)\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "import threading\nimport time\n\ndef worker(task_id):\n    time.sleep(0.01)\n    print(f\"Worker {task_id} done.\")\n\ndef main():\n    print(\"=== 12: Threading I/O Concurrency ===\")\n    threads = [threading.Thread(target=worker, args=(i,)) for i in range(5)]\n    for t in threads: t.start()\n    for t in threads: t.join()\n    print(\"All threads finished.\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 12: Classes Example\n\nclass Counter:\n    def __init__(self, start=0):\n        self.count = start\n\n    def increment(self):\n        self.count += 1\n        return self.count\n\nc = Counter(10)\nprint(\"Increment:\", c.increment()) # 11\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a ThreadPoolExecutor simulation using 'concurrent.futures'.\nfrom concurrent.futures import ThreadPoolExecutor\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "from concurrent.futures import ThreadPoolExecutor\n\ndef square(n):\n    return n * n\n\nif __name__ == '__main__':\n    with ThreadPoolExecutor(max_workers=3) as executor:\n        results = list(executor.map(square, [1, 2, 3, 4, 5]))\n    assert results == [1, 4, 9, 16, 25]\n    print(\"\u2714 ThreadPoolExecutor results verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 12: Classes & OOP\n\nclass Rectangle:\n    # TODO: Implement __init__, area(), perimeter(), is_square(), @classmethod create_square(side)\n    pass\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import Rectangle\n\nclass TestClasses(unittest.TestCase):\n    def test_rectangle_dimensions(self):\n        r = Rectangle(10, 5)\n        self.assertEqual(r.area(), 50)\n        self.assertEqual(r.perimeter(), 30)\n        self.assertFalse(r.is_square())\n\n    def test_square_classmethod(self):\n        sq = Rectangle.create_square(4)\n        self.assertEqual(sq.area(), 16)\n        self.assertTrue(sq.is_square())\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "13-asyncio-event-loop-coroutines",
+        "name": "13-inheritance-and-super",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 \u2014 Asyncio Event Loop Coroutines\n\n## \ud83c\udfaf What is it?\nAsyncio Event Loop Coroutines is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Asyncio Event Loop Coroutines, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Asyncio Event Loop Coroutines executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 AsyncIO, Coroutines & Non-Blocking I/O\n\n## \ud83c\udfaf Cooperative Multitasking\nAsyncIO runs on a single thread using an **Event Loop**.\nWhen a coroutine hits `await`, it yields control back to the event loop, allowing other coroutines to execute.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Asyncio Event Loop Coroutines\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 13 — Inheritance & Super\n\n## What is this?\nInheritance allows a child class to inherit attributes and methods from a parent class. The `super()` built-in delegates method calls to the parent class, enabling clean method extension and cooperative multiple inheritance via Method Resolution Order (MRO).\n\n## Why does Python have it?\n- Promotes code reuse and polymorphism: a function expecting a base `Vehicle` can operate on any `Car` or `Truck` subclass without modification.\n\n## Basic Syntax\n```python\nclass Employee:\n    def __init__(self, name: str, base_salary: float):\n        self.name = name\n        self.base_salary = base_salary\n\n    def get_pay(self) -> float:\n        return self.base_salary\n\nclass Manager(Employee):\n    def __init__(self, name: str, base_salary: float, bonus: float):\n        super().__init__(name, base_salary)\n        self.bonus = bonus\n\n    def get_pay(self) -> float:\n        return super().get_pay() + self.bonus\n```\n\n## How it Behaves\n1. `super().__init__(...)`: Delegates constructor initialization to the parent class.\n2. `isinstance(obj, Class)`: Returns `True` if `obj` is an instance of `Class` or any subclass derived from it.\n\n## Common Mistakes\n1. Forgetting to call `super().__init__()`: Leaves parent class attributes uninitialized.\n\n## Small Practical Example\n```python\nclass Animal:\n    def speak(self) -> str:\n        return \"...\"\n\nclass Cat(Animal):\n    def speak(self) -> str:\n        return \"Meow\"\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `class Device`:\n   - `__init__(self, brand: str, model: str)`\n   - `get_description(self) -> str`: returns `f\"{self.brand} {self.model}\"`\n2. `class SmartPhone(Device)`:\n   - `__init__(self, brand: str, model: str, os_name: str)`: calls `super().__init__(brand, model)`, stores `self.os_name`.\n   - `get_description(self) -> str`: returns `f\"{super().get_description()} running {self.os_name}\"`.\n\n## Progressive Hints\n- Hint 1: In `SmartPhone.__init__`, call `super().__init__(brand, model)`.\n- Hint 2: In `SmartPhone.get_description`, call `super().get_description()`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nclass Device:\n    def __init__(self, brand: str, model: str):\n        self.brand = brand\n        self.model = model\n\n    def get_description(self) -> str:\n        return f\"{self.brand} {self.model}\"\n\nclass SmartPhone(Device):\n    def __init__(self, brand: str, model: str, os_name: str):\n        super().__init__(brand, model)\n        self.os_name = os_name\n\n    def get_description(self) -> str:\n        return f\"{super().get_description()} running {self.os_name}\"\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "import asyncio\n\nasync def fetch_data(source, delay):\n    await asyncio.sleep(delay)\n    return f\"Data from {source}\"\n\nasync def main():\n    print(\"=== 13: AsyncIO Concurrent Gather ===\")\n    results = await asyncio.gather(\n        fetch_data(\"API_1\", 0.02),\n        fetch_data(\"API_2\", 0.01),\n        fetch_data(\"API_3\", 0.03),\n    )\n    print(f\"Gathered Results: {results}\")\n\nif __name__ == '__main__':\n    asyncio.run(main())\n"
+            "content": "# Module 13: Inheritance Example\n\nclass Parent:\n    def hello(self): return \"Hello from Parent\"\n\nclass Child(Parent):\n    def hello(self): return f\"{super().hello()} and Child\"\n\nprint(Child().hello())\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement an async producer-consumer queue with asyncio.Queue.\nimport asyncio\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import asyncio\n\nasync def producer(q):\n    for i in range(5):\n        await q.put(i)\n    await q.put(None)\n\nasync def consumer(q, out):\n    while True:\n        item = await q.get()\n        if item is None: break\n        out.append(item * 10)\n        q.task_done()\n\nasync def main():\n    q = asyncio.Queue()\n    out = []\n    await asyncio.gather(producer(q), consumer(q, out))\n    assert out == [0, 10, 20, 30, 40]\n    print(\"\u2714 Async Queue pipeline verified!\")\n\nif __name__ == '__main__':\n    asyncio.run(main())\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 13: Inheritance & Super\n\nclass Device:\n    # TODO: implement brand, model, and get_description()\n    pass\n\nclass SmartPhone(Device):\n    # TODO: inherit Device, add os_name, extend get_description()\n    pass\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import Device, SmartPhone\n\nclass TestInheritance(unittest.TestCase):\n    def test_device_and_smartphone(self):\n        d = Device('Generic', 'X1')\n        self.assertEqual(d.get_description(), 'Generic X1')\n\n        sp = SmartPhone('Apple', 'iPhone', 'iOS')\n        self.assertEqual(sp.get_description(), 'Apple iPhone running iOS')\n        self.assertTrue(isinstance(sp, Device))\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "14-cpython-internals-and-memory",
+        "name": "14-dunder-methods-and-operator-overloading",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 \u2014 Cpython Internals And Memory\n\n## \ud83c\udfaf What is it?\nCpython Internals And Memory is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Cpython Internals And Memory, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Cpython Internals And Memory executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 CPython Memory Management & Cyclic GC\n\n## \ud83c\udfaf Memory Architecture\n1. **Reference Counting**: Primary memory management. Immediate deallocation when `ob_refcnt == 0`.\n2. **Cyclic Garbage Collector**: Detects reference cycles (`A -> B -> A`). Operates in 3 generations (Gen 0, Gen 1, Gen 2) using heuristic thresholds.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Cpython Internals And Memory\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 14 — Dunder Methods & Operator Overloading\n\n## What is this?\nSpecial methods (also called \"magic methods\" or **dunder methods** for double-underscore: `__init__`, `__str__`, `__len__`, `__eq__`, `__add__`) allow your custom classes to integrate seamlessly with Python's operators and built-in functions.\n\n## Why does Python have it?\n- Python achieves a cohesive, elegant object model by delegating built-in function calls to dunder methods (`len(obj)` calls `obj.__len__()`, `str(obj)` calls `obj.__str__()`, `a + b` calls `a.__add__(b)`).\n\n## Basic Syntax\n```python\nclass Vector:\n    def __init__(self, x: int, y: int):\n        self.x = x\n        self.y = y\n\n    def __repr__(self) -> str:\n        return f\"Vector({self.x}, {self.y})\"\n\n    def __add__(self, other: \"Vector\") -> \"Vector\":\n        return Vector(self.x + other.x, self.y + other.y)\n\n    def __eq__(self, other: object) -> bool:\n        if isinstance(other, Vector):\n            return self.x == other.x and self.y == other.y\n        return False\n```\n\n## How it Behaves\n1. `__str__` vs `__repr__`:\n   - `__str__`: Readable string representation intended for end-users (`print(obj)`).\n   - `__repr__`: Unambiguous string representation intended for developers and debugging.\n2. `__len__`: Must return a non-negative integer.\n\n## Common Mistakes\n1. Not checking `isinstance` in `__eq__`: Comparing your object to other types can raise an `AttributeError` if you assume `other` always has the same attributes. Return `False` or `NotImplemented` instead.\n\n## Small Practical Example\n```python\nclass Book:\n    def __init__(self, title: str, pages: int):\n        self.title = title\n        self.pages = pages\n    def __len__(self):\n        return self.pages\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `class Point`:\n   - `__init__(self, x: int, y: int)`\n   - `__str__(self) -> str`: returns `f\"({self.x}, {self.y})\"`\n   - `__eq__(self, other: object) -> bool`: returns `True` if `other` is a `Point` with matching `x` and `y`.\n   - `__add__(self, other: \"Point\") -> \"Point\"`: returns a new `Point(self.x + other.x, self.y + other.y)`.\n\n## Progressive Hints\n- Hint 1: In `__str__`, return `f\"({self.x}, {self.y})\"`.\n- Hint 2: In `__eq__`, check `isinstance(other, Point) and self.x == other.x and self.y == other.y`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nclass Point:\n    def __init__(self, x: int, y: int):\n        self.x = x\n        self.y = y\n\n    def __str__(self) -> str:\n        return f\"({self.x}, {self.y})\"\n\n    def __repr__(self) -> str:\n        return f\"Point({self.x}, {self.y})\"\n\n    def __eq__(self, other: object) -> bool:\n        if isinstance(other, Point):\n            return self.x == other.x and self.y == other.y\n        return False\n\n    def __add__(self, other: \"Point\") -> \"Point\":\n        if not isinstance(other, Point):\n            return NotImplemented\n        return Point(self.x + other.x, self.y + other.y)\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "import sys\nimport gc\n\ndef main():\n    print(\"=== 14: CPython Ref Counts & GC ===\")\n    a = [1, 2, 3]\n    print(f\"Refcount of 'a': {sys.getrefcount(a) - 1}\")\n    b = a\n    print(f\"Refcount after 'b = a': {sys.getrefcount(a) - 1}\")\n    print(f\"GC Thresholds (Gen0, Gen1, Gen2): {gc.get_threshold()}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 14: Dunder Methods Example\n\nclass Cart:\n    def __init__(self, items): self.items = items\n    def __len__(self): return len(self.items)\n\nprint(len(Cart([\"a\", \"b\", \"c\"]))) # 3\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Create an explicit circular reference and verify that gc.collect() collects it.\nimport gc\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import gc\n\nclass Node:\n    def __init__(self):\n        self.cycle = None\n\nif __name__ == '__main__':\n    gc.disable()\n    n1 = Node()\n    n2 = Node()\n    n1.cycle = n2\n    n2.cycle = n1\n    del n1\n    del n2\n    collected = gc.collect()\n    assert collected >= 2\n    gc.enable()\n    print(f\"\u2714 Cyclic GC collected {collected} unreachable objects!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 14: Dunder Methods & Operator Overloading\n\nclass Point:\n    # TODO: Implement __init__(x, y), __str__, __eq__, __add__\n    pass\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import Point\n\nclass TestDunderMethods(unittest.TestCase):\n    def test_point_operations(self):\n        p1 = Point(2, 3)\n        p2 = Point(4, 5)\n\n        self.assertEqual(str(p1), '(2, 3)')\n        self.assertEqual(p1 + p2, Point(6, 8))\n        self.assertEqual(p1, Point(2, 3))\n        self.assertNotEqual(p1, Point(1, 1))\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "15-testing-pytest-and-mocking",
+        "name": "15-properties-and-encapsulation",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 \u2014 Testing Pytest And Mocking\n\n## \ud83c\udfaf What is it?\nTesting Pytest And Mocking is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Testing Pytest And Mocking, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Testing Pytest And Mocking executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Unit Testing & Mocking Architecture\n\n## \ud83c\udfaf Pytest Patterns\n- Standard `assert` statements without boilerplate `self.assertEqual()`\n- Fixtures with dependency injection (`@pytest.fixture`)\n- Test doubles and mocks with `unittest.mock.MagicMock`\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Testing Pytest And Mocking\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 15 — Properties & Encapsulation\n\n## What is this?\nThe `@property` decorator allows class methods to be accessed like regular attributes (`obj.attr` instead of `obj.get_attr()`). It provides clean getter, setter (`@attr.setter`), and deleter interfaces while encapsulating validation and data transformation behind the scenes.\n\n## Why does Python have it?\n- Python adheres to the Uniform Access Principle: you can start with a simple public attribute `self.price = 10` and refactor it into an encrypted or validated `@property` later without breaking the public interface for existing callers.\n\n## Basic Syntax\n```python\nclass Temperature:\n    def __init__(self, celsius: float):\n        self._celsius = celsius  # Private by convention\n\n    @property\n    def celsius(self) -> float:\n        return self._celsius\n\n    @celsius.setter\n    def celsius(self, value: float):\n        if value < -273.15:\n            raise ValueError(\"Temperature below absolute zero!\")\n        self._celsius = value\n```\n\n## How it Behaves\n1. Read-only Properties: A method with `@property` and no corresponding `@attr.setter` is strictly read-only. Attempting to assign `obj.attr = val` raises an `AttributeError`.\n\n## Common Mistakes\n1. Infinite recursion in setter: Writing `self.val = value` inside `def val(self, value)` calls the setter again recursively. Always store the backing value in a private attribute like `self._val`.\n\n## Small Practical Example\n```python\nclass Circle:\n    def __init__(self, radius: float):\n        self.radius = radius\n    @property\n    def diameter(self) -> float:\n        return self.radius * 2\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `class UserProfile`:\n   - `__init__(self, username: str, email: str)`\n   - `@property email`: returns `self._email`.\n   - `@email.setter`: if `value` does not contain `\"@\"`, raises `ValueError(\"Invalid email\")`. Otherwise sets `self._email = value`.\n\n## Progressive Hints\n- Hint 1: In `__init__`, set `self.username = username` and `self.email = email` (calling the setter).\n- Hint 2: In setter, check `if \"@\" not in value: raise ValueError(\"Invalid email\")`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nclass UserProfile:\n    def __init__(self, username: str, email: str):\n        self.username = username\n        self.email = email\n\n    @property\n    def email(self) -> str:\n        return self._email\n\n    @email.setter\n    def email(self, value: str):\n        if \"@\" not in value:\n            raise ValueError(\"Invalid email\")\n        self._email = value\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "from unittest.mock import MagicMock\n\ndef notify_user(notifier, user_id, message):\n    return notifier.send(user_id, message)\n\ndef main():\n    print(\"=== 15: Mocking & Verification ===\")\n    mock_notifier = MagicMock()\n    mock_notifier.send.return_value = True\n    res = notify_user(mock_notifier, 42, \"Welcome to Trak!\")\n    mock_notifier.send.assert_called_once_with(42, \"Welcome to Trak!\")\n    print(\"Mock assertion passed!\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 15: Properties Example\n\nclass Square:\n    def __init__(self, side): self.side = side\n    @property\n    def area(self): return self.side ** 2\n\ns = Square(5)\nprint(\"Area:\", s.area) # 25\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Write unit tests for a palindrome checker function.\ndef is_palindrome(s: str) -> bool:\n    clean = ''.join(c.lower() for c in s if c.isalnum())\n    return clean == clean[::-1]\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "def is_palindrome(s: str) -> bool:\n    clean = ''.join(c.lower() for c in s if c.isalnum())\n    return clean == clean[::-1]\n\nif __name__ == '__main__':\n    assert is_palindrome('A man, a plan, a canal: Panama')\n    assert is_palindrome('racecar')\n    assert not is_palindrome('python')\n    print(\"\u2714 Palindrome tests passed!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 15: Properties & Encapsulation\n\nclass UserProfile:\n    # TODO: Implement username, @property email, and @email.setter validating \"@\"\n    pass\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import UserProfile\n\nclass TestProperties(unittest.TestCase):\n    def test_user_profile_email_validation(self):\n        user = UserProfile('alex', 'alex@test.com')\n        self.assertEqual(user.email, 'alex@test.com')\n\n        user.email = 'new@test.com'\n        self.assertEqual(user.email, 'new@test.com')\n\n        with self.assertRaises(ValueError):\n            user.email = 'invalid-email'\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "16-modules-packages-and-imports",
+        "name": "16-generators-and-iterators",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 \u2014 Modules Packages And Imports\n\n## \ud83c\udfaf What is it?\nModules Packages And Imports is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Modules Packages And Imports, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Modules Packages And Imports executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n**Technical Internals & Architectural Notes:**\n\u2014 Modern Packages & Import Resolution\n\n## \ud83c\udfaf Package Layout\n- `__init__.py`: Initializes package namespace and controls `__all__` exports.\n- `sys.modules`: In-memory cache of previously imported modules.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Modules Packages And Imports\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 16 — Generators & Iterators\n\n## What is this?\nA **generator** is a function that produces a sequence of values lazily using the `yield` keyword rather than returning them all at once. An **iterator** is any object implementing the iterator protocol (`__iter__()` and `__next__()`).\n\n## Why does Python have it?\n- Generating elements on demand allows processing massive datasets (e.g. gigabyte log files, infinite mathematical streams) with $O(1)$ constant memory usage.\n\n## Basic Syntax\n```python\ndef count_up_to(max_val: int):\n    count = 1\n    while count <= max_val:\n        yield count\n        count += 1\n\n# Generator expression (memory efficient lazy evaluation)\nsquared_gen = (x ** 2 for x in range(1_000_000))\n```\n\n## How it Behaves\n1. State Suspension: When `yield` is encountered, the generator's execution state (local variables, instruction pointer) is frozen in memory and the yielded value is sent to the caller. On the next call to `next()`, execution resumes immediately after `yield`.\n2. Exhaustion: When the generator finishes, it raises a `StopIteration` exception, signaling loop termination.\n\n## Common Mistakes\n1. Trying to reuse an exhausted generator: Once a generator runs to completion, it cannot be restarted. You must create a new generator instance.\n\n## Small Practical Example\n```python\ndef fibonacci(limit: int):\n    a, b = 0, 1\n    for _ in range(limit):\n        yield a\n        a, b = b, a + b\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `even_numbers(max_val: int)`: Generator that yields even numbers starting from `0` up to `max_val` inclusive.\n2. `chunk_list(items: list, chunk_size: int)`: Generator that yields successive chunks (slices) of `items` of size `chunk_size`.\n\n## Progressive Hints\n- Hint 1: In `even_numbers`, loop `for n in range(0, max_val + 1, 2): yield n`.\n- Hint 2: In `chunk_list`, loop `for i in range(0, len(items), chunk_size): yield items[i:i + chunk_size]`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\ndef even_numbers(max_val: int):\n    for n in range(0, max_val + 1, 2):\n        yield n\n\ndef chunk_list(items: list, chunk_size: int):\n    if chunk_size <= 0:\n        return\n    for i in range(0, len(items), chunk_size):\n        yield items[i:i + chunk_size]\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "import sys\n\ndef main():\n    print(\"=== 16: Module System Internals ===\")\n    print(f\"Loaded modules in sys.modules: {len(sys.modules)}\")\n    print(f\"Is 'os' loaded? {'os' in sys.modules}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 16: Generators Example\n\ndef countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nprint(list(countdown(3))) # [3, 2, 1]\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Demonstrate importing dynamically using importlib.import_module.\nimport importlib\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import importlib\n\nif __name__ == '__main__':\n    math_mod = importlib.import_module('math')\n    assert math_mod.sqrt(16) == 4.0\n    print(\"\u2714 Dynamic importlib verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 16: Generators & Iterators\n\ndef even_numbers(max_val: int):\n    # TODO: Yield even numbers from 0 up to max_val\n    pass\n\ndef chunk_list(items: list, chunk_size: int):\n    # TODO: Yield chunks of items of length chunk_size\n    pass\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import even_numbers, chunk_list\n\nclass TestGenerators(unittest.TestCase):\n    def test_even_numbers(self):\n        self.assertEqual(list(even_numbers(6)), [0, 2, 4, 6])\n        self.assertEqual(list(even_numbers(1)), [0])\n\n    def test_chunk_list(self):\n        self.assertEqual(list(chunk_list([1, 2, 3, 4, 5], 2)), [[1, 2], [3, 4], [5]])\n        self.assertEqual(list(chunk_list([], 2)), [])\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "17-serialization-json-pickle",
+        "name": "17-decorators-and-functools",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 \u2014 Serialization Json Pickle\n\n## \ud83c\udfaf What is it?\nSerialization Json Pickle is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Serialization Json Pickle, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Serialization Json Pickle executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Serialization Json Pickle\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 17 — Decorators & Functools\n\n## What is this?\nA **decorator** is a callable that accepts a function as an argument and returns an augmented function. Decorators use `@decorator_name` syntax. The `@functools.wraps` helper ensures the decorated function preserves its original name, docstring, and annotations.\n\n## Why does Python have it?\n- Eliminates code duplication for cross-cutting concerns like authentication, caching, rate limiting, and performance benchmarking.\n\n## Basic Syntax\n```python\nimport functools\n\ndef log_call(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@log_call\ndef add(a, b):\n    return a + b\n```\n\n## How it Behaves\n1. Syntactic Sugar: `@my_decorator` placed above `def target(): ...` is identical to `target = my_decorator(target)`.\n2. Preserving Metadata: Always use `@functools.wraps(func)` on the wrapper function so `func.__name__` does not get renamed to `\"wrapper\"`.\n\n## Common Mistakes\n1. Forgetting to pass `*args, **kwargs` through `wrapper()`, which breaks decorating functions that accept arguments.\n\n## Small Practical Example\n```python\ndef double_result(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs) * 2\n    return wrapper\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `track_calls(func)`: Decorator that attaches an integer attribute `.call_count` to the returned wrapper, incrementing it every time the decorated function is invoked.\n2. `retry_on_failure(times: int)`: Decorator factory that retries executing the target function up to `times` attempts if an exception is raised. If all attempts fail, re-raises the exception.\n\n## Progressive Hints\n- Hint 1: In `track_calls`, define `wrapper.call_count = 0` and increment `wrapper.call_count += 1` inside `wrapper`.\n- Hint 2: In `retry_on_failure`, write an outer function returning a decorator function.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nimport functools\n\ndef track_calls(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        wrapper.call_count += 1\n        return func(*args, **kwargs)\n    wrapper.call_count = 0\n    return wrapper\n\ndef retry_on_failure(times: int):\n    def decorator(func):\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            last_err = None\n            for _ in range(times):\n                try:\n                    return func(*args, **kwargs)\n                except Exception as e:\n                    last_err = e\n            raise last_err\n        return wrapper\n    return decorator\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "import json\n\ndef main():\n    print(\"=== 17: JSON Serialization ===\")\n    user_data = {'id': 101, 'username': 'ndk123-web', 'roles': ['admin', 'creator']}\n    serialized = json.dumps(user_data, indent=2)\n    print(f\"Serialized JSON:\\n{serialized}\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 17: Decorators Example\n\ndef uppercase_output(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs).upper()\n    return wrapper\n\n@uppercase_output\ndef get_message(): return \"ready\"\n\nprint(get_message()) # \"READY\"\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Implement a custom JSONEncoder for a custom class 'Point(x, y)'.\nimport json\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "import json\n\nclass Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\nclass PointEncoder(json.JSONEncoder):\n    def default(self, o):\n        if isinstance(o, Point):\n            return {'x': o.x, 'y': o.y}\n        return super().default(o)\n\nif __name__ == '__main__':\n    p = Point(10, 20)\n    out = json.dumps(p, cls=PointEncoder)\n    assert out == '{\"x\": 10, \"y\": 20}'\n    print(\"\u2714 Custom JSONEncoder verified!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 17: Decorators & Functools\n\nimport functools\n\ndef track_calls(func):\n    # TODO: Implement decorator that maintains wrapper.call_count\n    pass\n\ndef retry_on_failure(times: int):\n    # TODO: Implement decorator factory that retries up to times attempts\n    pass\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import track_calls, retry_on_failure\n\nclass TestDecorators(unittest.TestCase):\n    def test_track_calls(self):\n        @track_calls\n        def greet(name): return f\"Hi {name}\"\n\n        self.assertEqual(greet.call_count, 0)\n        self.assertEqual(greet('Alice'), 'Hi Alice')\n        self.assertEqual(greet('Bob'), 'Hi Bob')\n        self.assertEqual(greet.call_count, 2)\n\n    def test_retry_on_failure(self):\n        attempts = 0\n\n        @retry_on_failure(3)\n        def flaky_task():\n            nonlocal attempts\n            attempts += 1\n            if attempts < 2:\n                raise ValueError(\"Transient error\")\n            return \"success\"\n\n        self.assertEqual(flaky_task(), \"success\")\n        self.assertEqual(attempts, 2)\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       },
       {
-        "name": "18-interview-questions-and-drills",
+        "name": "18-context-managers-and-with-statement",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 \u2014 Interview Questions And Drills\n\n## \ud83c\udfaf What is it?\nInterview Questions And Drills is a core foundational concept in Python Architecture & Systems Mastery Track that governs how resources, execution flow, and system state are managed.\n\n## \ud83d\udca1 Why does it exist & Why use it?\nWithout mastering Interview Questions And Drills, systems suffer from subtle bugs, suboptimal performance, security vulnerabilities, or unpredictable runtime behavior. Understanding this concept allows you to design reliable, production-grade solutions.\n\n## \u2699\ufe0f How does it work under the hood?\nUnder the hood, Interview Questions And Drills executes through structured lifecycle phases: initialization, state validation, execution against target constraints, and deterministic result propagation to calling layers.\n\n## \ud83d\udd0d Concept & Core Logic\n**Core Logic & Mental Model**\n- Establishes explicit boundaries between declarative intent and runtime execution.\n- Preserves deterministic behavior and state isolation across distributed or concurrent environments.\n\n## \u23f1\ufe0f When to use & When NOT to use\n**When to Use:** Standard production workflows, automated pipelines, and scalable application architectures requiring high reliability.\n**When NOT to Use:** Trivial throwaway scripts where the operational overhead outweighs the benefits.\n\n## \ud83d\udcdd Syntax & Anatomy\n```\n# Conceptual syntax & execution model for Interview Questions And Drills\n# Refer to the runnable code files in this module for hands-on examples.\n```\n\n## \ud83d\ude80 Production Gotchas & Pitfalls\n1. Always verify environment prerequisites and state boundaries before applying changes.\n2. Monitor logs and diagnostic outputs to prevent silent failures or unexpected configuration drift.\n"
+            "content": "# 18 — Context Managers & With Statement\n\n## What is this?\nA **context manager** manages the setup and teardown of resources using the `with` statement. It can be implemented either as a class with `__enter__` and `__exit__` dunder methods or using the `@contextlib.contextmanager` generator decorator.\n\n## Why does Python have it?\n- Guarantees that resources (open file handles, network sockets, database connections, locks) are reliably released, even if an unhandled exception occurs.\n\n## Basic Syntax\n```python\n# Class-based Context Manager\nclass ManagedResource:\n    def __enter__(self):\n        print(\"Acquiring resource\")\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print(\"Releasing resource\")\n        return False # Do not suppress exceptions\n```\n\n## How it Behaves\n1. `__enter__`: Executes before entering the `with` block. The return value is bound to the identifier after `as`.\n2. `__exit__`: Always executes upon exiting the `with` block. If it returns `True`, any exception raised within the block is swallowed. If it returns `False` (or `None`), the exception propagates.\n\n## Common Mistakes\n1. Forgetting that `__exit__` receives 4 parameters: `self, exc_type, exc_val, exc_tb`.\n\n## Small Practical Example\n```python\nimport contextlib\n\n@contextlib.contextmanager\ndef temporary_flag(obj, attr, temp_val):\n    old_val = getattr(obj, attr)\n    setattr(obj, attr, temp_val)\n    try:\n        yield\n    finally:\n        setattr(obj, attr, old_val)\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `class ExecutionTimer`:\n   - Measures elapsed time in seconds.\n   - `__enter__(self)`: records `time.perf_counter()` and returns `self`.\n   - `__exit__(self, *args)`: records end time, sets `self.elapsed = end_time - start_time`.\n2. `class SuppressExceptions`:\n   - `__init__(self, *exception_types)`: stores allowed exceptions.\n   - `__enter__(self)`: returns `self`.\n   - `__exit__(self, exc_type, exc_val, exc_tb)`: returns `True` if `exc_type` is a subclass of any allowed exceptions (suppressing the error), else returns `False`.\n\n## Progressive Hints\n- Hint 1: In `ExecutionTimer`, use `import time` and calculate `self.elapsed = time.perf_counter() - self.start_time`.\n- Hint 2: In `SuppressExceptions.__exit__`, check `exc_type is not None and issubclass(exc_type, self.exception_types)`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nimport time\n\nclass ExecutionTimer:\n    def __enter__(self):\n        self.start_time = time.perf_counter()\n        self.elapsed = 0.0\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        self.elapsed = time.perf_counter() - self.start_time\n        return False\n\nclass SuppressExceptions:\n    def __init__(self, *exception_types):\n        self.exception_types = exception_types\n\n    def __enter__(self):\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type is not None and issubclass(exc_type, self.exception_types):\n            return True\n        return False\n```\n</details>\n"
           },
           {
             "name": "example.py",
             "type": "file",
-            "content": "def main():\n    print(\"=== 18: Master Interview Drill ===\")\n    print(\"1. Mutable defaults trap\")\n    print(\"2. LEGB scope & late binding\")\n    print(\"3. CPython GIL & multiprocessing\")\n    print(\"4. MRO & C3 Linearization\")\n    print(\"\ud83d\ude80 You have completed the comprehensive Python Mastery Track!\")\n\nif __name__ == '__main__':\n    main()\n"
+            "content": "# Module 18: Context Managers Example\n\nclass LogContext:\n    def __enter__(self): print(\"[START]\"); return self\n    def __exit__(self, *args): print(\"[END]\")\n\nwith LogContext():\n    print(\"Working...\")\n"
           },
           {
-            "name": "exercise",
-            "type": "directory",
-            "children": [
-              {
-                "name": "starter.py",
-                "type": "file",
-                "content": "# TODO: Master Drill: Fix the late binding closure bug in the following list comprehension:\n# funcs = [lambda: i for i in range(4)]  # All return 3!\n\nif __name__ == '__main__':\n    pass\n"
-              },
-              {
-                "name": "solution.py",
-                "type": "file",
-                "content": "if __name__ == '__main__':\n    funcs = [lambda i=i: i for i in range(4)]\n    results = [f() for f in funcs]\n    assert results == [0, 1, 2, 3]\n    print(\"\u2714 Late binding closure drill passed!\")\n"
-              }
-            ]
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 18: Context Managers & With Statement\n\nclass ExecutionTimer:\n    # TODO: Implement __enter__ and __exit__ calculating self.elapsed\n    pass\n\nclass SuppressExceptions:\n    # TODO: Implement __init__(*exception_types) and __exit__ suppressing matching exceptions\n    pass\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nimport time\nfrom exercise import ExecutionTimer, SuppressExceptions\n\nclass TestContextManagers(unittest.TestCase):\n    def test_execution_timer(self):\n        with ExecutionTimer() as timer:\n            time.sleep(0.01)\n        self.assertGreater(timer.elapsed, 0.005)\n\n    def test_suppress_exceptions(self):\n        with SuppressExceptions(ValueError, KeyError):\n            raise ValueError(\"Suppressed error\")\n\n        with self.assertRaises(ZeroDivisionError):\n            with SuppressExceptions(ValueError):\n                _ = 1 / 0\n\nif __name__ == '__main__':\n    unittest.main()\n"
+          }
+        ]
+      },
+      {
+        "name": "19-standard-library-json-math-pathlib",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 — Standard Library: JSON, Math & Pathlib\n\n## What is this?\nPython's philosophy is **\"Batteries Included\"**. Its extensive standard library provides modules for JSON serialization (`json`), mathematical algorithms (`math`), modern object-oriented filesystem paths (`pathlib`), and timestamps (`datetime`).\n\n## Why does Python have it?\n- Eliminates the need to install third-party dependencies for common day-to-day computing tasks.\n\n## Basic Syntax\n```python\nimport json\nfrom pathlib import Path\nimport math\n\n# JSON\ndata = {\"status\": \"ok\", \"code\": 200}\njson_text = json.dumps(data)\nparsed = json.loads(json_text)\n\n# Pathlib\np = Path(\"data\") / \"logs\" / \"app.log\"\np.suffix # \".log\"\n```\n\n## How it Behaves\n1. `json.dumps()` vs `json.loads()`:\n   - `dumps`: Serializes a Python object into a JSON `str`.\n   - `loads`: Deserializes a JSON `str` into Python objects (`dict`, `list`).\n2. `pathlib.Path`: Overloads the division operator `/` to join path components cross-platform.\n\n## Common Mistakes\n1. Using string manipulation (`+ \"/\"`) instead of `pathlib.Path` or `os.path.join`: Fails across different operating systems.\n\n## Small Practical Example\n```python\nimport math\n\ndef distance_from_origin(x: float, y: float) -> float:\n    return math.hypot(x, y)\n```\n\n## What to Practice\nImplement in `exercise.py`:\n1. `safe_json_deserialize(raw_json: str, default=None)`:\n   - Parses `raw_json` using `json.loads`. If a `json.JSONDecodeError` or `TypeError` occurs, returns `default`.\n2. `get_file_info(filepath: str) -> dict[str, str]`:\n   - Uses `pathlib.Path(filepath)` to return `{ \"name\": path.name, \"stem\": path.stem, \"suffix\": path.suffix }`.\n3. `calculate_circle_area(radius: float) -> float`:\n   - Uses `math.pi` to calculate `math.pi * radius ** 2`. Round to 2 decimal places. Returns `0.0` if `radius <= 0`.\n\n## Progressive Hints\n- Hint 1: In `safe_json_deserialize`, wrap `json.loads` in `try...except (json.JSONDecodeError, TypeError)`.\n- Hint 2: In `get_file_info`, use `p = Path(filepath); return {\"name\": p.name, \"stem\": p.stem, \"suffix\": p.suffix}`.\n\n## Reference Solution\n\n<details>\n<summary>Click to reveal reference solution</summary>\n\n```python\nimport json\nimport math\nfrom pathlib import Path\n\ndef safe_json_deserialize(raw_json: str, default=None):\n    try:\n        return json.loads(raw_json)\n    except (json.JSONDecodeError, TypeError):\n        return default\n\ndef get_file_info(filepath: str) -> dict[str, str]:\n    p = Path(filepath)\n    return {\n        \"name\": p.name,\n        \"stem\": p.stem,\n        \"suffix\": p.suffix\n    }\n\ndef calculate_circle_area(radius: float) -> float:\n    if radius <= 0:\n        return 0.0\n    return round(math.pi * (radius ** 2), 2)\n```\n</details>\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "# Module 19: Standard Library Example\nimport json\nfrom pathlib import Path\n\np = Path(\"config.json\")\ndata = {\"ready\": True}\nprint(\"JSON:\", json.dumps(data))\nprint(\"File suffix:\", p.suffix)\n"
+          },
+          {
+            "name": "exercise.py",
+            "type": "file",
+            "content": "# Module 19: Standard Library: JSON, Math & Pathlib\n\nimport json\nimport math\nfrom pathlib import Path\n\ndef safe_json_deserialize(raw_json: str, default=None):\n    # TODO: Return parsed json or default on error\n    return None\n\ndef get_file_info(filepath: str) -> dict[str, str]:\n    # TODO: Return dict with name, stem, and suffix from pathlib.Path\n    return {}\n\ndef calculate_circle_area(radius: float) -> float:\n    # TODO: Return area rounded to 2 decimals, or 0.0 if radius <= 0\n    return 0.0\n"
+          },
+          {
+            "name": "exercise_test.py",
+            "type": "file",
+            "content": "import unittest\nfrom exercise import safe_json_deserialize, get_file_info, calculate_circle_area\n\nclass TestStandardLibrary(unittest.TestCase):\n    def test_safe_json_deserialize(self):\n        self.assertEqual(safe_json_deserialize('{\"ok\": true}'), {'ok': True})\n        self.assertEqual(safe_json_deserialize('invalid', {'fallback': True}), {'fallback': True})\n\n    def test_get_file_info(self):\n        info = get_file_info('reports/annual_2026.pdf')\n        self.assertEqual(info, {\n            'name': 'annual_2026.pdf',\n            'stem': 'annual_2026',\n            'suffix': '.pdf'\n        })\n\n    def test_calculate_circle_area(self):\n        self.assertEqual(calculate_circle_area(5.0), 78.54)\n        self.assertEqual(calculate_circle_area(0.0), 0.0)\n        self.assertEqual(calculate_circle_area(-5.0), 0.0)\n\nif __name__ == '__main__':\n    unittest.main()\n"
           }
         ]
       }
